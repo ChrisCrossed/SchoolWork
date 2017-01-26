@@ -1,0 +1,3 @@
+Combine lightcycles with drag racing. The player 'shifts gears' at specific points to increase in speed.
+Have the point in which the player must switch gears decrease with the higher gears. Think Gears of War fast-reload.
+Objective is to overtake their opponent and crush them with the lightwall.
