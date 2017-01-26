@@ -9,7 +9,7 @@ public class Cs_BossLogic : MonoBehaviour
     GameObject go_BossSpot_4;
 
     GameObject go_CurrBossSpot;
-    NavMeshAgent nav_Destination;
+    UnityEngine.AI.NavMeshAgent nav_Destination;
 
     // Use this for initialization
     void Start ()
@@ -21,7 +21,7 @@ public class Cs_BossLogic : MonoBehaviour
 
         // print("Set: 1");
         go_CurrBossSpot = go_BossSpot_1;
-        nav_Destination = gameObject.GetComponent<NavMeshAgent>();
+        nav_Destination = gameObject.GetComponent<UnityEngine.AI.NavMeshAgent>();
     }
 
     void Set_NewPosition( int i_Pos_ )

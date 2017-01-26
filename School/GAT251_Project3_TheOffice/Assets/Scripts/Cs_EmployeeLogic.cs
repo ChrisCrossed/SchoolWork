@@ -10,14 +10,14 @@ public class Cs_EmployeeLogic : MonoBehaviour
 
     Cs_Objective objectiveObj;
     
-    NavMeshAgent navAgent;
+    UnityEngine.AI.NavMeshAgent navAgent;
     bool b_TestPosition;
 
 	// Use this for initialization
 	void Start ()
     {
         objectiveObj = transform.Find("BackMessage").GetComponent<Cs_Objective>();
-        navAgent = gameObject.GetComponent<NavMeshAgent>();
+        navAgent = gameObject.GetComponent<UnityEngine.AI.NavMeshAgent>();
 
         for(int i_ = 0; i_ < go_Positions.Length; ++i_)
         {
