@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/Lvl_PickBan.unity
+  isLoaded: 1
+  isActive: 1

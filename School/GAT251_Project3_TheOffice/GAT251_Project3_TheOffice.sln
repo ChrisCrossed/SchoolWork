@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAT251_Project3_TheOffice.CSharp", "GAT251_Project3_TheOffice.CSharp.csproj", "{66DC4BAF-542E-DA2F-29A6-7D7DD690FF05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAT251_Project3_TheOffice.CSharp.Editor", "GAT251_Project3_TheOffice.CSharp.Editor.csproj", "{195FA2D5-9F34-4F54-AFB0-C258F5103C70}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{66DC4BAF-542E-DA2F-29A6-7D7DD690FF05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66DC4BAF-542E-DA2F-29A6-7D7DD690FF05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66DC4BAF-542E-DA2F-29A6-7D7DD690FF05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66DC4BAF-542E-DA2F-29A6-7D7DD690FF05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{195FA2D5-9F34-4F54-AFB0-C258F5103C70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{195FA2D5-9F34-4F54-AFB0-C258F5103C70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{195FA2D5-9F34-4F54-AFB0-C258F5103C70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{195FA2D5-9F34-4F54-AFB0-C258F5103C70}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
