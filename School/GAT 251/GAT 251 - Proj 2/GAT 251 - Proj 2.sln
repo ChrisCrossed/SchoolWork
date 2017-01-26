@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAT 251 - Proj 2.CSharp", "GAT 251 - Proj 2.CSharp.csproj", "{C966EB8F-4144-29BF-7BDD-86DEBFA0E5C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAT 251 - Proj 2.CSharp.Editor", "GAT 251 - Proj 2.CSharp.Editor.csproj", "{2AC4CDA2-EECC-1741-93AF-8C113458532D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C966EB8F-4144-29BF-7BDD-86DEBFA0E5C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C966EB8F-4144-29BF-7BDD-86DEBFA0E5C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C966EB8F-4144-29BF-7BDD-86DEBFA0E5C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C966EB8F-4144-29BF-7BDD-86DEBFA0E5C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AC4CDA2-EECC-1741-93AF-8C113458532D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AC4CDA2-EECC-1741-93AF-8C113458532D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AC4CDA2-EECC-1741-93AF-8C113458532D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AC4CDA2-EECC-1741-93AF-8C113458532D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
