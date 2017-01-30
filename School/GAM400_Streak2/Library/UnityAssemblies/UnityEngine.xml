@@ -4322,6 +4322,11 @@ Default is false.</para>
         <para>Priority of background loading thread.</para>
       </summary>
     </member>
+    <member name="P:UnityEngine.Application.buildGUID">
+      <summary>
+        <para>Returns a GUID for this build (Read Only).</para>
+      </summary>
+    </member>
     <member name="P:UnityEngine.Application.bundleIdentifier">
       <summary>
         <para>Returns application bundle identifier at runtime.</para>
@@ -27542,6 +27547,11 @@ Note that updating a light probe volume every frame may be costly. The cost depe
         <para>The main material's color.</para>
       </summary>
     </member>
+    <member name="P:UnityEngine.Material.enableInstancing">
+      <summary>
+        <para>Gets and sets whether GPU instancing is enabled for this material.</para>
+      </summary>
+    </member>
     <member name="P:UnityEngine.Material.globalIlluminationFlags">
       <summary>
         <para>Defines how the material should interact with lightmaps and lightprobes.</para>
@@ -31611,6 +31621,17 @@ DisconnectNetworkHost can only be called by the group owner on the relay server.
       <param name="hostId">Host id associated with this connection (retrieved when calling Networking.NetworkTransport.AddHost).</param>
       <param name="error">Error (can be casted to Networking.NetworkError for more information).</param>
     </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetAckBufferCount(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns size of reliable buffer.</para>
+      </summary>
+      <param name="hostId">Host id associated with this connection.</param>
+      <param name="connectionId">Id of the connection.</param>
+      <param name="error">Error (can be casted to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Size of ack buffer.</para>
+      </returns>
+    </member>
     <member name="M:UnityEngine.Networking.NetworkTransport.GetAssetId(UnityEngine.GameObject)">
       <summary>
         <para>The Unity Multiplayer spawning system uses assetIds to identify what remote objects to spawn. This function allows you to get the assetId for the prefab associated with an object.</para>
@@ -31661,13 +31682,75 @@ DisconnectNetworkHost can only be called by the group owner on the relay server.
         <para>Returns the total number of messages still in the write-queue.</para>
       </summary>
     </member>
-    <member name="M:UnityEngine.Networking.NetworkTransport.GetCurrentRtt(System.Int32,System.Int32,System.Byte&amp;)">
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetCurrentRTT(System.Int32,System.Int32,System.Byte&amp;)">
       <summary>
         <para>Return the round trip time for the given connectionId.</para>
+      </summary>
+      <param name="error">Error (can be casted to Networking.NetworkError for more information).</param>
+      <param name="hostId">Host id associated with this connection.</param>
+      <param name="connectionId">Id of the connection.</param>
+      <returns>
+        <para>Current round trip time in ms.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetIncomingMessageQueueSize(System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns the number of received messages waiting in the queue for processing.</para>
+      </summary>
+      <param name="hostId">Host id associated with this queue.</param>
+      <param name="error">Error code. Cast this value to Networking.NetworkError for more information.</param>
+      <returns>
+        <para>The number of messages in the queue.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetIncomingPacketCount(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns how many packets have been received from start for connection.</para>
       </summary>
       <param name="hostId">Host id associated with this connection.</param>
       <param name="connectionId">Id of the connection.</param>
       <param name="error">Error (can be casted to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>The absolute number of packets received since the connection was established.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetIncomingPacketCountForAllHosts">
+      <summary>
+        <para>Returns how many packets have been received from start. (from Init() call).</para>
+      </summary>
+      <returns>
+        <para>Packets count received from start for all hosts.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetIncomingPacketDropCountForAllHosts">
+      <summary>
+        <para>How many packets have been dropped due lack space in incoming queue (absolute value, countinf from start).</para>
+      </summary>
+      <returns>
+        <para>Dropping packet count.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetIncomingPacketLossCount(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns how many incoming packets have been lost due transmitting (dropped by network).</para>
+      </summary>
+      <param name="hostId">Host id associated with this connection.</param>
+      <param name="connectionId">Id of the connection.</param>
+      <param name="error">Error (can be casted to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>The absolute number of packets that have been lost since the connection was established.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetMaxAllowedBandwidth(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Gets the currently-allowed network bandwidth in bytes per second. The value returned can vary because bandwidth can be throttled by flow control. If the bandwidth is throttled to zero, the connection is disconnected.ted.</para>
+      </summary>
+      <param name="hostId">Host id associated with this connection.</param>
+      <param name="connectionId">Id of the connection.</param>
+      <param name="error">Error (can be casted to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Currently-allowed bandwidth in bytes per second.</para>
+      </returns>
     </member>
     <member name="M:UnityEngine.Networking.NetworkTransport.GetNetIOTimeuS">
       <summary>
@@ -31691,6 +31774,38 @@ DisconnectNetworkHost can only be called by the group owner on the relay server.
       </summary>
       <returns>
         <para>Timestamp.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingMessageQueueSize(System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns the number of messages waiting in the outgoing message queue to be sent.</para>
+      </summary>
+      <param name="hostId">Host id associated with this queue.</param>
+      <param name="error">Error code. Cast this value to Networking.NetworkError for more information.</param>
+      <returns>
+        <para>The number of messages waiting in the outgoing message queue to be sent.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingPacketNetworkLossPercent(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns the value in percent of the number of sent packets that were dropped by the network and not received by the peer.</para>
+      </summary>
+      <param name="hostId">Host id associated with this connection.</param>
+      <param name="connectionId">Id of the connection.</param>
+      <param name="error">Error (can be casted to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>The number of packets dropped by the network in the last ping timeout period expressed as an integer percentage from 0 to 100.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingPacketOverflowLossPercent(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns the value in percent of the number of sent packets that were dropped by the peer.</para>
+      </summary>
+      <param name="hostId">Host id associated with this connection.</param>
+      <param name="connectionId">Id of the connection.</param>
+      <param name="error">Error (can be casted to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>The number of packets dropped by the peer in the last ping timeout period expressed as an integer percentage from 0 to 100.</para>
       </returns>
     </member>
     <member name="M:UnityEngine.Networking.NetworkTransport.GetPacketReceivedRate(System.Int32,System.Int32,System.Byte&amp;)">
@@ -31743,6 +31858,20 @@ DisconnectNetworkHost can only be called by the group owner on the relay server.
       <summary>
         <para>Deprecated.</para>
       </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.QueueMessageForSending(System.Int32,System.Int32,System.Int32,System.Byte[],System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Function is queueing but not sending messages.</para>
+      </summary>
+      <param name="hostId">Host id associated with this connection.</param>
+      <param name="connectionId">Id of the connection.</param>
+      <param name="error">Error (can be casted to Networking.NetworkError for more information).</param>
+      <param name="channelId">The channelId to send on.</param>
+      <param name="buffer">Buffer containing the data to send.</param>
+      <param name="size">Size of the buffer.</param>
+      <returns>
+        <para>True if success.</para>
+      </returns>
     </member>
     <member name="M:UnityEngine.Networking.NetworkTransport.Receive(System.Int32&amp;,System.Int32&amp;,System.Int32&amp;,System.Byte[],System.Int32,System.Int32&amp;,System.Byte&amp;)">
       <summary>
@@ -31809,6 +31938,17 @@ Can only be called by the relay group owner.</para>
       <param name="hostId">Host id associated with this connection.</param>
       <param name="connectionId">Id of the connection.</param>
       <param name="error">Error (can be casted to Networking.NetworkError for more information).</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.SendQueuedMessages(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Sends messages, previously queued by NetworkTransport.QueueMessageForSending function.</para>
+      </summary>
+      <param name="hostId">Host id associated with this connection.</param>
+      <param name="connectionId">Id of the connection.</param>
+      <param name="error">Error (can be casted to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>True if hostId and connectioId are valid.</para>
+      </returns>
     </member>
     <member name="M:UnityEngine.Networking.NetworkTransport.SetBroadcastCredentials(System.Int32,System.Int32,System.Int32,System.Int32,System.Byte&amp;)">
       <summary>
@@ -38860,12 +39000,12 @@ Note that IgnoreLayerCollision will reset the trigger state of affected collider
     </member>
     <member name="F:UnityEngine.ProceduralLoadingBehavior.DoNothing">
       <summary>
-        <para>Do not generate the textures. RebuildTextures() or RebuildTexturesImmediately() must be called to generate the textures.</para>
+        <para>Does not generate the textures automatically when the scene is loaded as it is set to "DoNothing". RebuildTextures() or RebuildTexturesImmediately() must be called to generate the textures.</para>
       </summary>
     </member>
     <member name="F:UnityEngine.ProceduralLoadingBehavior.DoNothingAndCache">
       <summary>
-        <para>Do not generate the textures. RebuildTextures() or RebuildTexturesImmediately() must be called to generate the textures. After the textures have been generrated for the first time, they are cached to diskflash to speed up subsequent gameapplication startups.</para>
+        <para>Does not generate the textures automatically when the scene is loaded as it is set to "DoNothing". RebuildTextures() or RebuildTexturesImmediately() must be called to generate the textures. After the textures have been generrated for the first time, they are cached to diskflash to speed up subsequent gameapplication startups. This setting will not load the cached textures automatically when the scene is loaded as it is still set to "DoNothing".  RebuildTextures() or RebuildTexturesImmediately() must be called again to load the previously cached textures.</para>
       </summary>
     </member>
     <member name="F:UnityEngine.ProceduralLoadingBehavior.Generate">
@@ -41734,11 +41874,6 @@ See Also: ReflectionProbeTimeSlicingMode.</para>
     <member name="F:UnityEngine.Rendering.BuiltinShaderType.ScreenSpaceShadows">
       <summary>
         <para>Shader used for screen-space cascaded shadows.</para>
-      </summary>
-    </member>
-    <member name="F:UnityEngine.Rendering.BuiltinShaderType.Sprite">
-      <summary>
-        <para>Default shader used by sprites.</para>
       </summary>
     </member>
     <member name="T:UnityEngine.Rendering.CameraEvent">

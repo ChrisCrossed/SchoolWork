@@ -23,6 +23,11 @@ public class Cs_MenuButtonLogic : MonoBehaviour
 
     bool b_IsSelected;
 
+    GameObject go_Button;
+    [SerializeField] AnimationCurve lerpCurve;
+    float f_LerpTimer;
+    float f_ZPos = 5f;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -30,8 +35,12 @@ public class Cs_MenuButtonLogic : MonoBehaviour
         clr_Selected = mat_Selected.color;
 
         mat_ThisMat = gameObject.GetComponent<MeshRenderer>().materials[1];
-        
-        
+
+        go_Button = transform.Find("Button").gameObject;
+
+        Vector3 v3_ButtonPos = gameObject.transform.position;
+        v3_ButtonPos.z = f_ZPos;
+        go_Button.transform.position = v3_ButtonPos;
     }
 
     public void Init_Button( bool b_IsEnabled_ = false )
@@ -68,6 +77,14 @@ public class Cs_MenuButtonLogic : MonoBehaviour
                 SetMaterial();
                 #endregion
             }
+
+            // Lerp Button Position outward
+            if(f_LerpTimer < 1.0f)
+            {
+                // Increase lerp timer
+                f_LerpTimer += Time.deltaTime * 3f;
+                if (f_LerpTimer > 1.0f) f_LerpTimer = 1.0f;
+            }
         }
         else // Not selected
         {
@@ -84,7 +101,28 @@ public class Cs_MenuButtonLogic : MonoBehaviour
                 SetMaterial();
                 #endregion
             }
+
+            // Lerp Button Position outward
+            if (f_LerpTimer > 0.0f)
+            {
+                // Increase lerp timer
+                f_LerpTimer -= Time.deltaTime * 3f;
+                if (f_LerpTimer < 0.0f) f_LerpTimer = 0.0f;
+            }
         }
+
+        // Evaluate lerp timer
+        float f_Evaluate = lerpCurve.Evaluate(f_LerpTimer);
+
+        // Set positions
+        Vector3 v3_StartPos = gameObject.transform.position;
+        v3_StartPos.z = f_ZPos;
+
+        Vector3 v3_FinalPos = v3_StartPos;
+        v3_FinalPos.x += 100f;
+
+        Vector3 v3_NewPos = Vector3.Lerp(v3_StartPos, v3_FinalPos, f_Evaluate);
+        go_Button.transform.position = v3_NewPos;
     }
 
     void SetMaterial()
@@ -97,6 +135,11 @@ public class Cs_MenuButtonLogic : MonoBehaviour
     {
         set
         {
+            if( b_IsSelected != value )
+            {
+                // f_LerpTimer = 0f;
+            }
+
             b_IsSelected = value;
         }
         get { return b_IsSelected; }

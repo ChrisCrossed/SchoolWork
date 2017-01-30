@@ -2734,6 +2734,13 @@ Transitions with exit times greater than one will be evaluated only once, so the
       <param name="obj"></param>
       <param name="labels"></param>
     </member>
+    <member name="M:UnityEditor.AssetDatabase.SetMainObject(UnityEngine.Object,System.String)">
+      <summary>
+        <para>Specifies which object in the asset file should become the main object after the next import.</para>
+      </summary>
+      <param name="mainObject">The object to become the main object.</param>
+      <param name="assetPath">Path to the asset file.</param>
+    </member>
     <member name="M:UnityEditor.AssetDatabase.StartAssetEditing">
       <summary>
         <para>Begin Asset importing. This lets you group several asset imports together into one larger import.</para>
@@ -13139,6 +13146,47 @@ Note: Use HandleUtility.GetHandleSize where you might want to have constant scre
       <param name="segmentIndices">A list of pairs of indices to the start and end points of the line segments.</param>
       <param name="screenSpaceSize">The size in pixels for the lengths of the line segments and the gaps between them.</param>
     </member>
+    <member name="T:UnityEditor.Handles.DrawingScope">
+      <summary>
+        <para>Disposable helper struct for automatically setting and reverting Handles.color and/or Handles.matrix.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEditor.Handles.DrawingScope.originalColor">
+      <summary>
+        <para>The value of Handles.color at the time this DrawingScope was created.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEditor.Handles.DrawingScope.originalMatrix">
+      <summary>
+        <para>The value of Handles.matrix at the time this DrawingScope was created.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEditor.Handles.DrawingScope.#ctor(UnityEngine.Color)">
+      <summary>
+        <para>Create a new DrawingScope and set Handles.color and/or Handles.matrix to the specified values.</para>
+      </summary>
+      <param name="matrix">The matrix to use for displaying Handles inside the scope block.</param>
+      <param name="color">The color to use for displaying Handles inside the scope block.</param>
+    </member>
+    <member name="M:UnityEditor.Handles.DrawingScope.#ctor(UnityEngine.Color,UnityEngine.Matrix4x4)">
+      <summary>
+        <para>Create a new DrawingScope and set Handles.color and/or Handles.matrix to the specified values.</para>
+      </summary>
+      <param name="matrix">The matrix to use for displaying Handles inside the scope block.</param>
+      <param name="color">The color to use for displaying Handles inside the scope block.</param>
+    </member>
+    <member name="M:UnityEditor.Handles.DrawingScope.#ctor(UnityEngine.Matrix4x4)">
+      <summary>
+        <para>Create a new DrawingScope and set Handles.color and/or Handles.matrix to the specified values.</para>
+      </summary>
+      <param name="matrix">The matrix to use for displaying Handles inside the scope block.</param>
+      <param name="color">The color to use for displaying Handles inside the scope block.</param>
+    </member>
+    <member name="M:UnityEditor.Handles.DrawingScope.Dispose">
+      <summary>
+        <para>Automatically reverts Handles.color and Handles.matrix to their values prior to entering the scope, when the scope is exited. You do not need to call this method manually.</para>
+      </summary>
+    </member>
     <member name="M:UnityEditor.Handles.DrawLine(UnityEngine.Vector3,UnityEngine.Vector3)">
       <summary>
         <para>Draw a line from p1 to p2.</para>
@@ -13340,22 +13388,6 @@ Note: Use HandleUtility.GetHandleSize where you might want to have constant scre
       <param name="endTangent"></param>
       <param name="division"></param>
     </member>
-    <member name="T:UnityEditor.Handles.MatrixScope">
-      <summary>
-        <para>Disposable helper struct for automatically setting and reverting Handles.matrix.</para>
-      </summary>
-    </member>
-    <member name="M:UnityEditor.Handles.MatrixScope.#ctor(UnityEngine.Matrix4x4)">
-      <summary>
-        <para>Create a new MatrixScope and set Handles.matrix to the specified value.</para>
-      </summary>
-      <param name="matrix">The matrix to use for displaying Handles inside the scope block.</param>
-    </member>
-    <member name="M:UnityEditor.Handles.MatrixScope.Dispose">
-      <summary>
-        <para>Automatically reverts Handles.matrix to its value prior to entering the scope, when the scope is exited. You do not need to call this manually.</para>
-      </summary>
-    </member>
     <member name="M:UnityEditor.Handles.PositionHandle(UnityEngine.Vector3,UnityEngine.Quaternion)">
       <summary>
         <para>Make a 3D Scene view position handle.</para>
@@ -13473,6 +13505,12 @@ Note: Use HandleUtility.GetHandleSize where you might want to have constant scre
       </summary>
       <param name="camera"></param>
       <param name="position"></param>
+    </member>
+    <member name="T:UnityEditor.Handles.SizeFunction">
+      <summary>
+        <para>A delegate type for getting a handle's size based on its current position.</para>
+      </summary>
+      <param name="position">The current position of the handle in the space of Handles.matrix.</param>
     </member>
     <member name="M:UnityEditor.Handles.Slider(UnityEngine.Vector3,UnityEngine.Vector3)">
       <summary>
@@ -14100,11 +14138,6 @@ Note: Use HandleUtility.GetHandleSize where you might want to have constant scre
         <para>Customizable height of the multi column header.</para>
       </summary>
     </member>
-    <member name="P:UnityEditor.IMGUI.Controls.MultiColumnHeader.previousSortedColumnIndex">
-      <summary>
-        <para>The index of the previous sorted column (if any).</para>
-      </summary>
-    </member>
     <member name="P:UnityEditor.IMGUI.Controls.MultiColumnHeader.sortedColumnIndex">
       <summary>
         <para>The index of the column that is set to be the primary sorting column. This is the column that shows the sorting arrow above the header text.</para>
@@ -14244,7 +14277,7 @@ Note: Use HandleUtility.GetHandleSize where you might want to have constant scre
     </member>
     <member name="M:UnityEditor.IMGUI.Controls.MultiColumnHeader.IsSortedAscending(System.Int32)">
       <summary>
-        <para>Check the sorting direction state for a column.</para>
+        <para>Check the sorting order state for a column.</para>
       </summary>
       <param name="columnIndex">Column index.</param>
       <returns>
@@ -14287,10 +14320,17 @@ Note: Use HandleUtility.GetHandleSize where you might want to have constant scre
     </member>
     <member name="M:UnityEditor.IMGUI.Controls.MultiColumnHeader.SetSorting(System.Int32,System.Boolean)">
       <summary>
-        <para>Set both the curent sorting column and its sorting direction.</para>
+        <para>Sets the primary sorting column and its sorting order.</para>
       </summary>
       <param name="columnIndex">Column to sort.</param>
-      <param name="sortAscending">Sorting direction for the column specified.</param>
+      <param name="sortAscending">Sorting order for the column specified.</param>
+    </member>
+    <member name="M:UnityEditor.IMGUI.Controls.MultiColumnHeader.SetSortingColumns(System.Int32[],System.Boolean[])">
+      <summary>
+        <para>Sets multiple sorting columns and the associated sorting orders.</para>
+      </summary>
+      <param name="columnIndices">Column indices of the sorted columns.</param>
+      <param name="sortAscending">Sorting order for the column indices specified.</param>
     </member>
     <member name="M:UnityEditor.IMGUI.Controls.MultiColumnHeader.SortingButton(UnityEditor.IMGUI.Controls.MultiColumnHeaderState/Column,UnityEngine.Rect,System.Int32)">
       <summary>
@@ -14316,19 +14356,24 @@ Note: Use HandleUtility.GetHandleSize where you might want to have constant scre
         <para>The array of column states used by the MultiColumnHeader class.</para>
       </summary>
     </member>
-    <member name="P:UnityEditor.IMGUI.Controls.MultiColumnHeaderState.previousSortedColumnIndex">
+    <member name="P:UnityEditor.IMGUI.Controls.MultiColumnHeaderState.maximumNumberOfSortedColumns">
       <summary>
-        <para>When a new column is set for sorting the previous sorted column is stored.</para>
+        <para>This property controls the maximum number of columns returned by the sortedColumns property.</para>
       </summary>
     </member>
     <member name="P:UnityEditor.IMGUI.Controls.MultiColumnHeaderState.sortedColumnIndex">
       <summary>
-        <para>The main sorted column. This column will show the sorting arrow in the column header.</para>
+        <para>This property holds the index to the primary sorted column.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEditor.IMGUI.Controls.MultiColumnHeaderState.sortedColumns">
+      <summary>
+        <para>The array of column indices for multiple column sorting.</para>
       </summary>
     </member>
     <member name="P:UnityEditor.IMGUI.Controls.MultiColumnHeaderState.visibleColumns">
       <summary>
-        <para>This is the array of currently visible column indicies.</para>
+        <para>This is the array of currently visible column indices.</para>
       </summary>
     </member>
     <member name="P:UnityEditor.IMGUI.Controls.MultiColumnHeaderState.widthOfAllVisibleColumns">
@@ -14446,7 +14491,7 @@ Note: Use HandleUtility.GetHandleSize where you might want to have constant scre
     </member>
     <member name="P:UnityEditor.IMGUI.Controls.PrimitiveBoundsHandle.midpointHandleSizeFunction">
       <summary>
-        <para>An optional GetMidpointHandleSizeCallback to specify how large the control handles should be. Defaults to a fixed screen-space size.</para>
+        <para>An optional Handles.HandleSizeFunction to specify how large the control handles should be in the space of Handles.matrix. Defaults to a fixed screen-space size.</para>
       </summary>
     </member>
     <member name="P:UnityEditor.IMGUI.Controls.PrimitiveBoundsHandle.wireframeColor">
@@ -14499,12 +14544,6 @@ Note: Use HandleUtility.GetHandleSize where you might want to have constant scre
       <summary>
         <para>Draw a wireframe shape for this instance. Subclasses must implement this method.</para>
       </summary>
-    </member>
-    <member name="T:UnityEditor.IMGUI.Controls.PrimitiveBoundsHandle.GetMidpointHandleSizeCallback">
-      <summary>
-        <para>A delegate type for getting a control handle's size based on its current position.</para>
-      </summary>
-      <param name="position">The current position of the handle in the space of Handles.matrix.</param>
     </member>
     <member name="M:UnityEditor.IMGUI.Controls.PrimitiveBoundsHandle.GetSize">
       <summary>
@@ -15974,6 +16013,17 @@ Note: Use HandleUtility.GetHandleSize where you might want to have constant scre
       <returns>
         <para>Returns true if enabled, or false if disabled or mixed due to multi-editing.</para>
       </returns>
+    </member>
+    <member name="M:UnityEditor.MaterialEditor.EnableInstancingField">
+      <summary>
+        <para>Display UI for editing material's render queue setting.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEditor.MaterialEditor.EnableInstancingField(UnityEngine.Rect)">
+      <summary>
+        <para>Display UI for editing material's render queue setting within the specified rect.</para>
+      </summary>
+      <param name="r"></param>
     </member>
     <member name="M:UnityEditor.MaterialEditor.FixupEmissiveFlag(UnityEngine.Color,UnityEngine.MaterialGlobalIlluminationFlags)">
       <summary>
@@ -20389,17 +20439,17 @@ Note: calling this function will implicitly call Application.SetStackTraceLogTyp
     </member>
     <member name="T:UnityEditor.PlayerSettings.VRCardboard">
       <summary>
-        <para>Google's Cardboard specific Player Settings.</para>
+        <para>Google Cardboard-specific Player Settings.</para>
       </summary>
     </member>
     <member name="P:UnityEditor.PlayerSettings.VRCardboard.depthFormat">
       <summary>
-        <para>Set the requested depth format for the Depth and Stencil Buffers and. Options are 16bit Depth, 24bit Depth and 24bit Depth + 8bit Stencil.</para>
+        <para>Set the requested depth format for the Depth and Stencil Buffers. Options are 16bit Depth, 24bit Depth and 24bit Depth + 8bit Stencil.</para>
       </summary>
     </member>
     <member name="T:UnityEditor.PlayerSettings.VRDaydream">
       <summary>
-        <para>Google VR's specific Player Settings.</para>
+        <para>Google VR-specific Player Settings.</para>
       </summary>
     </member>
     <member name="P:UnityEditor.PlayerSettings.VRDaydream.daydreamIcon">
@@ -20414,7 +20464,7 @@ Note: calling this function will implicitly call Application.SetStackTraceLogTyp
     </member>
     <member name="P:UnityEditor.PlayerSettings.VRDaydream.depthFormat">
       <summary>
-        <para>Set the requested depth format for the Depth and Stencil Buffers and. Options are 16bit Depth, 24bit Depth and 24bit Depth + 8bit Stencil.</para>
+        <para>Set the requested depth format for the Depth and Stencil Buffers. Options are 16bit Depth, 24bit Depth and 24bit Depth + 8bit Stencil.</para>
       </summary>
     </member>
     <member name="T:UnityEditor.PlayerSettings.WebGL">
@@ -24744,11 +24794,6 @@ Valid values are in the range [0-1], with higher values generating a tighter mes
     <member name="T:UnityEditor.TizenOSVersion">
       <summary>
         <para>Tizen OS compatibility.</para>
-      </summary>
-    </member>
-    <member name="F:UnityEditor.TizenOSVersion.Version23">
-      <summary>
-        <para></para>
       </summary>
     </member>
     <member name="F:UnityEditor.TizenOSVersion.Version24">

@@ -49,6 +49,8 @@ public class Cs_MainMenuLogic : MonoBehaviour
     float f_CreditsTimer;
     static float f_CreditsTimer_Max = 30f;
 
+    AudioSource as_MenuMusic;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -97,6 +99,10 @@ public class Cs_MainMenuLogic : MonoBehaviour
         f_QuitMenuLerpTimer = 1.0f;
         CreditsActive = false;
         f_CreditsLerpTimer = 0.0f;
+
+        // Connecting AudioSource
+        as_MenuMusic = GameObject.Find("EventSystem").GetComponent<AudioSource>();
+        as_MenuMusic.volume = 0f;
     }
 
     void Set_ButtonHighlighed( bool b_OnNewGameMenu_, MenuButtonSelected e_ButtonSelected_ )
@@ -485,11 +491,26 @@ public class Cs_MainMenuLogic : MonoBehaviour
         }
     }
 
+    float f_MaxVolume = 0.3f;
+    void MenuMusic()
+    {
+        if (as_MenuMusic.volume < f_MaxVolume)
+        {
+            as_MenuMusic.volume += Time.fixedDeltaTime / 10f;
+
+            if (as_MenuMusic.volume >= f_MaxVolume) as_MenuMusic.volume = f_MaxVolume;
+        }
+        else return;
+    }
+
     // Update is called once per frame
     void Update ()
     {
         prevState = state;
         state = GamePad.GetState(pad_PlayerOne);
+
+        // Increase menu volume
+        MenuMusic();
 
         #region Player Input
         if(b_PlayerInputAllowed)
