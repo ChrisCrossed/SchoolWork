@@ -23,8 +23,9 @@ public class Cs_MenuButtonLogic : MonoBehaviour
 
     bool b_IsSelected;
 
-    GameObject go_Button;
-    [SerializeField] AnimationCurve lerpCurve;
+    GameObject go_AButton;
+    [SerializeField] AnimationCurve lerpCurve_AButton;
+    [SerializeField] AnimationCurve lerpCurve_Position;
     float f_LerpTimer;
     float f_ZPos = 5f;
 
@@ -36,11 +37,11 @@ public class Cs_MenuButtonLogic : MonoBehaviour
 
         mat_ThisMat = gameObject.GetComponent<MeshRenderer>().materials[1];
 
-        go_Button = transform.Find("Button").gameObject;
+        go_AButton = transform.Find("Button").gameObject;
 
         Vector3 v3_ButtonPos = gameObject.transform.position;
         v3_ButtonPos.z = f_ZPos;
-        go_Button.transform.position = v3_ButtonPos;
+        go_AButton.transform.position = v3_ButtonPos;
     }
 
     public void Init_Button( bool b_IsEnabled_ = false )
@@ -82,7 +83,7 @@ public class Cs_MenuButtonLogic : MonoBehaviour
             if(f_LerpTimer < 1.0f)
             {
                 // Increase lerp timer
-                f_LerpTimer += Time.deltaTime * 3f;
+                f_LerpTimer += Time.deltaTime * 10f;
                 if (f_LerpTimer > 1.0f) f_LerpTimer = 1.0f;
             }
         }
@@ -106,23 +107,39 @@ public class Cs_MenuButtonLogic : MonoBehaviour
             if (f_LerpTimer > 0.0f)
             {
                 // Increase lerp timer
-                f_LerpTimer -= Time.deltaTime * 3f;
+                f_LerpTimer -= Time.deltaTime * 10f;
                 if (f_LerpTimer < 0.0f) f_LerpTimer = 0.0f;
             }
         }
 
+        #region Lerp Menu Button Position
+        Vector3 v3_ButtonPosition_Start = gameObject.transform.localPosition;
+        v3_ButtonPosition_Start.x = 0f;
+
+        Vector3 v3_ButtonPosition_Final = v3_ButtonPosition_Start;
+        v3_ButtonPosition_Final.x = 25f;
+
+        float f_Evaluate_Menu = lerpCurve_Position.Evaluate(f_LerpTimer);
+        Vector3 v3_ButtonPosition_New = Vector3.Lerp(v3_ButtonPosition_Start, v3_ButtonPosition_Final, f_Evaluate_Menu);
+        gameObject.transform.localPosition = v3_ButtonPosition_New;
+        #endregion
+
+        #region Lerp 'A' button position
         // Evaluate lerp timer
-        float f_Evaluate = lerpCurve.Evaluate(f_LerpTimer);
+        /*
+        float f_Evaluate = lerpCurve_AButton.Evaluate(f_LerpTimer);
 
         // Set positions
-        Vector3 v3_StartPos = gameObject.transform.position;
-        v3_StartPos.z = f_ZPos;
+        Vector3 v3_StartPos = gameObject.transform.localPosition;
+        // v3_StartPos.z = f_ZPos;
 
         Vector3 v3_FinalPos = v3_StartPos;
-        v3_FinalPos.x += 100f;
+        v3_FinalPos.x += 90f;
 
         Vector3 v3_NewPos = Vector3.Lerp(v3_StartPos, v3_FinalPos, f_Evaluate);
-        go_Button.transform.position = v3_NewPos;
+        go_AButton.transform.localPosition = v3_NewPos;
+        */
+        #endregion
     }
 
     void SetMaterial()

@@ -449,7 +449,7 @@ public class Cs_MainMenuLogic : MonoBehaviour
     Vector3 v3_NewGame_PrevLoc;
     Vector3 v3_NewGame_CurrLoc;
     float f_LerpTimer;
-    static float f_LerpTimer_Max = 2.0f;
+    static float f_LerpTimer_Max = 1.5f;
     void SetButtonPosition( bool b_NewGameMenu_, bool b_OnScreen_ )
     {
         // Reset f_LerpTimer
