@@ -2,6 +2,7 @@
 using System.Collections;
 using XInputDotNetPure;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /*********************************
  * 
@@ -19,6 +20,8 @@ public class Cs_InputManager : MonoBehaviour
     // Keyboard Input
     public KeyCode key_Down;
     public KeyCode key_Down_2;
+    public KeyCode key_Up;
+    public KeyCode key_Up_2;
     public KeyCode key_Left;
     public KeyCode key_Left_2;
     public KeyCode key_Right;
@@ -37,6 +40,7 @@ public class Cs_InputManager : MonoBehaviour
     GamePadState prevState_p1;
 
     bool b_KeyboardUsedLast;
+    bool b_PauseMenuActive;
 
     // Use this for initialization
     void Start ()
@@ -56,15 +60,18 @@ public class Cs_InputManager : MonoBehaviour
         f_ControllerInputTimer += Time.deltaTime;
 
         if ( Input.GetKey(key_Down) ||
+            Input.GetKey(key_Up) ||
             Input.GetKey(key_Left) ||
             Input.GetKey(key_Right) ||
             Input.GetKey(key_Down_2) ||
+            Input.GetKey(key_Up_2) ||
             Input.GetKey(key_Left_2) ||
             Input.GetKey(key_Right_2) ||
             Input.GetKey(key_RotClock) ||
             Input.GetKey(key_RotCounter) ||
             Input.GetKey(key_Drop) ||
-            Input.GetKey(key_Quit))
+            Input.GetKey(key_Quit) ||
+            Input.GetKey(KeyCode.Return))
         {
             return true;
         }
@@ -74,7 +81,51 @@ public class Cs_InputManager : MonoBehaviour
 
     void KeyboardInput()
     {
-        if(Input.GetKey(key_Quit)) SceneManager.LoadScene(2);
+        if (Input.GetKeyDown(key_Quit))
+        {
+            BoardLogic.Set_PauseMenu = !BoardLogic.Set_PauseMenu;
+            b_PauseMenuActive = BoardLogic.Set_PauseMenu;
+
+            PauseMenuState = true;
+        }
+
+        if (b_PauseMenuActive)
+        {
+            // Handle Up/Down/Select input
+            #region Down
+            if (Input.GetKeyDown(key_Down) || Input.GetKeyDown(key_Down_2))
+            {
+                // Move Indicator down
+                PauseMenuState = false;
+            }
+            #endregion
+
+            #region Up
+            if (Input.GetKeyDown(key_Up) || Input.GetKeyDown(key_Up_2))
+            {
+                // Move Indicator up
+                PauseMenuState = true;
+            }
+            #endregion
+
+            #region Select
+            if (Input.GetKeyDown(key_Drop) || Input.GetKeyDown(KeyCode.Return))      // Button 'A' Pressed
+            {
+                if (PauseMenuState)
+                {
+                    BoardLogic.Set_PauseMenu = !BoardLogic.Set_PauseMenu;
+                    b_PauseMenuActive = BoardLogic.Set_PauseMenu;
+                }
+                else
+                {
+                    SceneManager.LoadScene(2);
+                }
+            }
+            #endregion
+
+            // Then quit out so input is not sent out
+            return;
+        }
 
         #region Left Input
         if ( (Input.GetKeyDown(key_Left) || Input.GetKeyDown(key_Left_2)) &&
@@ -159,12 +210,69 @@ public class Cs_InputManager : MonoBehaviour
         #endregion
     }
 
+    bool b_ResumeGameSelected;
+    bool PauseMenuState
+    {
+        set
+        {
+            b_ResumeGameSelected = value;
+
+            GameObject.Find("Selector_Resume").GetComponent<Image>().enabled = value;
+            GameObject.Find("Selector_Quit").GetComponent<Image>().enabled = !value;
+        }
+        get { return b_ResumeGameSelected; }
+    }
+
     float f_ControllerInputTimer = 0.0f;
     void ControllerInput()
     {
         if(state_p1.Buttons.Start == ButtonState.Pressed && prevState_p1.Buttons.Start == ButtonState.Released)
         {
-            SceneManager.LoadScene(2);
+            // SceneManager.LoadScene(2);
+            BoardLogic.Set_PauseMenu = !BoardLogic.Set_PauseMenu;
+            b_PauseMenuActive = BoardLogic.Set_PauseMenu;
+        }
+
+        if (b_PauseMenuActive)
+        {
+            // Handle Up/Down/Select input
+            #region Down
+            if ((state_p1.ThumbSticks.Right.Y < -0.5f && prevState_p1.ThumbSticks.Right.Y > -0.5f) ||           // Right Analog Down Pressed
+            (state_p1.ThumbSticks.Left.Y < -0.5f && prevState_p1.ThumbSticks.Left.Y > -0.5f) ||             // Left Analog Down Pressed
+            (state_p1.DPad.Down == ButtonState.Pressed && prevState_p1.DPad.Down == ButtonState.Released)) // DPad Down Pressed
+            {
+                // Move Indicator down
+                PauseMenuState = false;
+            }
+            #endregion
+
+            #region Up
+            if ((state_p1.ThumbSticks.Right.Y > 0.5f && prevState_p1.ThumbSticks.Right.Y < 0.5f) ||           // Right Analog Up Pressed
+            (state_p1.ThumbSticks.Left.Y > 0.5f && prevState_p1.ThumbSticks.Left.Y < 0.5f) ||             // Left Analog Up Pressed
+            (state_p1.DPad.Up == ButtonState.Pressed && prevState_p1.DPad.Up == ButtonState.Released)) // DPad Up Pressed
+            {
+                // Move Indicator up
+                PauseMenuState = true;
+            }
+            #endregion
+
+            #region Select
+            if (state_p1.Buttons.A == ButtonState.Pressed && prevState_p1.Buttons.A == ButtonState.Released)      // Button 'A' Pressed
+            {
+                if( PauseMenuState )
+                {
+                    BoardLogic.Set_PauseMenu = !BoardLogic.Set_PauseMenu;
+                    b_PauseMenuActive = BoardLogic.Set_PauseMenu;
+                }
+                else
+                {
+                    SceneManager.LoadScene(2);
+                }
+            }
+            #endregion
+
+            // Then quit out so input is not sent out
+            return;
         }
 
         #region Move Left

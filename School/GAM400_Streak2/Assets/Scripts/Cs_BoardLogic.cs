@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.ImageEffects;
 
 /*********************************
  * 
@@ -32,6 +33,7 @@ public enum Enum_BlockSize
 public enum Enum_PauseEffect
 {
     StartGame,
+    PauseMenu,
     Unpause,
     ScoreLine,
     GameOver
@@ -142,6 +144,7 @@ public class Cs_BoardLogic : MonoBehaviour
 
     GameObject go_SFX;
     AudioClip sfx_ScoreEffect;
+    GameObject cam_Main;
 
     // Used to begin gameplay
     public void Init_Gameplay()
@@ -247,8 +250,8 @@ public class Cs_BoardLogic : MonoBehaviour
         // Initialize block array
         BlockArray = new Enum_BlockType[i_ArrayHeight, i_ArrayWidth];
         Initialize_BlockArray();
-        
-        // PrintArrayToConsole();
+
+        cam_Main = GameObject.Find("Main Camera");
     }
 
     #region Block Creation
@@ -1764,6 +1767,25 @@ public class Cs_BoardLogic : MonoBehaviour
         GameObject.Find("BoardDisplay").GetComponent<Cs_BoardDisplay>().Set_OneBlock(8, 3, Enum_BlockType.Block_1_Static);
     }
 
+    bool b_PauseMenuActive;
+    public bool Set_PauseMenu
+    {
+        set
+        {
+            b_PauseMenuActive = value;
+
+            cam_Main.GetComponent<BlurOptimized>().enabled = b_PauseMenuActive;
+            GameObject.Find("MenuCanvas").GetComponent<Canvas>().enabled = b_PauseMenuActive;
+
+            float f_MusicVolume = 0.4f;
+
+            if (b_PauseMenuActive) f_MusicVolume = 0.2f;
+
+            GameObject.Find("AudioSource_Music").GetComponent<AudioSource>().volume = f_MusicVolume;
+        }
+        get { return b_PauseMenuActive; }
+    }
+
     // Update is called once per frame
     float f_ScoreLine_Timer;
     // static float f_ScoreLine_Timer_Max = 0.075f;
@@ -1782,26 +1804,33 @@ public class Cs_BoardLogic : MonoBehaviour
             Cheat_SetDoubleLine();
         }
 
-        if(e_PauseEffect == Enum_PauseEffect.Unpause)
+        if (e_PauseEffect == Enum_PauseEffect.PauseMenu)
+        {
+            
+        }
+        else if(e_PauseEffect == Enum_PauseEffect.Unpause)
         {
             if(b_DemoGame_InputReceived)
             {
                 #region Drop Block timer
-            // Decrement timer for next time to move blocks down
-            if (i_TimeToDrop_Max > 0)
-            {
-                f_TimeToDrop += Time.deltaTime;
-
-                if(f_TimeToDrop > i_TimeToDrop_Max)
+                if(!b_PauseMenuActive)
                 {
-                    // Reset timer
-                    f_TimeToDrop = 0;
+                    // Decrement timer for next time to move blocks down
+                    if (i_TimeToDrop_Max > 0)
+                    {
+                        f_TimeToDrop += Time.deltaTime;
 
-                    // Drop blocks down manually
-                    MoveActiveBlocks_Down(v2_ActiveBlockLocation, e_BlockSize);
+                        if(f_TimeToDrop > i_TimeToDrop_Max)
+                        {
+                            // Reset timer
+                            f_TimeToDrop = 0;
+
+                            // Drop blocks down manually
+                            MoveActiveBlocks_Down(v2_ActiveBlockLocation, e_BlockSize);
+                        }
+                    }
                 }
-            }
-            #endregion
+                #endregion
             }
         }
         else if(e_PauseEffect == Enum_PauseEffect.ScoreLine)
