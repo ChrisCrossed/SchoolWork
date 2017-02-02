@@ -210,7 +210,7 @@ public class Cs_InputManager : MonoBehaviour
         #endregion
     }
 
-    bool b_ResumeGameSelected;
+    bool b_ResumeGameSelected = true;
     bool PauseMenuState
     {
         set
