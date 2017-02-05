@@ -1,0 +1,118 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70224e4fc0a97f54eb97162aee73e7d6, type: 3}
+  m_Name: LowPower
+  m_EditorClassIdentifier: 
+  codeFriendlyName: LowPower
+  axisType: 0
+  binaryInputMethods:
+  - name: Method 1
+    controlSet: 0
+    inputType_: 1
+    sendOnChannels: 01000000
+    expanded: 1
+    parentEvent: {fileID: 11400000}
+    keyCode: 306
+    gamePadButton: 0
+    gamePadAxis: 0
+    mouseDirection: 0
+    threshold: 0
+  singleAxisInputMethods: []
+  dualAxisInputMethods:
+  - name: Method 1
+    controlSet: 0
+    inputType_: 7
+    sendOnChannels: 00
+    expanded: 1
+    parentEvent: {fileID: 11400000}
+    horizontal:
+      name: 
+      controlSet: 0
+      inputType_: 7
+      sendOnChannels: 
+      expanded: 1
+      parentEvent: {fileID: 11400000}
+      positiveKeyCode: 0
+      negativeKeyCode: 0
+      positiveGamePadButton: 0
+      negativeGamePadButton: 0
+      positiveGamePadAxis: 0
+      negativeGamePadAxis: 0
+      positiveMouseDirection: 4
+      negativeMouseDirection: 3
+      currentValue: 0
+      delay: 0
+    vertical:
+      name: 
+      controlSet: 0
+      inputType_: 7
+      sendOnChannels: 
+      expanded: 1
+      parentEvent: {fileID: 11400000}
+      positiveKeyCode: 0
+      negativeKeyCode: 0
+      positiveGamePadButton: 0
+      negativeGamePadButton: 0
+      positiveGamePadAxis: 0
+      negativeGamePadAxis: 0
+      positiveMouseDirection: 1
+      negativeMouseDirection: 2
+      currentValue: 0
+      delay: 0
+  - name: Method 2
+    controlSet: 0
+    inputType_: 5
+    sendOnChannels: 01
+    expanded: 1
+    parentEvent: {fileID: 11400000}
+    horizontal:
+      name: 
+      controlSet: 0
+      inputType_: 5
+      sendOnChannels: 
+      expanded: 1
+      parentEvent: {fileID: 11400000}
+      positiveKeyCode: 0
+      negativeKeyCode: 0
+      positiveGamePadButton: 0
+      negativeGamePadButton: 0
+      positiveGamePadAxis: 10
+      negativeGamePadAxis: 9
+      positiveMouseDirection: 0
+      negativeMouseDirection: 0
+      currentValue: 0
+      delay: 0
+    vertical:
+      name: 
+      controlSet: 0
+      inputType_: 5
+      sendOnChannels: 
+      expanded: 1
+      parentEvent: {fileID: 11400000}
+      positiveKeyCode: 0
+      negativeKeyCode: 0
+      positiveGamePadButton: 0
+      negativeGamePadButton: 0
+      positiveGamePadAxis: 7
+      negativeGamePadAxis: 8
+      positiveMouseDirection: 0
+      negativeMouseDirection: 0
+      currentValue: 0
+      delay: 0
+  channelCount: 4
+  hasNegativeInput: 1
+  threshold: 0
+  thresholdType: 0
+  sendOnActive: 0
+  sendOnInactive: 0
+  sendOnTriggered: 1
+  sendOnReleased: 1
+  repeatDelay: Infinity

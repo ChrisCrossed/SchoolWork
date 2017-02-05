@@ -1,0 +1,127 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1000013039576510}
+  m_IsPrefabParent: 1
+--- !u!1 &1000013039576510
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000010999616256}
+  - 114: {fileID: 114000010204658308}
+  m_Layer: 0
+  m_Name: OneShotSound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4000010999616256
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013039576510}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 24.574984, y: 13.824112, z: -29.462671}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!114 &114000010204658308
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013039576510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49efe7b6cd96d974a8315e93aee3481b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: 7cd661e5141ebd74c9a530f20d875c5c, type: 3}
+  mixerGroup: {fileID: 24300001, guid: 4104422c9ceb67c4f929cbfa8979b04e, type: 2}
+  playAtStart: 1
+  loop: 0
+  range: 0
+  volume: 0.35
+  volumeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0.0024880618
+      value: 0.99968374
+      inSlope: -30.693853
+      outSlope: -30.693853
+      tangentMode: 0
+    - time: 0.015139281
+      value: 0.69303554
+      inSlope: -16.422781
+      outSlope: -16.422781
+      tangentMode: 10
+    - time: 0.054953694
+      value: 0.3503555
+      inSlope: -5.909074
+      outSlope: -5.909074
+      tangentMode: 10
+    - time: 0.07923738
+      value: 0.2723754
+      inSlope: -2.408505
+      outSlope: -2.408505
+      tangentMode: 10
+    - time: 0.116864815
+      value: 0.2119534
+      inSlope: -1.2461185
+      outSlope: -1.2461185
+      tangentMode: 10
+    - time: 0.18406133
+      value: 0.15238768
+      inSlope: -0.7901037
+      outSlope: -0.7901037
+      tangentMode: 0
+    - time: 0.29903597
+      value: 0.07922703
+      inSlope: -0.49872902
+      outSlope: -0.49872902
+      tangentMode: 10
+    - time: 0.41690305
+      value: 0.036660735
+      inSlope: -0.23635755
+      outSlope: -0.23635755
+      tangentMode: 0
+    - time: 0.99961776
+      value: 0.003000792
+      inSlope: -0.031320598
+      outSlope: -0.031320598
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  priority: 128
+  volumeOverTime:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
