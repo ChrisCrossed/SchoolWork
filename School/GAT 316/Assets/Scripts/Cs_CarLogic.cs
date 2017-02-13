@@ -7,7 +7,7 @@ public class Cs_CarLogic : MonoBehaviour
     float f_LaneSwitchTimer;
     float f_LaneSwitchTimer_Max;
     bool b_CarGoal;
-    NavMeshAgent navAgent;
+    UnityEngine.AI.NavMeshAgent navAgent;
 
     Vector3 go_CarGoal_1;
     Vector3 go_CarGoal_2;
@@ -25,7 +25,7 @@ public class Cs_CarLogic : MonoBehaviour
         go_CarStart_1 = GameObject.Find("CarStart_1").transform.position;
         go_CarStart_2 = GameObject.Find("CarStart_2").transform.position;
 
-        navAgent = gameObject.GetComponent<NavMeshAgent>();
+        navAgent = gameObject.GetComponent<UnityEngine.AI.NavMeshAgent>();
 
         Reset();
     }

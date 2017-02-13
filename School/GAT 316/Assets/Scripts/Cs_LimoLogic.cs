@@ -5,7 +5,7 @@ public class Cs_LimoLogic : MonoBehaviour
 {
     GameObject go_LimoStop;
     GameObject go_LimoGoal;
-    NavMeshAgent navMeshAgent;
+    UnityEngine.AI.NavMeshAgent navMeshAgent;
 
     bool b_IsArriving = true;
 
@@ -15,7 +15,7 @@ public class Cs_LimoLogic : MonoBehaviour
         go_LimoGoal = GameObject.Find("CarGoal_2");
         go_LimoStop = GameObject.Find("LimoStop");
 
-        navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
+        navMeshAgent = gameObject.GetComponent<UnityEngine.AI.NavMeshAgent>();
         navMeshAgent.speed = 15f;
 
         gameObject.transform.position = GameObject.Find("LimoStart").transform.position;

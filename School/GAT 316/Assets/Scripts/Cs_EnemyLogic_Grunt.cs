@@ -52,7 +52,7 @@ public class Cs_EnemyLogic_Grunt : MonoBehaviour
         // Set the first patrol point for the guard
         if(gameObject.GetComponent<NavMeshAgent>().enabled)
         {
-            NavMeshAgent agent = GetComponent<NavMeshAgent>();
+            UnityEngine.AI.NavMeshAgent agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
             if(go_PatrolPath[i_PatrolPoint] != null)
             {
                 agent.destination = go_PatrolPath[i_PatrolPoint].transform.position;
