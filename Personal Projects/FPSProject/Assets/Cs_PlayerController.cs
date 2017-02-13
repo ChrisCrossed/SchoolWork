@@ -9,15 +9,20 @@ public class Cs_PlayerController : MonoBehaviour
     Rigidbody this_Rigidbody;
     Collider this_Collider;
     GameObject this_Camera;
+    Cs_Crosshair this_Crosshair;
 
 	// Use this for initialization
 	void Start ()
     {
+        // Lock mouse cursor
+        Cursor.lockState = CursorLockMode.Locked;
+
         // Object Connections
         this_Player = gameObject;
         this_Rigidbody = this_Player.GetComponent<Rigidbody>();
         this_Collider = this_Player.GetComponent<Collider>();
         this_Camera = transform.FindChild("Main Camera").gameObject;
+        this_Crosshair = this_Player.GetComponent<Cs_Crosshair>();
 
         // Raycast information
         go_RaycastPoint = new GameObject[5];
@@ -101,15 +106,6 @@ public class Cs_PlayerController : MonoBehaviour
         else
         {
             f_FallVelocity = 0;
-
-            /*
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                Vector3 v3_JumpVelocity = this_Rigidbody.velocity;
-                v3_JumpVelocity.y = 10f;
-                this_Rigidbody.velocity = v3_JumpVelocity;
-            }
-            */
         }
         #endregion
 
@@ -171,5 +167,26 @@ public class Cs_PlayerController : MonoBehaviour
     {
         Movement();
         MouseLook();
+        
+        if( Input.GetKeyDown( KeyCode.E ) )
+        {
+            if( this_Crosshair.Get_CrosshairObject != null )
+            {
+                if(this_Crosshair.Get_CrosshairObject.layer == LayerMask.NameToLayer("Use"))
+                {
+                    print( this_Crosshair.Get_CrosshairObject );
+                }
+            }
+        }
+        else if( Input.GetMouseButtonDown(0) )
+        {
+            if( this_Crosshair.Get_CrosshairObject != null )
+            {
+                if( this_Crosshair.Get_CrosshairObject.layer == LayerMask.NameToLayer("Enemy") )
+                {
+                    print( this_Crosshair.Get_CrosshairObject );
+                }
+            }
+        }
 	}
 }
