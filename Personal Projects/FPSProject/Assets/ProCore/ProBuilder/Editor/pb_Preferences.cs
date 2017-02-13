@@ -1,4 +1,3 @@
-#define PROTOTYPE
 using UnityEngine;
 using UnityEditor;
 #if !UNITY_4_7

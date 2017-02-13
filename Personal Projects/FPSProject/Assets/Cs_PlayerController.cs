@@ -18,9 +18,14 @@ public class Cs_PlayerController : MonoBehaviour
         this_Rigidbody = this_Player.GetComponent<Rigidbody>();
         this_Collider = this_Player.GetComponent<Collider>();
         this_Camera = transform.FindChild("Main Camera").gameObject;
-	}
+
+        // Raycast information
+        go_RaycastPoint = transform.FindChild("RaycastPoint").gameObject;
+
+    }
 
     Vector3 v3_PushDirection_Old;
+    float f_FallVelocity;
     void Movement()
     {
         // Create new directional vector
@@ -53,13 +58,38 @@ public class Cs_PlayerController : MonoBehaviour
         Vector3 v3_PushDirection = this_Player.transform.rotation * v3_InputVector;
 
         // Lerp between the previous direction and the new direction (Makes direction switching a bit smoother)
-        v3_PushDirection = Vector3.Lerp(v3_PushDirection_Old, v3_PushDirection, 0.3f);
+        v3_PushDirection = Vector3.Lerp( v3_PushDirection_Old, v3_PushDirection, 0.3f );
+
+        // Apply new push direction based on ground normal
+        Vector3 v3_GroundNormal = FindGroundNormal();
+        if( v3_GroundNormal != new Vector3() )
+        {
+            // Convert normals
+            v3_PushDirection = Vector3.ProjectOnPlane( v3_PushDirection, v3_GroundNormal );
+        }
 
         // Set player velocity based on (SPEED) & (PUSH DIRECTION)
         this_Rigidbody.velocity = 10.0f * v3_PushDirection;
 
         // Store the old push direction
         v3_PushDirection_Old = v3_PushDirection;
+    }
+
+    GameObject go_RaycastPoint;
+    Vector3 FindGroundNormal()
+    {
+        // Raycast downward to find ground plane
+        RaycastHit hit;
+        int i_LayerMask = LayerMask.GetMask("Ground");
+
+        // Find normal of ground plane
+        if (Physics.Raycast(go_RaycastPoint.transform.position, -Vector3.up, out hit, 0.35f, i_LayerMask))
+        {
+            return hit.normal;
+        }
+
+        // Return normal
+        return new Vector3();
     }
 
     float f_VertAngle;
@@ -89,7 +119,7 @@ public class Cs_PlayerController : MonoBehaviour
         this_Camera.transform.eulerAngles = v3_CamEuler;
         #endregion
     }
-
+    
     // FixedUpdate is called at the same points in time.
     void FixedUpdate ()
     {
