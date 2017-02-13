@@ -20,14 +20,21 @@ public class Cs_PlayerController : MonoBehaviour
         this_Camera = transform.FindChild("Main Camera").gameObject;
 
         // Raycast information
-        go_RaycastPoint = transform.FindChild("RaycastPoint").gameObject;
-
+        go_RaycastPoint = new GameObject[5];
+        go_RaycastPoint[0] = transform.FindChild("RaycastPoints").FindChild("RaycastPoint_Center").gameObject;
+        go_RaycastPoint[1] = transform.FindChild("RaycastPoints").FindChild("RaycastPoint_0").gameObject;
+        go_RaycastPoint[2] = transform.FindChild("RaycastPoints").FindChild("RaycastPoint_1").gameObject;
+        go_RaycastPoint[3] = transform.FindChild("RaycastPoints").FindChild("RaycastPoint_2").gameObject;
+        go_RaycastPoint[4] = transform.FindChild("RaycastPoints").FindChild("RaycastPoint_3").gameObject;
     }
 
     Vector3 v3_PushDirection_Old;
     float f_FallVelocity;
     void Movement()
     {
+        // Store previous downward velocity
+        float f_yVel = this_Rigidbody.velocity.y;
+
         // Create new directional vector
         Vector3 v3_InputVector = new Vector3();
 
@@ -61,7 +68,7 @@ public class Cs_PlayerController : MonoBehaviour
         v3_PushDirection = Vector3.Lerp( v3_PushDirection_Old, v3_PushDirection, 0.3f );
 
         // Apply new push direction based on ground normal
-        Vector3 v3_GroundNormal = FindGroundNormal();
+        Vector3 v3_GroundNormal = FindRaycastHit().normal;
         if( v3_GroundNormal != new Vector3() )
         {
             // Convert normals
@@ -71,25 +78,64 @@ public class Cs_PlayerController : MonoBehaviour
         // Set player velocity based on (SPEED) & (PUSH DIRECTION)
         this_Rigidbody.velocity = 10.0f * v3_PushDirection;
 
+        #region Gravity
+        // Check if the ground is close below us.
+        float f_TerminalVelocity = 15f;
+        RaycastHit hitToGround = FindRaycastHit();
+        
+        // Run a Raycast to see if we're touching any ground or not
+        if (RaycastHit.Equals(hitToGround, new RaycastHit()))
+        {
+            // Not touching the ground. Add gravity/velocity
+            if (f_FallVelocity < f_TerminalVelocity)
+            {
+                f_FallVelocity += Time.fixedDeltaTime + f_FallVelocity / 2f;
+                if (f_FallVelocity > f_TerminalVelocity) f_FallVelocity = f_TerminalVelocity;
+            }
+
+            // We are not touching the ground. Apply gravity.
+            Vector3 v3_Gravity = this_Rigidbody.velocity;
+            v3_Gravity.y -= f_FallVelocity;
+            this_Rigidbody.velocity = v3_Gravity;
+        }
+        else
+        {
+            f_FallVelocity = 0;
+
+            /*
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                Vector3 v3_JumpVelocity = this_Rigidbody.velocity;
+                v3_JumpVelocity.y = 10f;
+                this_Rigidbody.velocity = v3_JumpVelocity;
+            }
+            */
+        }
+        #endregion
+
         // Store the old push direction
         v3_PushDirection_Old = v3_PushDirection;
     }
 
-    GameObject go_RaycastPoint;
-    Vector3 FindGroundNormal()
+    GameObject[] go_RaycastPoint;
+    RaycastHit FindRaycastHit(float f_Distance = 0.35f)
     {
         // Raycast downward to find ground plane
         RaycastHit hit;
+        RaycastHit tempHit;
         int i_LayerMask = LayerMask.GetMask("Ground");
 
-        // Find normal of ground plane
-        if (Physics.Raycast(go_RaycastPoint.transform.position, -Vector3.up, out hit, 0.35f, i_LayerMask))
+        // Store first normal of ground plane
+        Physics.Raycast(go_RaycastPoint[0].transform.position, -Vector3.up, out hit, f_Distance, i_LayerMask);
+
+        for (int i_ = 0; i_ < go_RaycastPoint.Length; ++i_)
+        if (Physics.Raycast(go_RaycastPoint[i_].transform.position, -Vector3.up, out tempHit, f_Distance, i_LayerMask))
         {
-            return hit.normal;
+            if(tempHit.distance < hit.distance) hit = tempHit;
         }
 
         // Return normal
-        return new Vector3();
+        return hit;
     }
 
     float f_VertAngle;
