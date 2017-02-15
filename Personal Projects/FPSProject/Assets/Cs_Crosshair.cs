@@ -28,14 +28,26 @@ public class Cs_Crosshair : MonoBehaviour
         {
             if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Use"))
             {
-                img_Crosshair.color = Color.cyan;
+                // Because it is a button, we don't want to allow use until we're close
+                if(hit.distance < 5f)
+                {
+                    img_Crosshair.color = Color.cyan;
+
+                    go_CrosshairObject = hit.collider.gameObject;
+                }
+                else
+                {
+                    img_Crosshair.color = Color.white;
+
+                    go_CrosshairObject = null;
+                }
             }
             else if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 img_Crosshair.color = Color.red;
-            }
 
-            go_CrosshairObject = hit.collider.gameObject;
+                go_CrosshairObject = hit.collider.gameObject;
+            }
         }
         else
         {

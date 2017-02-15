@@ -174,7 +174,11 @@ public class Cs_PlayerController : MonoBehaviour
             {
                 if(this_Crosshair.Get_CrosshairObject.layer == LayerMask.NameToLayer("Use"))
                 {
-                    print( this_Crosshair.Get_CrosshairObject );
+                    // If button
+                    if(this_Crosshair.Get_CrosshairObject.GetComponent<Cs_UseButton>())
+                    {
+                        this_Crosshair.Get_CrosshairObject.GetComponent<Cs_UseButton>().Use_Button();
+                    }
                 }
             }
         }
