@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Cs_Crosshair.cs" />
+    <Compile Include="Assets\Cs_Door.cs" />
     <Compile Include="Assets\Cs_PlayerController.cs" />
     <Compile Include="Assets\Cs_UseButton.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\Scripts\CameraControls.cs" />

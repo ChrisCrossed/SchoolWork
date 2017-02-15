@@ -14,6 +14,7 @@ public class Cs_UseButton : MonoBehaviour
 
     // Boolean for Resetting Activation
     bool b_ReadyToUse;
+    GameObject go_Player;
 
     // Use this for initialization
     void Start ()
@@ -27,18 +28,36 @@ public class Cs_UseButton : MonoBehaviour
 
         // Boolean for Resetting Activation
         b_ReadyToUse = true;
+        go_Player = GameObject.Find("Player");
+        if( UseOnce )
+        {
+            if(ConnectedObject.GetComponent<Cs_Door>())
+            {
+                ConnectedObject.GetComponent<Cs_Door>().Set_ControlledByButton = UseOnce;
+            }
+        }
     }
 
     bool b_Active;
     public bool ButtonState
     {
         get { return b_Active; }
-        set
+        private set
         {
             if( (value == true || !UseOnce ) && b_ReadyToUse )
             {
                 b_Active = value;
                 b_ReadyToUse = false;
+
+                // Send the signal to the connected object
+                if( ConnectedObject )
+                {
+                    // If a door, manipulate the door
+                    if( ConnectedObject.GetComponent<Cs_Door>() )
+                    {
+                        ConnectedObject.GetComponent<Cs_Door>().DoorState = b_Active;
+                    }
+                }
             }
         }
     }
@@ -47,8 +66,7 @@ public class Cs_UseButton : MonoBehaviour
     {
         ButtonState = !ButtonState;
     }
-
-	
+    
 	// Update is called once per frame
 	void Update ()
     {
@@ -122,5 +140,11 @@ public class Cs_UseButton : MonoBehaviour
 
         go_Button_Top.transform.localPosition = v3_ButtonPos_Top;
         go_Button_Bottom.transform.localPosition = v3_ButtonPos_Bottom;
-	}
+
+        // If the door is allowed to be used multiple times and the player moves a set distance from the door, close it
+        if (!UseOnce && b_Active && Vector3.Distance(gameObject.transform.position, go_Player.transform.position) > 9.5f) // Door distance to player is 10f
+        {
+            ButtonState = false;
+        }
+    }
 }

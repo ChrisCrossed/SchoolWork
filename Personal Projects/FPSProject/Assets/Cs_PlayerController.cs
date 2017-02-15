@@ -179,6 +179,11 @@ public class Cs_PlayerController : MonoBehaviour
                     {
                         this_Crosshair.Get_CrosshairObject.GetComponent<Cs_UseButton>().Use_Button();
                     }
+
+                    if(this_Crosshair.Get_CrosshairObject.GetComponent<Cs_Door>())
+                    {
+                        this_Crosshair.Get_CrosshairObject.GetComponent<Cs_Door>().Use_OpenDoor();
+                    }
                 }
             }
         }
