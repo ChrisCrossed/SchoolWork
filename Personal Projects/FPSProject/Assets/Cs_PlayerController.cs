@@ -11,8 +11,14 @@ public class Cs_PlayerController : MonoBehaviour
     GameObject this_Camera;
     Cs_Crosshair this_Crosshair;
 
-	// Use this for initialization
-	void Start ()
+    // Floats
+    float MAX_MOVESPEED_FORWARD = 10f;
+    float ACCELERATION = 5f;
+    float f_RayCast_DownwardDistance = 0.32f;
+    float JUMP_HEIGHT = 12.5f;
+
+    // Use this for initialization
+    void Start ()
     {
         // Lock mouse cursor
         Cursor.lockState = CursorLockMode.Locked;
@@ -66,51 +72,19 @@ public class Cs_PlayerController : MonoBehaviour
         // Normalize vector
         v3_InputVector.Normalize();
 
-        // Find player orientation and push in that direction in accordance to the input vector
-        Vector3 v3_PushDirection = this_Player.transform.rotation * v3_InputVector;
-
-        // Lerp between the previous direction and the new direction (Makes direction switching a bit smoother)
-        v3_PushDirection = Vector3.Lerp( v3_PushDirection_Old, v3_PushDirection, 0.3f );
-
-        // Apply new push direction based on ground normal
-        Vector3 v3_GroundNormal = FindRaycastHit().normal;
-        if( v3_GroundNormal != new Vector3() )
+        #region Jump
+        bool b_Jump = false;
+        if (b_CanJump)
         {
-            // Convert normals
-            v3_PushDirection = Vector3.ProjectOnPlane( v3_PushDirection, v3_GroundNormal );
-        }
-
-        // Set player velocity based on (SPEED) & (PUSH DIRECTION)
-        this_Rigidbody.velocity = 10.0f * v3_PushDirection;
-
-        #region Gravity
-        // Check if the ground is close below us.
-        float f_TerminalVelocity = 15f;
-        RaycastHit hitToGround = FindRaycastHit();
-        
-        // Run a Raycast to see if we're touching any ground or not
-        if (RaycastHit.Equals(hitToGround, new RaycastHit()))
-        {
-            // Not touching the ground. Add gravity/velocity
-            if (f_FallVelocity < f_TerminalVelocity)
+            if (Input.GetKey(KeyCode.Space))
             {
-                f_FallVelocity += Time.fixedDeltaTime + f_FallVelocity / 2f;
-                if (f_FallVelocity > f_TerminalVelocity) f_FallVelocity = f_TerminalVelocity;
+                b_Jump = true;
+                b_CanJump = false;
             }
-
-            // We are not touching the ground. Apply gravity.
-            Vector3 v3_Gravity = this_Rigidbody.velocity;
-            v3_Gravity.y -= f_FallVelocity;
-            this_Rigidbody.velocity = v3_Gravity;
-        }
-        else
-        {
-            f_FallVelocity = 0;
         }
         #endregion
 
-        // Store the old push direction
-        v3_PushDirection_Old = v3_PushDirection;
+        PlayerMovement( v3_InputVector, b_Jump );
     }
 
     GameObject[] go_RaycastPoint;
@@ -118,20 +92,58 @@ public class Cs_PlayerController : MonoBehaviour
     {
         // Raycast downward to find ground plane
         RaycastHit hit;
-        RaycastHit tempHit;
+        // RaycastHit tempHit;
         int i_LayerMask = LayerMask.GetMask("Ground");
 
         // Store first normal of ground plane
         Physics.Raycast(go_RaycastPoint[0].transform.position, -Vector3.up, out hit, f_Distance, i_LayerMask);
 
-        for (int i_ = 0; i_ < go_RaycastPoint.Length; ++i_)
-        if (Physics.Raycast(go_RaycastPoint[i_].transform.position, -Vector3.up, out tempHit, f_Distance, i_LayerMask))
-        {
-            if(tempHit.distance < hit.distance) hit = tempHit;
-        }
-
         // Return normal
         return hit;
+    }
+
+    void PlayerMovement(Vector3 v3_Direction_, bool b_Jump_, float f_Magnitude_ = 1)
+    {
+        // Old velocity
+        Vector3 v3_oldVelocity = gameObject.GetComponent<Rigidbody>().velocity;
+
+        // Reset the new Push Direction for the player
+        Vector3 v3_PushDirection = new Vector3();
+
+        // Combine (not multiply) the player's current rotation (Quat) into the input vector (Vec3)
+        Vector3 v3_FinalRotation = gameObject.transform.rotation * v3_Direction_;
+
+        // Lerp prior velocity into new velocity
+        Vector3 v3_newVelocity = Vector3.Lerp(v3_oldVelocity, v3_FinalRotation * MAX_MOVESPEED_FORWARD * f_Magnitude_, 1 / ACCELERATION);
+
+        // Return gravity
+        if (!b_Jump_)
+        {
+            // Synthetic terminal velocity
+            RaycastHit hit;
+
+            // Raycast straight down 
+            Physics.Raycast(go_RaycastPoint[0].transform.position, -transform.up, out hit);
+
+            // Apply fake gravity (synthetic Terminal Velocity) - Note: RigidBody gravity is OFF
+            if (hit.distance > f_RayCast_DownwardDistance) v3_newVelocity.y = v3_oldVelocity.y - (Time.deltaTime * 50);
+
+            // Determine direction to push against ramp
+            v3_PushDirection = -FindRaycastHit().normal;
+
+            // Apply velocity to player
+            v3_newVelocity = Vector3.ProjectOnPlane(v3_newVelocity, v3_PushDirection);
+        }
+        else
+        {
+            // Apply a jump
+            v3_newVelocity.y = JUMP_HEIGHT;
+
+            ResetJump();
+        }
+
+        gameObject.GetComponent<Rigidbody>().velocity = v3_newVelocity;
+        gameObject.GetComponent<Rigidbody>().AddForce(v3_PushDirection);
     }
 
     float f_VertAngle;
@@ -161,11 +173,47 @@ public class Cs_PlayerController : MonoBehaviour
         this_Camera.transform.eulerAngles = v3_CamEuler;
         #endregion
     }
-    
+
+    bool b_CanJump;
+    float f_JumpTimer;
+    void UpdateJump()
+    {
+        // Raycast Out object
+        RaycastHit hit;
+
+        b_CanJump = true;
+
+        if (f_JumpTimer < 0.1f)
+        {
+            f_JumpTimer += Time.deltaTime;
+
+            if (f_JumpTimer > 0.1f) f_JumpTimer = 0.1f;
+
+            // Disable the ability to jump during this initial window
+            b_CanJump = false;
+        }
+        else
+        {
+            // If the player isn't touching the ground, disable the ability to jump.
+            if (!Physics.Raycast(go_RaycastPoint[0].transform.position, -transform.up, out hit, 0.3f))
+            {
+                b_CanJump = false;
+            }
+        }
+    }
+
+    void ResetJump()
+    {
+        f_JumpTimer = 0.0f;
+
+        b_CanJump = false;
+    }
+
     // FixedUpdate is called at the same points in time.
     void FixedUpdate ()
     {
         Movement();
+        UpdateJump();
         MouseLook();
         
         if( Input.GetKeyDown( KeyCode.E ) )
