@@ -22,10 +22,21 @@ public class Cs_Crosshair : MonoBehaviour
     void CameraRaycast()
     {
         RaycastHit hit;
-        int i_LayerMask = LayerMask.GetMask("Use", "Enemy");
+        int i_LayerMask = LayerMask.GetMask("Use", "Enemy", "Default", "Wall");
 
         if(Physics.Raycast(go_Camera.transform.position, go_Camera.transform.forward, out hit, float.PositiveInfinity, i_LayerMask))
         {
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Default") ||
+                hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground") ||
+                hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall") )
+            {
+                img_Crosshair.color = Color.white;
+
+                go_CrosshairObject = null;
+
+                return;
+            }
+
             if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Use"))
             {
                 // Because it is a button, we don't want to allow use until we're close

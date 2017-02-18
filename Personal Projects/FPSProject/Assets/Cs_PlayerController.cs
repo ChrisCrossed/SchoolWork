@@ -195,7 +195,7 @@ public class Cs_PlayerController : MonoBehaviour
         else
         {
             // If the player isn't touching the ground, disable the ability to jump.
-            if (!Physics.Raycast(go_RaycastPoint[0].transform.position, -transform.up, out hit, 0.3f))
+            if (!Physics.Raycast(go_RaycastPoint[0].transform.position, -Vector3.up, out hit, 0.35f, LayerMask.GetMask("Ground")))
             {
                 b_CanJump = false;
             }
@@ -245,5 +245,7 @@ public class Cs_PlayerController : MonoBehaviour
                 }
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
 	}
 }
