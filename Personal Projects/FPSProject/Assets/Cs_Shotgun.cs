@@ -2,15 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cs_Shotgun : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+public class Cs_Shotgun : Cs_WEAPON
+{
+    public override void ShootGun()
+    {
+        print("BANG BANG BANG BANG ");
+    }
 }
