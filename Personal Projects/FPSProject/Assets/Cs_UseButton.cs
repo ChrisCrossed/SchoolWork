@@ -20,7 +20,7 @@ public class Cs_UseButton : MonoBehaviour
     void Start ()
     {
         // Object connection
-		if(ConnectedObject == new GameObject() || ConnectedObject == null ) print(gameObject.name + " is missing a Connected Object!");
+		if( ConnectedObject == null ) print(gameObject.name + " is missing a Connected Object!");
 
         // Child objects
         go_Button_Bottom = transform.FindChild("Button_Bottom").gameObject;
