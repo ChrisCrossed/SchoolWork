@@ -30,8 +30,68 @@ public class Cs_BULLET : MonoBehaviour
         get { return f_Speed; }
     }
 
+    float f_TrailDistance = 1.0f;
     void Update()
     {
+        // Add point to LineRenderer
+        this_LineRenderer.numPositions++;
+        this_LineRenderer.SetPosition(this_LineRenderer.numPositions - 1, gameObject.transform.position);
+
+        Vector3[] v3_Positions = new Vector3[this_LineRenderer.numPositions - 1];
+        for (int i_ = 0; i_ < this_LineRenderer.numPositions - 1; ++i_)
+        {
+            v3_Positions[i_] = this_LineRenderer.GetPosition(i_);
+        }
+
+        if( v3_Positions.Length > 3 )
+        {
+            print( Vector3.Distance( v3_Positions[0], v3_Positions[v3_Positions.Length - 1] ) + ", Length: " + v3_Positions.Length);
+
+            while ( Vector3.Distance (v3_Positions[0], v3_Positions[v3_Positions.Length - 1] ) > f_TrailDistance )
+            {
+                // Create new array that's one smaller than before
+                Vector3[] v3_NewArray = new Vector3[ v3_Positions.Length - 2 ];
+
+                // Populate
+                for( int i_ = 0; i_ < v3_Positions.Length - 2; ++i_ )
+                {
+                    v3_NewArray[i_] = v3_Positions[i_ + 1];
+                }
+
+                v3_Positions = new Vector3[v3_NewArray.Length - 1];
+                for(int j_ = 0; j_ < v3_Positions.Length; ++j_)
+                {
+                    v3_Positions[j_] = v3_NewArray[j_];
+                }
+
+            }
+        }
+
+        this_LineRenderer.SetPositions(v3_Positions);
+        /*
+
+        if( v3_Positions.Length > 2)
+        {
+            print("Length: " + v3_Positions.Length);
+            while ( Vector3.Distance( v3_Positions[0], v3_Positions[v3_Positions.Length - 1] ) > f_TrailDistance )
+            {
+                // Create new Vector3[] with one fewer positions in the array
+                Vector3[] v3_NewArray = new Vector3[v3_Positions.Length - 2];
+
+                // Populate
+                for(int i_ = 1; i_ < v3_NewArray.Length; ++i_)
+                {
+                    v3_NewArray[i_ - 1] = v3_Positions[i_];
+                }
+
+                v3_Positions = v3_NewArray;
+            }
+        }
+
+        */
+        
+
+        /*
         // Add point to LineRenderer
         if (this_LineRenderer.numPositions < i_NumPoints)
         {
@@ -56,6 +116,7 @@ public class Cs_BULLET : MonoBehaviour
 
             this_LineRenderer.SetPositions(v3_Positions);
         }
+        */
     }
 
     // Update is called once per frame
