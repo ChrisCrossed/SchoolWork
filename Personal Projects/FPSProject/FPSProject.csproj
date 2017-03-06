@@ -96,6 +96,8 @@
     <Compile Include="Assets\Cs_BULLET.cs" />
     <Compile Include="Assets\Cs_Crosshair.cs" />
     <Compile Include="Assets\Cs_Door.cs" />
+    <Compile Include="Assets\Cs_ENEMY.cs" />
+    <Compile Include="Assets\Cs_Enemy_Test.cs" />
     <Compile Include="Assets\Cs_PlayerController.cs" />
     <Compile Include="Assets\Cs_Shotgun.cs" />
     <Compile Include="Assets\Cs_ShotgunPellet.cs" />

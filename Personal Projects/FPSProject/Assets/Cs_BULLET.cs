@@ -33,6 +33,7 @@ public class Cs_BULLET : MonoBehaviour
     float f_TrailDistance = 1.0f;
     void Update()
     {
+        /*
         // Add point to LineRenderer
         this_LineRenderer.numPositions++;
         this_LineRenderer.SetPosition(this_LineRenderer.numPositions - 1, gameObject.transform.position);
@@ -68,6 +69,7 @@ public class Cs_BULLET : MonoBehaviour
         }
 
         this_LineRenderer.SetPositions(v3_Positions);
+        */
         /*
 
         if( v3_Positions.Length > 2)
