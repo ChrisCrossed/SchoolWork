@@ -1063,8 +1063,20 @@ public class Cs_BoardDisplay : MonoBehaviour
                     // Reset score timer
                     f_ScoreTimer = f_ScoreTimer_Max;
 
+                    // Decrement ScoreTimer_Max
+                    if (f_ScoreTimer_Max > 0.1f)
+                    {
+                        f_ScoreTimer_Max -= 0.25f;
+                        if (f_ScoreTimer_Max < 0.1f) f_ScoreTimer_Max = 0.1f;
+                    }
+                    
                     // Set text on screen
-                    txt_Score.GetComponent<Text>().text = "Score: " + i_Score.ToString();
+                    txt_Score.GetComponent<Text>().text = i_Score.ToString();
+                }
+                else
+                {
+                    // Reset ScoreTimer_Max since all points have been added
+                    f_ScoreTimer_Max = 0.25f;
                 }
             }
         }
