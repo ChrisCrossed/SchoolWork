@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class Cs_MenuBlockLogic : MonoBehaviour
 {
-    [SerializeField] float f_InitialDelay;
-
-	// Use this for initialization
+    // Use this for initialization
 	void Start ()
     {
-        ResetHeight();
+        Init_Position();
 	}
 
     void MoveBlock()
@@ -29,6 +27,17 @@ public class Cs_MenuBlockLogic : MonoBehaviour
         gameObject.transform.eulerAngles = v3_CurrRot;
     }
 
+    void Init_Position()
+    {
+        Vector3 v3_Pos = gameObject.transform.localPosition;
+
+        v3_Pos.y = Random.Range(-115f, 115f);
+        v3_Pos.x = Random.Range(-115f, 115f);
+        v3_Pos.z = Random.Range(120f, 160f);
+
+        gameObject.transform.localPosition = v3_Pos;
+    }
+
     void ResetHeight()
     {
         Vector3 v3_Pos = gameObject.transform.localPosition;
@@ -39,17 +48,17 @@ public class Cs_MenuBlockLogic : MonoBehaviour
 
         gameObject.transform.localPosition = v3_Pos;
     }
+
+    bool b_IsPaused;
+    public bool PauseState
+    {
+        set { b_IsPaused = value; print(gameObject.name + " is paused: " + b_IsPaused); }
+        get { return b_IsPaused; }
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        if(f_InitialDelay > 0f)
-        {
-            f_InitialDelay -= Time.deltaTime;
-        }
-        else
-        {
-            MoveBlock();
-        }
-	}
+        if( !b_IsPaused ) MoveBlock();
+    }
 }

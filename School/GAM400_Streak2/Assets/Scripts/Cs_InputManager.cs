@@ -42,6 +42,12 @@ public class Cs_InputManager : MonoBehaviour
     bool b_KeyboardUsedLast;
     bool b_PauseMenuActive;
 
+    private void Awake()
+    {
+        go_BlockObjects = Object.FindObjectsOfType<Cs_MenuBlockLogic>();
+        i_NumBlocks = go_BlockObjects.Length;
+    }
+
     // Use this for initialization
     void Start ()
     {
@@ -211,14 +217,25 @@ public class Cs_InputManager : MonoBehaviour
     }
 
     bool b_ResumeGameSelected = true;
+    //Cs_MenuBlockLogic[] go_BlockObjects;
+    Cs_MenuBlockLogic[] go_BlockObjects;
+    int i_NumBlocks;
     bool PauseMenuState
     {
         set
         {
             b_ResumeGameSelected = value;
 
+            print("Now paused: " + b_ResumeGameSelected);
+
             GameObject.Find("Selector_Resume").GetComponent<Image>().enabled = value;
             GameObject.Find("Selector_Quit").GetComponent<Image>().enabled = !value;
+
+            // Go through all of the dropping background blocks and pause them
+            for(int i_ = 0; i_ < i_NumBlocks; ++i_)
+            {
+                go_BlockObjects[i_].gameObject.GetComponent<Cs_MenuBlockLogic>().PauseState = !go_BlockObjects[i_].gameObject.GetComponent<Cs_MenuBlockLogic>().PauseState;
+            }
         }
         get { return b_ResumeGameSelected; }
     }

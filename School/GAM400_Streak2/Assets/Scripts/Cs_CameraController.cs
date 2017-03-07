@@ -14,7 +14,12 @@ public class Cs_CameraController : MonoBehaviour
 	public void Init_CameraPosition( float f_BoardWidth_, float f_BoardHeight_, float f_BlockWidth_ )
     {
         Vector3 v3_CamPos = new Vector3();
-        
+
+        v3_CamPos.x = (f_BoardWidth_ * f_BlockWidth_ / 2) - (f_BlockWidth_ / 2);
+        v3_CamPos.y = (f_BoardHeight_ * f_BlockWidth_ / 2);
+        v3_CamPos.z = (v3_CamPos.y * -2);
+
+        /*
         if (f_BoardHeight_ >= f_BoardWidth_)
         {
             v3_CamPos.x = (f_BoardWidth_ * f_BlockWidth_ / 2) - (f_BlockWidth_ / 2);
@@ -27,6 +32,7 @@ public class Cs_CameraController : MonoBehaviour
             v3_CamPos.y = (f_BoardHeight_ * f_BlockWidth_ / 2) + (f_BoardWidth_ / 2);
             v3_CamPos.z = (v3_CamPos.y * -2);
         }
+        */
 
         gameObject.transform.position = v3_CamPos;
     }
