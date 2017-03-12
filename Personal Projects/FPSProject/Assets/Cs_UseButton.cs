@@ -141,10 +141,12 @@ public class Cs_UseButton : MonoBehaviour
         go_Button_Top.transform.localPosition = v3_ButtonPos_Top;
         go_Button_Bottom.transform.localPosition = v3_ButtonPos_Bottom;
 
+        /*
         // If the door is allowed to be used multiple times and the player moves a set distance from the door, close it
         if (!UseOnce && b_Active && Vector3.Distance(gameObject.transform.position, go_Player.transform.position) > 9.5f) // Door distance to player is 10f
         {
             ButtonState = false;
         }
+        */
     }
 }

@@ -123,7 +123,6 @@ public class Cs_BULLET : MonoBehaviour
 
     // Update is called once per frame
     bool b_IsStationary;
-    int i_NumPoints = 7;
 	void FixedUpdate ()
     {
         f_Timer += Time.fixedDeltaTime;

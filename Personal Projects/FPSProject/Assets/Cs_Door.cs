@@ -74,6 +74,7 @@ public class Cs_Door : MonoBehaviour
 	void Update ()
     {
 		// If door is open and Not controlled by a button, then close when the player is a certain distance away.
+        /*
         if( DoorState == true && !ControlledByButton )
         {
             if( Vector3.Distance(go_Player.transform.position, gameObject.transform.position) > f_DistanceToCloseDoor )
@@ -81,6 +82,7 @@ public class Cs_Door : MonoBehaviour
                 DoorState = false;
             }
         }
+        */
         
         // If the door is 'open', move to the Open position
         if( DoorState && f_MoveTimer < f_DoorTimer_Max )

@@ -16,7 +16,6 @@ public class Cs_ENEMY : MonoBehaviour
 
     public void Hit()
     {
-        print("GOT HIT");
         this_Material.color = Color.red;
         f_HitTimer = 0.0f;
     }

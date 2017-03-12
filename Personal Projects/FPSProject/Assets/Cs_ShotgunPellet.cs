@@ -10,6 +10,8 @@ public class Cs_ShotgunPellet : Cs_BULLET
 
     Collider this_Collider;
 
+    GameObject go_Player;
+
     // Use this for initialization
     void Start ()
     {
@@ -20,6 +22,9 @@ public class Cs_ShotgunPellet : Cs_BULLET
         i_LayerMask_Use = LayerMask.NameToLayer("Use");
 
         this_Collider = gameObject.GetComponent<Collider>();
+
+        // Set player
+        go_Player = GameObject.Find("Player");
     }
 
     public void SetDirection(Vector3 _forward, float _intensity = 5f )
@@ -31,13 +36,15 @@ public class Cs_ShotgunPellet : Cs_BULLET
     
     private void OnCollisionEnter(Collision collision_)
     {
-        print(LayerMask.LayerToName(collision_.gameObject.layer));
-
         if(collision_.gameObject.layer == i_LayerMask_Enemy)
         {
             if(collision_.gameObject.GetComponent<Cs_Enemy_Test>())
             {
+                // Connect with the enemy hit
                 collision_.gameObject.GetComponent<Cs_Enemy_Test>().Hit();
+
+                // Connect with the player to pass information
+                go_Player.GetComponent<Cs_PlayerController>().Set_BulletHit = collision_.gameObject;
             }
         }
 
