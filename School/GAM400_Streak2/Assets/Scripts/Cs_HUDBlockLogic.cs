@@ -45,23 +45,23 @@ public class Cs_HUDBlockLogic : MonoBehaviour
 
         if( e_BlockType_ == Enum_BlockType.Block_1_Active || e_BlockType_ == Enum_BlockType.Block_1_Static )
         {
-            go_CurrBlock = Instantiate(go_Block_A);
+            go_CurrBlock = Instantiate(go_Block_A, transform);
         }
         else if (e_BlockType_ == Enum_BlockType.Block_2_Active || e_BlockType_ == Enum_BlockType.Block_2_Static)
         {
-            go_CurrBlock = Instantiate(go_Block_B);
+            go_CurrBlock = Instantiate(go_Block_B, transform);
         }
         else if (e_BlockType_ == Enum_BlockType.Block_3_Active || e_BlockType_ == Enum_BlockType.Block_3_Static)
         {
-            go_CurrBlock = Instantiate(go_Block_C);
+            go_CurrBlock = Instantiate(go_Block_C, transform);
         }
         else if (e_BlockType_ == Enum_BlockType.Empty)
         {
-            go_CurrBlock = Instantiate(go_Empty);
+            Destroy_OldBlock();
         }
 
-        Vector2 pos = gameObject.transform.position;
-        Vector2 viewportPos = Camera.main.ScreenToWorldPoint(pos);
+        Vector3 pos = gameObject.transform.position;
+        Vector3 viewportPos = Camera.main.ScreenToWorldPoint(pos);
 
         print(viewportPos);
         
@@ -84,6 +84,14 @@ public class Cs_HUDBlockLogic : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.M))
         {
             Set_NewBlock(Enum_BlockType.Block_1_Active);
+        }
+        if (Input.GetKeyDown(KeyCode.Comma))
+        {
+            Set_NewBlock(Enum_BlockType.Block_2_Active);
+        }
+        if (Input.GetKeyDown(KeyCode.Period))
+        {
+            Set_NewBlock(Enum_BlockType.Block_3_Active);
         }
     }
 }

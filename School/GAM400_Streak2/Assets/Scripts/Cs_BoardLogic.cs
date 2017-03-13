@@ -125,7 +125,7 @@ public class Cs_BoardLogic : MonoBehaviour
     Enum_BlockSize e_BlockSize;
     [SerializeField] Enum_WhiteBlockChance e_WhiteBlockChance = Enum_WhiteBlockChance.OneInSeven;
     int i_WhiteBlockChance;
-    Enum_BlockType[] e_NextBlockList = new Enum_BlockType[27];
+    Enum_BlockType[] e_NextBlockList = new Enum_BlockType[36];
 
     // Game Settings
     [SerializeField] bool b_2w_2h_Allowed = true;
@@ -206,10 +206,39 @@ public class Cs_BoardLogic : MonoBehaviour
 
         // Set i_TimeToDrop_Max to be -1 if it starts at 0, to make sure we aren't dropping infinitely
         if (i_TimeToDrop_Max == 0) i_TimeToDrop_Max = -1;
+        
+        // Initialize NextBlockList
+        for(int i_ = 0; i_ < e_NextBlockList.Length; ++i_)
+        {
+            e_NextBlockList[i_] = Enum_BlockType.Empty;
+        }
+        PopulateNextBlockList();
 
-        #region Set First Block to Random Size
-            // Determine the size of the next block to use
+        // Populate four block sizes
+        for (int i_ = 0; i_ < 4; ++i_)
+        {
+            e_NextBlockSize[i_] = RandomizeNextBlockSize();
+        }
+
+        // Initialize block array
+        BlockArray = new Enum_BlockType[i_ArrayHeight, i_ArrayWidth];
+        Initialize_BlockArray();
+
+        cam_Main = GameObject.Find("Main Camera");
+
+        // HUD Manager
+        go_HUD = GameObject.Find("ThemeManager");
+        go_HUDManager = go_HUD.GetComponent<Cs_HUDManager>();
+    }
+
+    Enum_BlockSize RandomizeNextBlockSize()
+    {
+        // Determine the size of the next block to use
         bool b_FoundNextBlock = false;
+
+        // Storage
+        Enum_BlockSize e_NextBlockSize = Enum_BlockSize.size_2w_2h;
+
         // While we haven't found the next block, loop
         while (!b_FoundNextBlock)
         {
@@ -236,26 +265,22 @@ public class Cs_BoardLogic : MonoBehaviour
                 b_FoundNextBlock = true;
             }
         }
+
+        print("Next block size: " + e_NextBlockSize.ToString());
+
         // Set random initial block
-        e_BlockSize = e_NextBlockSize;
-        #endregion
-
-        // Initialize NextBlockList
-        for(int i_ = 0; i_ < e_NextBlockList.Length; ++i_)
+        return e_NextBlockSize;
+    }
+    void ShiftNextBlockSizeArray()
+    {
+        for (int i_ = 1; i_ < e_NextBlockSize.Length; ++i_)
         {
-            e_NextBlockList[i_] = Enum_BlockType.Empty;
+            e_NextBlockSize[i_ - 1] = e_NextBlockSize[i_];
         }
-        PopulateNextBlockList();
-
-        // Initialize block array
-        BlockArray = new Enum_BlockType[i_ArrayHeight, i_ArrayWidth];
-        Initialize_BlockArray();
-
-        cam_Main = GameObject.Find("Main Camera");
     }
 
     #region Block Creation
-    Enum_BlockSize e_NextBlockSize; // Choose the size of the next random block to put on the screen
+    Enum_BlockSize[] e_NextBlockSize = new Enum_BlockSize[4]; // Choose the size of the next random block to put on the screen
     // Fills e_NextBlockList with random blocks to push into CreateNewBlock
     void PopulateNextBlockList()
     {
@@ -310,39 +335,35 @@ public class Cs_BoardLogic : MonoBehaviour
                 }
             }
         }
-
-        // Determine the size of the next block to use
-        bool b_FoundNextBlock = false;
-        // While we haven't found the next block, loop
-        while(!b_FoundNextBlock)
-        {
-            int i_RandBlock = Random.Range(0, 4);
-
-            if(i_RandBlock == 0 && b_2w_2h_Allowed)
-            {
-                e_NextBlockSize = Enum_BlockSize.size_2w_2h;
-                b_FoundNextBlock = true;
-            }
-            else if (i_RandBlock == 1 && b_2w_3h_Allowed)
-            {
-                e_NextBlockSize = Enum_BlockSize.size_2w_3h;
-                b_FoundNextBlock = true;
-            }
-            else if (i_RandBlock == 2 && b_3w_2h_Allowed)
-            {
-                e_NextBlockSize = Enum_BlockSize.size_3w_2h;
-                b_FoundNextBlock = true;
-            }
-            else if (i_RandBlock == 3 && b_3w_3h_Allowed)
-            {
-                e_NextBlockSize = Enum_BlockSize.size_3w_3h;
-                b_FoundNextBlock = true;
-            }
-        }
     }
 
+    GameObject go_HUD;
+    Cs_HUDManager go_HUDManager;
     void CreateNewBlock()
     {
+        #region Pass next block information to HUD
+        // First block position in the array
+        int i_BlockTwoStartPos_ = 3;
+        if( e_NextBlockSize[0] == Enum_BlockSize.size_2w_3h || e_NextBlockSize[0] == Enum_BlockSize.size_3w_2h )
+        {
+            i_BlockTwoStartPos_ = 6;
+        }
+        else if(e_NextBlockSize[0] == Enum_BlockSize.size_3w_3h)
+        {
+            i_BlockTwoStartPos_ = 9;
+        }
+        
+        Enum_BlockSize[] e_TinyList_ = new Enum_BlockSize[e_NextBlockSize.Length - i_BlockTwoStartPos_];
+
+        for(int i_ = i_BlockTwoStartPos_; i_ < e_NextBlockSize.Length; ++i_)
+        {
+            e_TinyList_[i_] = e_NextBlockSize[i_ + i_BlockTwoStartPos_];
+        }
+
+        // go_HUDManager.Set_NextBlockList()
+
+        #endregion
+
         // Manually create a set of new blocks in the proper location
         int i_NumToShift = 0;
 
@@ -1169,12 +1190,14 @@ public class Cs_BoardLogic : MonoBehaviour
         #endregion
 
         // Set the next block size to be whatever we found
-        e_BlockSize = e_NextBlockSize;
+        e_BlockSize = e_NextBlockSize[0];
+        ShiftNextBlockSizeArray();
+        e_NextBlockSize[e_NextBlockSize.Length - 1] = RandomizeNextBlockSize();
 
         // Clear all backdrops now. Creating new blocks will reset the new backdrop colors
         // GameObject.Find("BoardDisplay").GetComponent<Cs_BoardDisplay>().Set_ClearBackdrops();
 
-        if(b_RunAgain)
+        if (b_RunAgain)
         {
             AllBlocksStatic();
 
