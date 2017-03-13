@@ -353,12 +353,14 @@ public class Cs_BoardLogic : MonoBehaviour
             i_BlockTwoStartPos_ = 9;
         }
         
-        Enum_BlockSize[] e_TinyList_ = new Enum_BlockSize[e_NextBlockSize.Length - i_BlockTwoStartPos_];
-
+        Enum_BlockSize[] e_TinyList_ = new Enum_BlockSize[e_NextBlockList.Length - i_BlockTwoStartPos_ - 1];
+        print(e_NextBlockList.Length);
+        /*
         for(int i_ = i_BlockTwoStartPos_; i_ < e_NextBlockSize.Length; ++i_)
         {
             e_TinyList_[i_] = e_NextBlockSize[i_ + i_BlockTwoStartPos_];
         }
+        */
 
         // go_HUDManager.Set_NextBlockList()
 
