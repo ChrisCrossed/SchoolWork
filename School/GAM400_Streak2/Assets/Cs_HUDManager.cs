@@ -33,7 +33,9 @@ public class Cs_HUDManager : MonoBehaviour
             go_HUDdisplay_Left = go_HUD_Camera.transform.Find("Hud_Normal").transform.Find("Block_Left").gameObject;
             go_HUDdisplay_Right = go_HUD_Camera.transform.Find("Hud_Normal").transform.Find("Block_Right").gameObject;
 
-            for(int i_ = 0; i_ < 12;  ++i_)
+            go_HUDblocks = new GameObject[8];
+
+            for(int i_ = 0; i_ < 8;  ++i_)
             {
                 go_HUDblocks[i_] = go_HUDdisplay_Left.transform.FindChild("HUD_Block_" + i_.ToString()).gameObject;
             }
@@ -61,7 +63,7 @@ public class Cs_HUDManager : MonoBehaviour
 
         for(int i_ = 0; i_ < 12; ++i_)
         {
-            print(e_BlockList_[i_]);
+            print("CHRIS RIGHT HERE: " + e_BlockList_[i_]);
         }
     }
 	

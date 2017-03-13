@@ -343,7 +343,7 @@ public class Cs_BoardLogic : MonoBehaviour
     {
         #region Pass next block information to HUD
         // First block position in the array
-        int i_BlockTwoStartPos_ = 3;
+        int i_BlockTwoStartPos_ = 4;
         if( e_NextBlockSize[0] == Enum_BlockSize.size_2w_3h || e_NextBlockSize[0] == Enum_BlockSize.size_3w_2h )
         {
             i_BlockTwoStartPos_ = 6;
@@ -352,15 +352,13 @@ public class Cs_BoardLogic : MonoBehaviour
         {
             i_BlockTwoStartPos_ = 9;
         }
-        
-        Enum_BlockSize[] e_TinyList_ = new Enum_BlockSize[e_NextBlockList.Length - i_BlockTwoStartPos_ - 1];
-        print(e_NextBlockList.Length);
-        /*
-        for(int i_ = i_BlockTwoStartPos_; i_ < e_NextBlockSize.Length; ++i_)
+
+        Enum_BlockType[] e_TinyList_ = new Enum_BlockType[e_NextBlockList.Length - i_BlockTwoStartPos_];
+        for (int i_ = i_BlockTwoStartPos_; i_ < e_NextBlockList.Length; ++i_)
         {
-            e_TinyList_[i_] = e_NextBlockSize[i_ + i_BlockTwoStartPos_];
+            e_TinyList_[i_ - i_BlockTwoStartPos_] = e_NextBlockList[i_];
+            print("Next Block: " + e_TinyList_[i_ - i_BlockTwoStartPos_]);
         }
-        */
 
         // go_HUDManager.Set_NextBlockList()
 
