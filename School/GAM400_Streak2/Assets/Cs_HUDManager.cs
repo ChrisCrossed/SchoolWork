@@ -33,9 +33,9 @@ public class Cs_HUDManager : MonoBehaviour
             go_HUDdisplay_Left = go_HUD_Camera.transform.Find("Hud_Normal").transform.Find("Block_Left").gameObject;
             go_HUDdisplay_Right = go_HUD_Camera.transform.Find("Hud_Normal").transform.Find("Block_Right").gameObject;
 
-            go_HUDblocks = new GameObject[8];
+            go_HUDblocks = new GameObject[27];
 
-            for(int i_ = 0; i_ < 8;  ++i_)
+            for(int i_ = 0; i_ < go_HUDblocks.Length;  ++i_)
             {
                 go_HUDblocks[i_] = go_HUDdisplay_Left.transform.FindChild("HUD_Block_" + i_.ToString()).gameObject;
             }
@@ -61,9 +61,46 @@ public class Cs_HUDManager : MonoBehaviour
     {
         if (b_IsTutorial) return;
 
-        for(int i_ = 0; i_ < 12; ++i_)
+        if(e_BlockSize_[0] == Enum_BlockSize.size_2w_2h)
         {
-            print("CHRIS RIGHT HERE: " + e_BlockList_[i_]);
+            int i_ = 0;
+
+            go_HUDblocks[i_ + 0].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(e_BlockList_[0]);
+            go_HUDblocks[i_ + 1].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(e_BlockList_[1]);
+            go_HUDblocks[i_ + 3].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(e_BlockList_[2]);
+            go_HUDblocks[i_ + 4].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(e_BlockList_[3]);
+
+            go_HUDblocks[i_ + 2].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(Enum_BlockType.Empty);
+            go_HUDblocks[i_ + 5].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(Enum_BlockType.Empty);
+            go_HUDblocks[i_ + 6].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(Enum_BlockType.Empty);
+            go_HUDblocks[i_ + 7].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(Enum_BlockType.Empty);
+            go_HUDblocks[i_ + 8].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(Enum_BlockType.Empty);
+
+            i_ = 9;
+
+            go_HUDblocks[i_ + 0].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(e_BlockList_[4]);
+            go_HUDblocks[i_ + 1].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(e_BlockList_[5]);
+            go_HUDblocks[i_ + 3].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(e_BlockList_[6]);
+            go_HUDblocks[i_ + 4].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(e_BlockList_[7]);
+
+            go_HUDblocks[i_ + 2].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(Enum_BlockType.Empty);
+            go_HUDblocks[i_ + 5].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(Enum_BlockType.Empty);
+            go_HUDblocks[i_ + 6].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(Enum_BlockType.Empty);
+            go_HUDblocks[i_ + 7].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(Enum_BlockType.Empty);
+            go_HUDblocks[i_ + 8].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(Enum_BlockType.Empty);
+
+            i_ = 18;
+
+            go_HUDblocks[i_ + 0].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(e_BlockList_[8]);
+            go_HUDblocks[i_ + 1].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(e_BlockList_[9]);
+            go_HUDblocks[i_ + 3].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(e_BlockList_[10]);
+            go_HUDblocks[i_ + 4].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(e_BlockList_[11]);
+
+            go_HUDblocks[i_ + 2].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(Enum_BlockType.Empty);
+            go_HUDblocks[i_ + 5].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(Enum_BlockType.Empty);
+            go_HUDblocks[i_ + 6].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(Enum_BlockType.Empty);
+            go_HUDblocks[i_ + 7].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(Enum_BlockType.Empty);
+            go_HUDblocks[i_ + 8].GetComponent<Cs_HUDBlockLogic>().Set_NewBlock(Enum_BlockType.Empty);
         }
     }
 	

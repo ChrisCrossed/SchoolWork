@@ -60,38 +60,16 @@ public class Cs_HUDBlockLogic : MonoBehaviour
             Destroy_OldBlock();
         }
 
-        Vector3 pos = gameObject.transform.position;
-        Vector3 viewportPos = Camera.main.ScreenToWorldPoint(pos);
+        if (go_CurrBlock)
+        {
+            go_CurrBlock.transform.position = gameObject.transform.position;
 
-        print(viewportPos);
-        
-        // Vector2 viewportPos = Camera.main.ScreenToWorldPoint(pos);
-
-        // Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, gameObject.transform.position);
-        
-        
-
-        go_CurrBlock.transform.position = pos;
-        // go_CurrBlock.transform.SetParent( gameObject.transform );
-
-        // go_CurrBlock.transform.SetParent( GameObject.Find("CanvasTest").transform );
-
-        // go_CurrBlock.GetComponent<Cs_BlockOnBoardLogic>().Init_BlockModel((int)viewportPos.x - 5, (int)viewportPos.y - 5, 1.0f, 1.0f, 0);
+            go_CurrBlock.transform.localScale = new Vector3(1, 1, 1);
+        }
     }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.M))
-        {
-            Set_NewBlock(Enum_BlockType.Block_1_Active);
-        }
-        if (Input.GetKeyDown(KeyCode.Comma))
-        {
-            Set_NewBlock(Enum_BlockType.Block_2_Active);
-        }
-        if (Input.GetKeyDown(KeyCode.Period))
-        {
-            Set_NewBlock(Enum_BlockType.Block_3_Active);
-        }
+
     }
 }

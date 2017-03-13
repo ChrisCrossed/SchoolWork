@@ -353,15 +353,14 @@ public class Cs_BoardLogic : MonoBehaviour
             i_BlockTwoStartPos_ = 9;
         }
 
+        // Create inner block list and pass to the HUD
         Enum_BlockType[] e_TinyList_ = new Enum_BlockType[e_NextBlockList.Length - i_BlockTwoStartPos_];
         for (int i_ = i_BlockTwoStartPos_; i_ < e_NextBlockList.Length; ++i_)
         {
             e_TinyList_[i_ - i_BlockTwoStartPos_] = e_NextBlockList[i_];
-            print("Next Block: " + e_TinyList_[i_ - i_BlockTwoStartPos_]);
         }
 
-        // go_HUDManager.Set_NextBlockList()
-
+        go_HUDManager.Set_NextBlockList( e_TinyList_, e_NextBlockSize );
         #endregion
 
         // Manually create a set of new blocks in the proper location
