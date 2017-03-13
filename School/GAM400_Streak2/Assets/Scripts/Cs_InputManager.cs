@@ -217,7 +217,6 @@ public class Cs_InputManager : MonoBehaviour
     }
 
     bool b_ResumeGameSelected = true;
-    //Cs_MenuBlockLogic[] go_BlockObjects;
     Cs_MenuBlockLogic[] go_BlockObjects;
     int i_NumBlocks;
     bool PauseMenuState
@@ -225,8 +224,6 @@ public class Cs_InputManager : MonoBehaviour
         set
         {
             b_ResumeGameSelected = value;
-
-            print("Now paused: " + b_ResumeGameSelected);
 
             GameObject.Find("Selector_Resume").GetComponent<Image>().enabled = value;
             GameObject.Find("Selector_Quit").GetComponent<Image>().enabled = !value;

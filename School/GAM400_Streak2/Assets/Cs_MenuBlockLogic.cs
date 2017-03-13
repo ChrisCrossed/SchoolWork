@@ -52,7 +52,7 @@ public class Cs_MenuBlockLogic : MonoBehaviour
     bool b_IsPaused;
     public bool PauseState
     {
-        set { b_IsPaused = value; print(gameObject.name + " is paused: " + b_IsPaused); }
+        set { b_IsPaused = value; }
         get { return b_IsPaused; }
     }
 	

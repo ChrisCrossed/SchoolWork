@@ -140,6 +140,9 @@ public class Cs_MainMenu_GameSettings : MonoBehaviour
         gameSettings.i_BoardWidth = i_BoardWidth_;
         gameSettings.i_BoardHeight = i_BoardHeight_;
 
+        print("Width: " + gameSettings.i_BoardWidth);
+        print("Height: " + gameSettings.i_BoardHeight);
+
         gameSettings.i_DropTimer = i_DropTimer_;
 
         gameSettings.b_IsTutorial = b_IsTutorial_;

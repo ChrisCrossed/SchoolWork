@@ -29,12 +29,22 @@ public class Cs_BoardDisplay : MonoBehaviour
     GameObject go_Camera;
     GameObject go_ThemeManager;
 
+    GameObject go_HUD;
+    Cs_HUDManager go_HUDManager;
+
     int i_Height;
     int i_Width;
 
     bool b_IsDone;
 
     GameObject txt_Score;
+
+    private void Awake()
+    {
+        // Set HUD Manager
+        go_HUD = GameObject.Find("ThemeManager");
+        go_HUDManager = go_HUD.GetComponent<Cs_HUDManager>();
+    }
 
     // Use this for initialization
     void Start()
@@ -64,6 +74,16 @@ public class Cs_BoardDisplay : MonoBehaviour
     // When called from BoardLogic, create the grid background
     public void Init_Board(int i_Width_, int i_Height_, int i_MidWall_ = -1, Enum_BlockSize e_BlockSize_ = Enum_BlockSize.size_2w_2h)
     {
+        // Enable appropriate HUD elements
+        if(i_Width_ == 12 && i_Height_ == 10) // Normal difficulty
+        {
+            go_HUDManager.Initialize( true );
+        }
+        else if(i_Width_ == 15 && i_Height_ == 15) // Hard difficulties
+        {
+            go_HUDManager.Initialize( false );
+        }
+
         i_Height = i_Height_;
         i_Width = i_Width_;
 
