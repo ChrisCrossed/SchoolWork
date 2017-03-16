@@ -182,6 +182,26 @@ public class Cs_MainMenuLogic : MonoBehaviour
 
     void Menu_Down()
     {
+        if (!b_OnNewGameMenu && enum_ButtonSelected == MenuButtonSelected.Button_One)
+        {
+            enum_ButtonSelected = MenuButtonSelected.Button_Two;
+
+            Set_ButtonHighlighed(b_OnNewGameMenu, enum_ButtonSelected);
+        }
+        else if (!b_OnNewGameMenu && enum_ButtonSelected == MenuButtonSelected.Button_Two)
+        {
+            enum_ButtonSelected = MenuButtonSelected.Button_Three;
+
+            Set_ButtonHighlighed(b_OnNewGameMenu, enum_ButtonSelected);
+        }
+        else if (b_OnNewGameMenu && enum_ButtonSelected == MenuButtonSelected.Button_Zero)
+        {
+            enum_ButtonSelected = MenuButtonSelected.Button_One;
+
+            Set_ButtonHighlighed(b_OnNewGameMenu, enum_ButtonSelected);
+        }
+
+        /*
         if (enum_ButtonSelected == MenuButtonSelected.Button_One)
         {
             enum_ButtonSelected = MenuButtonSelected.Button_Two;
@@ -200,6 +220,7 @@ public class Cs_MainMenuLogic : MonoBehaviour
 
             Set_ButtonHighlighed(b_OnNewGameMenu, enum_ButtonSelected);
         }
+        */
     }
 
     void Menu_Select()

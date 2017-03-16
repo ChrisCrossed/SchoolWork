@@ -110,6 +110,13 @@ public class Cs_HUDManager : MonoBehaviour
         #region Harder difficulties
         else
         {
+            /*
+            for(int x_ = 0; x_ < e_BlockList_.Length; ++x_)
+            {
+                print(x_ + ": " + e_BlockList_[x_]);
+            }
+            */
+
             int i_NextBlockStart = 0;
             for(int i_ = 0; i_ < 3; ++i_)
             {
