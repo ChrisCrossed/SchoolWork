@@ -266,8 +266,6 @@ public class Cs_BoardLogic : MonoBehaviour
             }
         }
 
-        print("Next block size: " + e_NextBlockSize.ToString());
-
         // Set random initial block
         return e_NextBlockSize;
     }
