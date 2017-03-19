@@ -38,6 +38,7 @@ public class Cs_BoardDisplay : MonoBehaviour
     bool b_IsDone;
 
     GameObject txt_Score;
+    GameObject txt_HiScore;
 
     private void Awake()
     {
@@ -50,6 +51,9 @@ public class Cs_BoardDisplay : MonoBehaviour
     void Start()
     {
         txt_Score = GameObject.Find("Text_Score");
+        txt_HiScore = GameObject.Find("Hi_Score");
+
+        txt_HiScore.GetComponent<Text>().text = "100";
     }
 
     void LoadResources()
@@ -1092,6 +1096,12 @@ public class Cs_BoardDisplay : MonoBehaviour
                     
                     // Set text on screen
                     txt_Score.GetComponent<Text>().text = i_Score.ToString();
+
+                    if(i_Score > 100)
+                    {
+                        txt_HiScore.GetComponent<Text>().text = i_Score.ToString();
+                        txt_HiScore.GetComponent<Cs_HighScore>().Activate();
+                    }
                 }
                 else
                 {
