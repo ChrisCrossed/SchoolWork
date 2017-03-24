@@ -103,7 +103,7 @@ public class Cs_Grenade : MonoBehaviour
         }
         else if(!b_Active && f_Timer < 0f)
         {
-            if (f_Timer < -3.0f) GameObject.Destroy(gameObject);
+            if (f_Timer < -3.0f) GameObject.Destroy(this);
         }
 	}
 }

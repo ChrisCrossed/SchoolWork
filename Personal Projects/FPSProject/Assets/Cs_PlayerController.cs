@@ -25,6 +25,10 @@ public class Cs_PlayerController : MonoBehaviour
     float f_RayCast_DownwardDistance = 0.32f;
     float JUMP_HEIGHT = 12.5f;
 
+    // Cooldown timers
+    [SerializeField] float f_DashCooldown_Max = 5.0f;
+    float f_DashCooldown;
+
     // Use this for initialization
     void Start ()
     {
@@ -290,6 +294,12 @@ public class Cs_PlayerController : MonoBehaviour
         // If no enemy object is stored, cancel the action
         if (go_LastKnownConnection == null) return;
 
+        // If player is already dashing, cancel the action
+        if ( e_PlayerState == Enum_PlayerState.DashToObject ) return;
+
+        // Check for cooldown timer
+        if (f_DashCooldown > 0f) return;
+
         // Set positions
         v3_StartPos = gameObject.transform.position;
         v3_EndPos = go_LastKnownConnection.transform.position;
@@ -309,6 +319,17 @@ public class Cs_PlayerController : MonoBehaviour
 
         if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Enemy")) { print("Something in the way"); return; }
         if (hit.collider.gameObject != go_LastKnownConnection) { print("Different Enemy in the way"); return; }
+
+        // Raycast to the ground and find the position right above the ground.
+        RaycastHit newHit;
+        Physics.Raycast(hit.point, -hit.collider.gameObject.transform.up, out newHit, float.PositiveInfinity);
+
+        // Set new Vector based on ground hit position
+        v3_Vector = newHit.point - v3_StartPos;
+        v3_Vector.Normalize();
+
+        f_Distance = Vector3.Distance(gameObject.transform.position, newHit.point);
+        f_Distance -= gameObject.transform.lossyScale.z + go_LastKnownConnection.transform.lossyScale.z - 0.1f;
         #endregion
 
         // Set new final position
@@ -322,12 +343,23 @@ public class Cs_PlayerController : MonoBehaviour
 
         // Set state
         e_PlayerState = Enum_PlayerState.DashToObject;
+
+        // TODO: Set ability cooldown
+        f_DashCooldown = f_DashCooldown_Max;
     }
 
     // FixedUpdate is called at the same points in time.
     void FixedUpdate ()
     {
-        if(e_PlayerState == Enum_PlayerState.Movement)
+        #region Cooldown timers
+        if (f_DashCooldown > 0f) 
+        {
+            f_DashCooldown -= Time.deltaTime;
+            if (f_DashCooldown < 0f) f_DashCooldown = 0f;
+        }
+        #endregion
+
+        if (e_PlayerState == Enum_PlayerState.Movement)
         {
             Movement();
             UpdateJump();
@@ -351,12 +383,14 @@ public class Cs_PlayerController : MonoBehaviour
             // Set new position
             this_Rigidbody.MovePosition(v3_NewPosition);
 
-            // Lerp player rotation to face the object being moved to
-
+            // When player timer reaches max, reset player state and velocity.
             if(f_TimeToPosition == f_TimeToPosition_Max)
             {
                 // Allow movement
                 e_PlayerState = Enum_PlayerState.Movement;
+
+                // Reset velocity
+                this_Rigidbody.velocity = new Vector3();
             }
         }
         else if(e_PlayerState == Enum_PlayerState.Grenade)
