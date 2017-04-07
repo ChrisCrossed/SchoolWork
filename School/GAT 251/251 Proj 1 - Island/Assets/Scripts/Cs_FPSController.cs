@@ -154,7 +154,7 @@ public class Cs_FPSController : MonoBehaviour
         b_IsFading = false;
     }
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         // These need to run every frame due to Lerping
         Look_Controller();
