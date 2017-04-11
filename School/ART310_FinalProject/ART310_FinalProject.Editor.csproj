@@ -188,6 +188,7 @@
     <Compile Include="Assets\ProCore\ProBuilder\Editor\pb_ScenePostProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\JuliusCaesarBust\readme_first.txt" />
     <None Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\README.txt" />
     <None Include="Assets\ProCore\ProBuilder\About\Credits.txt" />
     <None Include="Assets\ProCore\ProBuilder\About\Font\SIL Open Font License.txt" />
@@ -208,6 +209,8 @@
     <None Include="Assets\ProCore\ProBuilder\Shader\pb_VertexPicker.shader" />
     <None Include="Assets\ProCore\ProBuilder\Shader\pb_VertexShader.shader" />
     <None Include="Assets\ProCore\ProBuilder\readme.txt" />
+    <None Include="Assets\RomanPugio\readme_first.txt" />
+    <None Include="Assets\torch\readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

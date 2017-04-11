@@ -112,8 +112,12 @@
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Procedural Mesh\ExtrudeRandomEdges.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Runtime Editing\RuntimeEdit.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Vertex Colors\HighlightNearestFace.cs" />
+    <Compile Include="Assets\torch\scene\script\TorchSlider.cs" />
+    <Compile Include="Assets\torch\scene\script\Torchslider2.cs" />
+    <Compile Include="Assets\torch\scripts\Torchelight.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\JuliusCaesarBust\readme_first.txt" />
     <None Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\README.txt" />
     <None Include="Assets\ProCore\ProBuilder\About\Credits.txt" />
     <None Include="Assets\ProCore\ProBuilder\About\Font\SIL Open Font License.txt" />
@@ -134,6 +138,8 @@
     <None Include="Assets\ProCore\ProBuilder\Shader\pb_VertexPicker.shader" />
     <None Include="Assets\ProCore\ProBuilder\Shader\pb_VertexShader.shader" />
     <None Include="Assets\ProCore\ProBuilder\readme.txt" />
+    <None Include="Assets\RomanPugio\readme_first.txt" />
+    <None Include="Assets\torch\readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
