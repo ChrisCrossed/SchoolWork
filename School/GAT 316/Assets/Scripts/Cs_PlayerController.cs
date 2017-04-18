@@ -694,6 +694,8 @@ public class Cs_PlayerController : MonoBehaviour
     Vector3 CalculateThrow(float f_AnalogStickMagnitude_)
     {
         f_Gravity = Physics.gravity.magnitude;
+        
+        // Convert degrees to radians
         float f_Angle = (f_FiringAngle * f_AnalogStickMagnitude_) * Mathf.Deg2Rad;
 
         Vector3 v3_HorizontalTarget = new Vector3(v3_TargetLocation.x, 0, v3_TargetLocation.z);
@@ -709,7 +711,6 @@ public class Cs_PlayerController : MonoBehaviour
         float f_AngleBetweenObjects = Vector3.Angle(Vector3.forward, v3_HorizontalTarget - v3_HorizontalPosition);
 
         Vector3 v3_FinalVelocity = Quaternion.AngleAxis(f_AngleBetweenObjects, Vector3.up) * v3_Velocity;
-
 
         if (v3_HorizontalTarget.x < v3_HorizontalPosition.x)
         {
