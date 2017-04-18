@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2015
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAT261_Project3", "GAT261_Project3.csproj", "{C19F5144-21DF-1BF2-C2BD-DAFBDE97C1DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAT261_Project3.Editor", "GAT261_Project3.Editor.csproj", "{21ED0C6F-1120-B01E-1C78-9302E68D2E57}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{C19F5144-21DF-1BF2-C2BD-DAFBDE97C1DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C19F5144-21DF-1BF2-C2BD-DAFBDE97C1DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C19F5144-21DF-1BF2-C2BD-DAFBDE97C1DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21ED0C6F-1120-B01E-1C78-9302E68D2E57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21ED0C6F-1120-B01E-1C78-9302E68D2E57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21ED0C6F-1120-B01E-1C78-9302E68D2E57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21ED0C6F-1120-B01E-1C78-9302E68D2E57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
