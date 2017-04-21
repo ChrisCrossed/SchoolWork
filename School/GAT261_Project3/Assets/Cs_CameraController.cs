@@ -9,24 +9,26 @@ public class Cs_CameraController : MonoBehaviour
     [SerializeField] GameObject go_CamPos_Right;
     [SerializeField] GameObject go_CameraPoint;
     GameObject go_MainCamera;
+    Camera mainCamera;
 
     // Smooth Lerp
     [SerializeField] AnimationCurve ac_Curve;
 
     // Use this for initialization
-    void Start ()
+    void Awake ()
     {
         go_MainCamera = GameObject.Find("Main Camera");
+        mainCamera = go_MainCamera.GetComponent<Camera>();
 
         go_CamPos_Left.transform.LookAt(go_CameraPoint.transform.position);
         go_CamPos_Right.transform.LookAt(go_CameraPoint.transform.position);
 
         Vector3 v3_NewRot = go_CamPos_Left.transform.eulerAngles;
-        v3_NewRot.z = -6f;
+        v3_NewRot.z = -5f;
         go_CamPos_Left.transform.eulerAngles = v3_NewRot;
 
         v3_NewRot = go_CamPos_Right.transform.eulerAngles;
-        v3_NewRot.z = 6f;
+        v3_NewRot.z = 5f;
         go_CamPos_Right.transform.eulerAngles = v3_NewRot;
 
         IsLeftSide = true;
@@ -84,8 +86,57 @@ public class Cs_CameraController : MonoBehaviour
         #endregion
     }
 
+    float f_CameraFOVScale = 45f;
     void Update()
     {
+        // TEMP CODE
         if (Input.GetKeyDown(KeyCode.Space)) IsLeftSide = !IsLeftSide;
+
+        // Slow down time
+        if(Input.GetKey(KeyCode.LeftShift))
+        {
+            Time.timeScale -= Time.deltaTime * 2;
+            if (Time.timeScale < 0.5f) Time.timeScale = 0.5f;
+
+            mainCamera.fieldOfView -= Time.deltaTime * f_CameraFOVScale;
+            if (mainCamera.fieldOfView < 45f) mainCamera.fieldOfView = 45f;
+        }
+        // Speed up time
+        else if(Input.GetKey(KeyCode.LeftControl))
+        {
+            Time.timeScale += Time.deltaTime * 2;
+            if (Time.timeScale > 2f) Time.timeScale = 2f;
+
+            mainCamera.fieldOfView += Time.deltaTime * f_CameraFOVScale;
+            if (mainCamera.fieldOfView > 75f) mainCamera.fieldOfView = 75f;
+        }
+        // Normalize time
+        else
+        {
+            if(Time.timeScale > 1.0f)
+            {
+                Time.timeScale -= Time.deltaTime;
+                if (Time.timeScale < 1.0f) Time.timeScale = 1.0f;
+            }
+            else if(Time.timeScale < 1.0f)
+            {
+                Time.timeScale += Time.deltaTime;
+                if (Time.timeScale > 1.0f) Time.timeScale = 1.0f;
+            }
+
+            if(mainCamera.fieldOfView > 60f)
+            {
+                mainCamera.fieldOfView -= Time.deltaTime * f_CameraFOVScale;
+                if (mainCamera.fieldOfView < 60f) mainCamera.fieldOfView = 60f;
+            }
+            else if(mainCamera.fieldOfView < 60f)
+            {
+                mainCamera.fieldOfView += Time.deltaTime * f_CameraFOVScale;
+                if (mainCamera.fieldOfView > 60f) mainCamera.fieldOfView = 60f;
+            }
+        }
+
+        // Set fixedDeltaTime according to deltaTime
+        Time.fixedDeltaTime = 0.02F * Time.timeScale;
     }
 }
