@@ -33,6 +33,9 @@ public class Cs_CameraController : MonoBehaviour
 
         IsLeftSide = true;
         f_LerpTimer = 0f;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
 	}
 
     bool b_IsLeftSide;
@@ -57,16 +60,56 @@ public class Cs_CameraController : MonoBehaviour
     bool b_DoneMoving;
 	void FixedUpdate ()
     {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            b_DoneMoving = false;
+
+            if (f_LerpTimer == 0f) f_LerpTimer += Time.deltaTime;
+            else if (f_LerpTimer == f_LerpTimer_Max) f_LerpTimer -= Time.deltaTime;
+        }
+
         #region Lerp Timer
         if (b_IsLeftSide && f_LerpTimer > 0f)
         {
-            f_LerpTimer -= Time.fixedDeltaTime;
-            if (f_LerpTimer < 0f) f_LerpTimer = 0f;
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                if (f_LerpTimer < f_LerpTimer_Max / 2f)
+                {
+                    f_LerpTimer += Time.deltaTime;
+                    if (f_LerpTimer > f_LerpTimer_Max / 2f) f_LerpTimer = f_LerpTimer_Max / 2f;
+                }
+                else if(f_LerpTimer > f_LerpTimer_Max / 2f)
+                {
+                    f_LerpTimer -= Time.deltaTime;
+                    if (f_LerpTimer < f_LerpTimer_Max / 2f) f_LerpTimer = f_LerpTimer_Max / 2f;
+                }
+            }
+            else
+            {
+                f_LerpTimer -= Time.fixedDeltaTime;
+                if (f_LerpTimer < 0f) f_LerpTimer = 0f;
+            }
         }
         else if (!b_IsLeftSide && f_LerpTimer < f_LerpTimer_Max)
         {
-            f_LerpTimer += Time.fixedDeltaTime;
-            if (f_LerpTimer > f_LerpTimer_Max) f_LerpTimer = f_LerpTimer_Max;
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                if (f_LerpTimer < f_LerpTimer_Max / 2f)
+                {
+                    f_LerpTimer += Time.deltaTime;
+                    if (f_LerpTimer > f_LerpTimer_Max / 2f) f_LerpTimer = f_LerpTimer_Max / 2f;
+                }
+                else if (f_LerpTimer > f_LerpTimer_Max / 2f)
+                {
+                    f_LerpTimer -= Time.deltaTime;
+                    if (f_LerpTimer < f_LerpTimer_Max / 2f) f_LerpTimer = f_LerpTimer_Max / 2f;
+                }
+            }
+            else
+            {
+                f_LerpTimer += Time.fixedDeltaTime;
+                if (f_LerpTimer > f_LerpTimer_Max) f_LerpTimer = f_LerpTimer_Max;
+            }
         }
         #endregion
 
@@ -83,12 +126,16 @@ public class Cs_CameraController : MonoBehaviour
         #region Update 'Done Moving' Bool
         if (b_IsLeftSide && f_LerpTimer == 0f) b_DoneMoving = true;
         else if (!b_IsLeftSide && f_LerpTimer == f_LerpTimer_Max) b_DoneMoving = true;
+
+        if (Input.GetKey(KeyCode.LeftShift)) b_DoneMoving = false;
         #endregion
     }
 
     float f_CameraFOVScale = 45f;
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
+
         // TEMP CODE
         if (Input.GetKeyDown(KeyCode.Space)) IsLeftSide = !IsLeftSide;
 
@@ -138,5 +185,7 @@ public class Cs_CameraController : MonoBehaviour
 
         // Set fixedDeltaTime according to deltaTime
         Time.fixedDeltaTime = 0.02F * Time.timeScale;
+
+        go_MainCamera.GetComponent<AudioSource>().pitch = Time.timeScale;
     }
 }

@@ -24,7 +24,7 @@ public class Cs_VehicleParticle : MonoBehaviour
 
         GameObject go_Temp = Instantiate(go_Particle);
         go_Temp.transform.position = gameObject.transform.position;
-        go_Temp.transform.eulerAngles = new Vector3(0, 180, 0);
+        go_Temp.transform.eulerAngles = go_Temp.transform.eulerAngles + new Vector3(0, 180, 0);
 
         Particles.Add(go_Temp);
     }
@@ -56,5 +56,12 @@ public class Cs_VehicleParticle : MonoBehaviour
         }
 
         SetLineRenderer();
+
+        Material mat_ = gameObject.GetComponent<Renderer>().material;
+        Vector2 v2_Tiling = mat_.mainTextureOffset;
+        if(Input.GetKey(KeyCode.LeftControl)) v2_Tiling.x += 3.0f * Time.deltaTime;
+        else v2_Tiling.x -= 3.0f * Time.deltaTime;
+
+        mat_.mainTextureOffset = v2_Tiling;
     }
 }
