@@ -23,7 +23,7 @@ public class Cs_ENEMY : MonoBehaviour
     float f_HitTimer = 0.25f;
     float f_HitTimer_Max = 0.25f;
 	// Update is called once per frame
-	void Update ()
+	protected void SkinUpdate ()
     {
         if(f_HitTimer < f_HitTimer_Max)
         {

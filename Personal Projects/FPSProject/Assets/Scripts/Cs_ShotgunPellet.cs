@@ -25,6 +25,8 @@ public class Cs_ShotgunPellet : Cs_BULLET
 
         // Set player
         go_Player = GameObject.Find("Player");
+
+        base.RaycastBullet();
     }
 
     public void SetDirection(Vector3 _forward, float _intensity = 5f )
@@ -42,10 +44,15 @@ public class Cs_ShotgunPellet : Cs_BULLET
             {
                 // Connect with the enemy hit
                 collision_.gameObject.GetComponent<Cs_Enemy_Test>().Hit();
-
-                // Connect with the player to pass information
-                go_Player.GetComponent<Cs_PlayerController>().Set_BulletHit = collision_.gameObject;
             }
+            else if (collision_.gameObject.GetComponent<Cs_Enemy_Basic>())
+            {
+                // Connect with the enemy hit
+                collision_.gameObject.GetComponent<Cs_Enemy_Basic>().Hit();
+            }
+
+            // Connect with the player to pass information
+            go_Player.GetComponent<Cs_PlayerController>().Set_BulletHit = collision_.gameObject;
         }
 
         // Disable collider after first collision

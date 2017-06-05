@@ -294,7 +294,7 @@ public class Cs_PlayerController : MonoBehaviour
                 // Reset the timer
                 f_LastKnownBulletHit_Timer = 0f;
 
-                print("Received: " + value.name);
+                // print("Received: " + value.name);
 
                 // Store the connection
                 go_LastKnownConnection = value;
@@ -482,7 +482,7 @@ public class Cs_PlayerController : MonoBehaviour
             {
                 if( this_Crosshair.Get_CrosshairObject.layer == LayerMask.NameToLayer("Enemy") )
                 {
-                    print( this_Crosshair.Get_CrosshairObject );
+                    // print( this_Crosshair.Get_CrosshairObject );
                 }
             }
         }

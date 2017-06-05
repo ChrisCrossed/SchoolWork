@@ -10,4 +10,9 @@ public class Cs_Enemy_Test : Cs_ENEMY
     {
         Initialize();
 	}
+
+    private void Update()
+    {
+        base.SkinUpdate();
+    }
 }
