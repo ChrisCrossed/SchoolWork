@@ -17,7 +17,6 @@ public class Cs_BULLET : MonoBehaviour
 
     private void Awake()
     {
-        go_BulletCreationPoint = new GameObject();
         go_BulletCreationPoint = GameObject.Find("Bullet_CreatePoint");
         go_Player = GameObject.Find("Player");
     }
@@ -47,21 +46,22 @@ public class Cs_BULLET : MonoBehaviour
     protected void RaycastBullet( Vector3 v3_Pos_, Vector3 v3_Dir_ )
     {
         RaycastHit hit_;
-        int i_LayerMask_ = LayerMask.GetMask("Enemy");
-        v3_Dir_.Normalize();
-        // Debug.DrawLine( v3_Pos_, v3_Pos_ + (v3_Dir_ * 10f), Color.green, 5.0f);
-        Debug.DrawRay(v3_Pos_, v3_Dir_, Color.green, 1.0f);
+        int i_LayerMask_ = LayerMask.GetMask("Enemy", "Default", "Ground", "Use", "Wall");
+        
         if( Physics.Raycast( BulletCreationPoint(), v3_Dir_, out hit_, Mathf.Infinity, i_LayerMask_) )
         {
+            // Ensure the bullet hit an enemy
+            if (hit_.collider.gameObject.layer != LayerMask.NameToLayer("Enemy")) return;
+
+            // Enemy type '0'
             if (hit_.collider.gameObject.GetComponent<Cs_Enemy_Test>())
             {
-                print("Hit Enemy - TEST");
                 // Connect with the enemy hit
                 hit_.collider.gameObject.GetComponent<Cs_Enemy_Test>().Hit();
             }
+            // Basic enemy
             else if (hit_.collider.gameObject.GetComponent<Cs_Enemy_Basic>())
             {
-                // print("Hit Enemy - Basic");
                 // Connect with the enemy hit
                 hit_.collider.gameObject.GetComponent<Cs_Enemy_Basic>().Hit();
             }

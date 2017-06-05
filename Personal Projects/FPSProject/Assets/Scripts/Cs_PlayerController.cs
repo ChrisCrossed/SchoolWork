@@ -388,10 +388,13 @@ public class Cs_PlayerController : MonoBehaviour
             UpdateJump();
             MouseLook();
 
+            // GRENADE THROW DISABLED
+            /*
             if(Input.GetKeyDown(KeyCode.Q))
             {
                 gameObject.GetComponent<Cs_ThrowGrenade>().GrenadeButtonPressed();
             }
+            */
         }
         else if(e_PlayerState == Enum_PlayerState.DashToObject)
         {

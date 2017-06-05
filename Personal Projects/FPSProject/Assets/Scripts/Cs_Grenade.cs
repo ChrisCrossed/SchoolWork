@@ -75,14 +75,12 @@ public class Cs_Grenade : MonoBehaviour
 
         // Disable
         b_Active = false;
-
-        // GameObject.Destroy(gameObject);
     }
 
     // Update is called once per frame
     void Update ()
     {
-        print(5.0f - f_Timer);
+
         f_Timer -= Time.deltaTime;
 
         if(!b_Thrown)
@@ -103,7 +101,7 @@ public class Cs_Grenade : MonoBehaviour
         }
         else if(!b_Active && f_Timer < 0f)
         {
-            if (f_Timer < -3.0f) GameObject.Destroy(this);
+            // if (f_Timer < -3.0f) GameObject.Destroy(this);
         }
 	}
 }

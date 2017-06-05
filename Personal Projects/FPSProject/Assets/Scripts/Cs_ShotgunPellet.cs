@@ -38,8 +38,6 @@ public class Cs_ShotgunPellet : Cs_BULLET
     
     private void OnCollisionEnter(Collision collision_)
     {
-        
-
         // Disable collider after first collision
         this_Collider.enabled = false;
         GameObject.Destroy(gameObject);
