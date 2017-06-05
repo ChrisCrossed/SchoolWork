@@ -20,6 +20,9 @@ public class Cs_WaypointMarker : MonoBehaviour
         // Disable mesh renderer
         gameObject.GetComponent<MeshRenderer>().enabled = false;
 
+        // Disable collider
+        gameObject.GetComponent<BoxCollider>().enabled = false;
+
         // Position object one unit above
         Vector3 v3_Pos_ = gameObject.transform.position;
         v3_Pos_.y += 1f;
