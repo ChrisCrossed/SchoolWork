@@ -23,8 +23,8 @@ public class Cs_UseButton : MonoBehaviour
 		if( ConnectedObject == null ) print(gameObject.name + " is missing a Connected Object!");
 
         // Child objects
-        go_Button_Bottom = transform.FindChild("Button_Bottom").gameObject;
-        go_Button_Top = transform.FindChild("Button_Top").gameObject;
+        go_Button_Bottom = transform.Find("Button_Bottom").gameObject;
+        go_Button_Top = transform.Find("Button_Top").gameObject;
 
         // Boolean for Resetting Activation
         b_ReadyToUse = true;

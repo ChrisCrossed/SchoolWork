@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
+# Visual Studio 2017
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPSProject", "FPSProject.csproj", "{266672F2-DAE2-E970-FA9C-F4359867EF4F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPSProject.Editor", "FPSProject.Editor.csproj", "{58F0970B-1C9F-E099-DB58-699A5AB80974}"

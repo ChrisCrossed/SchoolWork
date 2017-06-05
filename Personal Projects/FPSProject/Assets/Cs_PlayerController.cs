@@ -39,16 +39,16 @@ public class Cs_PlayerController : MonoBehaviour
         this_Player = gameObject;
         this_Rigidbody = this_Player.GetComponent<Rigidbody>();
         this_Collider = this_Player.GetComponent<Collider>();
-        this_Camera = transform.FindChild("Main Camera").gameObject;
+        this_Camera = transform.Find("Main Camera").gameObject;
         this_Crosshair = this_Player.GetComponent<Cs_Crosshair>();
 
         // Raycast information
         go_RaycastPoint = new GameObject[5];
-        go_RaycastPoint[0] = transform.FindChild("RaycastPoints").FindChild("RaycastPoint_Center").gameObject;
-        go_RaycastPoint[1] = transform.FindChild("RaycastPoints").FindChild("RaycastPoint_0").gameObject;
-        go_RaycastPoint[2] = transform.FindChild("RaycastPoints").FindChild("RaycastPoint_1").gameObject;
-        go_RaycastPoint[3] = transform.FindChild("RaycastPoints").FindChild("RaycastPoint_2").gameObject;
-        go_RaycastPoint[4] = transform.FindChild("RaycastPoints").FindChild("RaycastPoint_3").gameObject;
+        go_RaycastPoint[0] = transform.Find("RaycastPoints").Find("RaycastPoint_Center").gameObject;
+        go_RaycastPoint[1] = transform.Find("RaycastPoints").Find("RaycastPoint_0").gameObject;
+        go_RaycastPoint[2] = transform.Find("RaycastPoints").Find("RaycastPoint_1").gameObject;
+        go_RaycastPoint[3] = transform.Find("RaycastPoints").Find("RaycastPoint_2").gameObject;
+        go_RaycastPoint[4] = transform.Find("RaycastPoints").Find("RaycastPoint_3").gameObject;
 
         // Set Player State
         e_PlayerState = Enum_PlayerState.Movement;
@@ -120,6 +120,33 @@ public class Cs_PlayerController : MonoBehaviour
         return hit;
     }
 
+    float f_FOV_MAX = 75f;
+    float f_FOV_MIN = 60f;
+    float f_FOV_Speed = 100.0f;
+    void CameraPov()
+    {
+        float f_FOV = this_Camera.GetComponent<Camera>().fieldOfView;
+
+        if (Input.GetKey(KeyCode.LeftShift) )
+        {
+            if(f_FOV < f_FOV_MAX)
+            {
+                f_FOV += Time.deltaTime * f_FOV_Speed;
+                if (f_FOV > f_FOV_MAX) f_FOV = f_FOV_MAX;
+            }
+        }
+        else
+        {
+            if(f_FOV > f_FOV_MIN)
+            {
+                f_FOV -= Time.deltaTime * f_FOV_Speed;
+                if (f_FOV < f_FOV_MIN) f_FOV = f_FOV_MIN;
+            }
+        }
+
+        this_Camera.GetComponent<Camera>().fieldOfView = f_FOV;
+    }
+
     void PlayerMovement(Vector3 v3_Direction_, bool b_Jump_, float f_Magnitude_ = 1)
     {
         // Old velocity
@@ -131,8 +158,15 @@ public class Cs_PlayerController : MonoBehaviour
         // Combine (not multiply) the player's current rotation (Quat) into the input vector (Vec3)
         Vector3 v3_FinalRotation = gameObject.transform.rotation * v3_Direction_;
 
+        // If player is sprinting, increase move speed
+        float f_MoveSpeed_ = MAX_MOVESPEED_FORWARD;
+        if (Input.GetKey(KeyCode.LeftShift)) f_MoveSpeed_ *= 2f;
+
+        // Set camera FOV based on movespeed
+        CameraPov();
+
         // Lerp prior velocity into new velocity
-        Vector3 v3_newVelocity = Vector3.Lerp(v3_oldVelocity, v3_FinalRotation * MAX_MOVESPEED_FORWARD * f_Magnitude_, 1 / ACCELERATION);
+        Vector3 v3_newVelocity = Vector3.Lerp(v3_oldVelocity, v3_FinalRotation * f_MoveSpeed_ * f_Magnitude_, 1 / ACCELERATION);
 
         // Return gravity
         if (!b_Jump_)
@@ -159,17 +193,6 @@ public class Cs_PlayerController : MonoBehaviour
 
             ResetJump();
         }
-
-        /*
-        if(Vector3.Magnitude(v3_newVelocity) <= Vector3.Magnitude(v3_oldVelocity))
-        {
-            gameObject.GetComponent<Rigidbody>().velocity = v3_newVelocity;
-        }
-        else
-        {
-            gameObject.GetComponent<Rigidbody>().velocity = v3_oldVelocity;
-        }
-        */
 
         gameObject.GetComponent<Rigidbody>().velocity = v3_newVelocity;
         gameObject.GetComponent<Rigidbody>().AddForce(v3_PushDirection);
