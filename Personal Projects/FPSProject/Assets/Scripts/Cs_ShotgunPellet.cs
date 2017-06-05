@@ -25,35 +25,20 @@ public class Cs_ShotgunPellet : Cs_BULLET
 
         // Set player
         go_Player = GameObject.Find("Player");
-
-        base.RaycastBullet();
     }
 
     public void SetDirection(Vector3 _forward, float _intensity = 5f )
     {
         Vector3 _direction = _forward + Random.onUnitSphere * (_intensity / 90);
         transform.LookAt(transform.position + _direction);
+
+        base.RaycastBullet( BulletCreationPoint(), _direction );
     }
 
     
     private void OnCollisionEnter(Collision collision_)
     {
-        if(collision_.gameObject.layer == i_LayerMask_Enemy)
-        {
-            if(collision_.gameObject.GetComponent<Cs_Enemy_Test>())
-            {
-                // Connect with the enemy hit
-                collision_.gameObject.GetComponent<Cs_Enemy_Test>().Hit();
-            }
-            else if (collision_.gameObject.GetComponent<Cs_Enemy_Basic>())
-            {
-                // Connect with the enemy hit
-                collision_.gameObject.GetComponent<Cs_Enemy_Basic>().Hit();
-            }
-
-            // Connect with the player to pass information
-            go_Player.GetComponent<Cs_PlayerController>().Set_BulletHit = collision_.gameObject;
-        }
+        
 
         // Disable collider after first collision
         this_Collider.enabled = false;

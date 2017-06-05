@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Cs_BULLET : MonoBehaviour
 {
+    GameObject go_Player;
     Rigidbody this_Rigidbody;
     Vector3 v3_StartRotation;
     LineRenderer this_LineRenderer;
@@ -14,8 +15,15 @@ public class Cs_BULLET : MonoBehaviour
 
     float f_Timer;
 
-	// Use this for initialization
-	protected void Initialize ()
+    private void Awake()
+    {
+        go_BulletCreationPoint = new GameObject();
+        go_BulletCreationPoint = GameObject.Find("Bullet_CreatePoint");
+        go_Player = GameObject.Find("Player");
+    }
+
+    // Use this for initialization
+    protected void Initialize ()
     {
         this_Rigidbody = gameObject.GetComponent<Rigidbody>();
         v3_StartRotation = gameObject.transform.eulerAngles;
@@ -36,15 +44,37 @@ public class Cs_BULLET : MonoBehaviour
 
     }
 
-    protected void RaycastBullet()
+    protected void RaycastBullet( Vector3 v3_Pos_, Vector3 v3_Dir_ )
     {
         RaycastHit hit_;
         int i_LayerMask_ = LayerMask.GetMask("Enemy");
-        Debug.DrawLine(gameObject.transform.position, gameObject.transform.forward * 10f, Color.green, 5.0f);
-        if( Physics.Raycast(gameObject.transform.position, gameObject.transform.forward, out hit_, Mathf.Infinity, i_LayerMask_) )
+        v3_Dir_.Normalize();
+        // Debug.DrawLine( v3_Pos_, v3_Pos_ + (v3_Dir_ * 10f), Color.green, 5.0f);
+        Debug.DrawRay(v3_Pos_, v3_Dir_, Color.green, 1.0f);
+        if( Physics.Raycast( BulletCreationPoint(), v3_Dir_, out hit_, Mathf.Infinity, i_LayerMask_) )
         {
-            print("Hit An Enemy");
+            if (hit_.collider.gameObject.GetComponent<Cs_Enemy_Test>())
+            {
+                print("Hit Enemy - TEST");
+                // Connect with the enemy hit
+                hit_.collider.gameObject.GetComponent<Cs_Enemy_Test>().Hit();
+            }
+            else if (hit_.collider.gameObject.GetComponent<Cs_Enemy_Basic>())
+            {
+                // print("Hit Enemy - Basic");
+                // Connect with the enemy hit
+                hit_.collider.gameObject.GetComponent<Cs_Enemy_Basic>().Hit();
+            }
+
+            // Connect with the player to pass information
+            go_Player.GetComponent<Cs_PlayerController>().Set_BulletHit = hit_.collider.gameObject;
         }
+    }
+
+    GameObject go_BulletCreationPoint;
+    protected Vector3 BulletCreationPoint()
+    {
+        return go_BulletCreationPoint.transform.position;
     }
 
     // Update is called once per frame
