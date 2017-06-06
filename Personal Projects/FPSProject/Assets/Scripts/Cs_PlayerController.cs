@@ -18,6 +18,8 @@ public class Cs_PlayerController : MonoBehaviour
     Collider this_Collider;
     GameObject this_Camera;
     Cs_Crosshair this_Crosshair;
+    Cs_Shotgun this_Shotgun;
+    // Cs_Pistol this_Pistol;
 
     // Floats
     float MAX_MOVESPEED_FORWARD = 10f;
@@ -41,6 +43,7 @@ public class Cs_PlayerController : MonoBehaviour
         this_Collider = this_Player.GetComponent<Collider>();
         this_Camera = transform.Find("Main Camera").gameObject;
         this_Crosshair = this_Player.GetComponent<Cs_Crosshair>();
+        this_Shotgun = this_Player.GetComponent<Cs_Shotgun>();
 
         // Raycast information
         go_RaycastPoint = new GameObject[5];
@@ -258,6 +261,11 @@ public class Cs_PlayerController : MonoBehaviour
         f_JumpTimer = 0.0f;
 
         b_CanJump = false;
+    }
+
+    public Quaternion GetCameraRotation
+    {
+        get { return this_Camera.transform.rotation; }
     }
 
     public void ApplyGrenadeBounce( Vector3 v3_Vector_, float f_GrenadeStrength_ )
@@ -492,4 +500,12 @@ public class Cs_PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
 	}
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            this_Shotgun.WeaponState = !this_Shotgun.WeaponState;
+        }
+    }
 }

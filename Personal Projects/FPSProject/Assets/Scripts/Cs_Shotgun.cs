@@ -11,7 +11,11 @@ public class Cs_Shotgun : Cs_WEAPON
 
     void Start()
     {
+        base.Start();
+
         go_Spawn = transform.Find("Main Camera").Find("mdl_Shotgun").Find("Bullet_CreatePoint").gameObject;
+
+        SetWeaponModel = GameObject.Find("mdl_Shotgun");
     }
 
     public override void ShootGun()
@@ -23,5 +27,11 @@ public class Cs_Shotgun : Cs_WEAPON
             go_Bullet.GetComponent<Cs_ShotgunPellet>().BulletSpeed = (float)i_PelletSpeed;
             go_Bullet.transform.position = go_Spawn.transform.position;
         }
+    }
+
+
+    void Update()
+    {
+        base.Update();
     }
 }

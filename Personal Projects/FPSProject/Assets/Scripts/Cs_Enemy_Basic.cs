@@ -94,8 +94,5 @@ public class Cs_Enemy_Basic : Cs_ENEMY
         base.SkinUpdate();
 
         BehaviorState();
-
-        print("Checkpoint: " + i_CurrentWaypoint);
-        print("Max: " + (WaypointList.Count - 1));
 	}
 }
