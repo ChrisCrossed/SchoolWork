@@ -17,6 +17,8 @@ public class Cs_Shotgun : Cs_WEAPON
         go_Spawn = transform.Find("Main Camera").Find("mdl_Shotgun").Find("Bullet_CreatePoint").gameObject;
 
         SetWeaponModel = GameObject.Find("mdl_Shotgun");
+
+        GunIsAutomatic = true;
     }
 
     public override void ShootGun()

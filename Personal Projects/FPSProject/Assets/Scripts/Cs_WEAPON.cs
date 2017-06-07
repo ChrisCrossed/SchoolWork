@@ -51,21 +51,27 @@ public class Cs_WEAPON : MonoBehaviour
             }
         }
 
-        if(Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && b_IsAutomatic)
         {
-            if(e_WeaponState == Enum_WeaponState.Active)
-            {
-                if(b_CanShoot)
-                {
-                    ShootGun();
-
-                    b_CanShoot = false;
-                    f_FireTimer = f_FireTimer_Max;
-                }
-            }
+            FireBullet();
         }
+        else if (Input.GetMouseButtonDown(0)) FireBullet();
 
         Update_WeaponState();
+    }
+
+    void FireBullet()
+    {
+        if (e_WeaponState == Enum_WeaponState.Active)
+        {
+            if (b_CanShoot)
+            {
+                ShootGun();
+
+                b_CanShoot = false;
+                f_FireTimer = f_FireTimer_Max;
+            }
+        }
     }
     
     bool b_IsActive;
@@ -135,6 +141,17 @@ public class Cs_WEAPON : MonoBehaviour
         // Lerp to proper position
         float f_Perc = f_LoadingTimer / f_LoadingTimer_MAX;
         go_WeaponModel.transform.rotation = Quaternion.Lerp(q_DisabledRot, this_PlayerController.GetCameraRotation * q_ForwardRot, f_Perc);
+    }
+
+    protected float AttackSpeed
+    {
+        set { f_FireTimer_Max = value; }
+    }
+
+    bool b_IsAutomatic;
+    protected bool GunIsAutomatic
+    {
+        set { b_IsAutomatic = value; }
     }
 
     float f_FireTimer = 0.01f;

@@ -56,6 +56,13 @@ public class Cs_PlayerController : MonoBehaviour
 
         // Set Player State
         e_PlayerState = Enum_PlayerState.Movement;
+        
+        
+    }
+
+    public float GetMaxWalkspeed
+    {
+        get { return MAX_MOVESPEED_FORWARD; }
     }
 
     Vector3 InputVector()
@@ -131,7 +138,7 @@ public class Cs_PlayerController : MonoBehaviour
     {
         float f_FOV = this_Camera.GetComponent<Camera>().fieldOfView;
 
-        if (Input.GetKey(KeyCode.LeftShift) )
+        if (Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.LeftControl))
         {
             if(f_FOV < f_FOV_MAX)
             {
@@ -164,7 +171,34 @@ public class Cs_PlayerController : MonoBehaviour
 
         // If player is sprinting, increase move speed
         float f_MoveSpeed_ = MAX_MOVESPEED_FORWARD;
-        if (Input.GetKey(KeyCode.LeftShift)) f_MoveSpeed_ *= 2f;
+
+        // Duck
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            f_MoveSpeed_ /= 2f;
+
+            Vector3 v3_PlayerHeight = gameObject.transform.lossyScale;
+            if(v3_PlayerHeight.y > 0.5f) v3_PlayerHeight.y -= 5 * Time.deltaTime;
+            if (v3_PlayerHeight.y < 0.5f) v3_PlayerHeight.y = 0.5f;
+            gameObject.transform.localScale = v3_PlayerHeight;
+        }
+        // Sprint
+        else if (Input.GetKey(KeyCode.LeftShift))
+        {
+            f_MoveSpeed_ *= 2f;
+
+            Vector3 v3_PlayerHeight = gameObject.transform.lossyScale;
+            if (v3_PlayerHeight.y < 1f) v3_PlayerHeight.y += 5 * Time.deltaTime;
+            if (v3_PlayerHeight.y > 1f) v3_PlayerHeight.y = 1f;
+            gameObject.transform.localScale = v3_PlayerHeight;
+        }
+        else
+        {
+            Vector3 v3_PlayerHeight = gameObject.transform.lossyScale;
+            if (v3_PlayerHeight.y < 1f) v3_PlayerHeight.y += 5 * Time.deltaTime;
+            if (v3_PlayerHeight.y > 1f) v3_PlayerHeight.y = 1f;
+            gameObject.transform.localScale = v3_PlayerHeight;
+        }
 
         // Set camera FOV based on movespeed
         CameraPov();
@@ -502,13 +536,12 @@ public class Cs_PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
 	}
 
+    bool b_WaitOneFrame;
     private void Update()
     {
         // As long as one weapon is active, accept player weapon input
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            GameObject.Find("mdl_Shotgun").SetActive(true);
-
             this_Shotgun.WeaponState = true;
             this_Pistol.WeaponState = false;
         }
@@ -517,5 +550,14 @@ public class Cs_PlayerController : MonoBehaviour
             this_Shotgun.WeaponState = false;
             this_Pistol.WeaponState = true;
         }
+
+        #region Just some code to force a wait for one frame. It's messy.
+        if (!b_WaitOneFrame)
+        {
+            this_Pistol.WeaponState = true;
+            this_Shotgun.WeaponState = false;
+            b_WaitOneFrame = true;
+        }
+        #endregion
     }
 }
