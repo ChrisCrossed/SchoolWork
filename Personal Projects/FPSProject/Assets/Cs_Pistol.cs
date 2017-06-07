@@ -23,6 +23,7 @@ public class Cs_Pistol : Cs_WEAPON
     {
         for (int i_ = 0; i_ < i_NumBulletsToFire; ++i_)
         {
+            print("Got here");
             GameObject go_Bullet = (GameObject)Instantiate(Resources.Load("Bullet_Shotgun"));
             go_Bullet.GetComponent<Cs_ShotgunPellet>().SetDirection(go_Spawn.transform.forward, i_PelletIntensity);
             go_Bullet.GetComponent<Cs_ShotgunPellet>().BulletSpeed = (float)i_PelletSpeed;

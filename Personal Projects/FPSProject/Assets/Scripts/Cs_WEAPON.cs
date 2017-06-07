@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-enum Enum_WeaponState
+public enum Enum_WeaponState
 {
     Active, // Weapon is ready to fire
     Reloading, // Weapon is adding a bullet to the clip
@@ -27,8 +27,8 @@ public class Cs_WEAPON : MonoBehaviour
         this_PlayerObject = GameObject.Find("Player");
         this_PlayerController = this_PlayerObject.GetComponent<Cs_PlayerController>();
 
-        // Math - Weapon rotation (Points directly in-front of player
-        q_ForwardRot = Quaternion.Euler(new Vector3(0, 90, 0));
+        // Math - Weapon rotation (Points directly in-front of player)
+        q_ForwardRot = Quaternion.Euler(new Vector3(90, 0, 0));
     }
 
     protected GameObject SetWeaponModel
@@ -94,6 +94,11 @@ public class Cs_WEAPON : MonoBehaviour
         }
     }
 
+    public Enum_WeaponState GetWeaponState
+    {
+        get { return e_WeaponState; }
+    }
+
     float f_LoadingTimer;
     static float f_LoadingTimer_MAX = 0.5f;
     Quaternion q_DisabledRot;
@@ -103,7 +108,7 @@ public class Cs_WEAPON : MonoBehaviour
         if(e_WeaponState == Enum_WeaponState.Loading)
         {
             f_LoadingTimer += Time.deltaTime;
-            if (f_LoadingTimer > f_LoadingTimer_MAX)
+            if (f_LoadingTimer >= f_LoadingTimer_MAX)
             {
                 f_LoadingTimer = f_LoadingTimer_MAX;
 
@@ -113,7 +118,7 @@ public class Cs_WEAPON : MonoBehaviour
         else if(e_WeaponState == Enum_WeaponState.Unloading)
         {
             f_LoadingTimer -= Time.deltaTime;
-            if (f_LoadingTimer < 0f)
+            if (f_LoadingTimer <= 0f)
             {
                 f_LoadingTimer = 0f;
 
@@ -123,9 +128,10 @@ public class Cs_WEAPON : MonoBehaviour
             }
         }
 
-        // Determine rotation to look in-front of player at a slight downward angle
-        q_DisabledRot = Quaternion.Euler(new Vector3(0, 90, 30) + gameObject.transform.eulerAngles);
-        
+        // Determine rotation to look in-front of player at a slight downward angle in relation to the player's rotation
+        // q_DisabledRot = Quaternion.Euler(new Vector3(0, 90, 30) + gameObject.transform.eulerAngles);
+        q_DisabledRot = Quaternion.Euler(new Vector3(135, 0, 0) + gameObject.transform.eulerAngles);
+
         // Lerp to proper position
         float f_Perc = f_LoadingTimer / f_LoadingTimer_MAX;
         go_WeaponModel.transform.rotation = Quaternion.Lerp(q_DisabledRot, this_PlayerController.GetCameraRotation * q_ForwardRot, f_Perc);

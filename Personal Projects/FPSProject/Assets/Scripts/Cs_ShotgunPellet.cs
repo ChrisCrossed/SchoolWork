@@ -10,8 +10,6 @@ public class Cs_ShotgunPellet : Cs_BULLET
 
     Collider this_Collider;
 
-    GameObject go_Player;
-
     // Use this for initialization
     void Start ()
     {
@@ -22,14 +20,14 @@ public class Cs_ShotgunPellet : Cs_BULLET
         i_LayerMask_Use = LayerMask.NameToLayer("Use");
 
         this_Collider = gameObject.GetComponent<Collider>();
-
-        // Set player
-        go_Player = GameObject.Find("Player");
     }
 
     public void SetDirection(Vector3 _forward, float _intensity = 5f )
     {
         Vector3 _direction = _forward + Random.onUnitSphere * (_intensity / 90);
+
+        if (_intensity == 0f) _direction = _forward;
+
         transform.LookAt(transform.position + _direction);
 
         base.RaycastBullet( BulletCreationPoint(), _direction );

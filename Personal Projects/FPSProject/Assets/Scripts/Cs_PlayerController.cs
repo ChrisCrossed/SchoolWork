@@ -19,7 +19,7 @@ public class Cs_PlayerController : MonoBehaviour
     GameObject this_Camera;
     Cs_Crosshair this_Crosshair;
     Cs_Shotgun this_Shotgun;
-    // Cs_Pistol this_Pistol;
+    Cs_Pistol this_Pistol;
 
     // Floats
     float MAX_MOVESPEED_FORWARD = 10f;
@@ -44,6 +44,7 @@ public class Cs_PlayerController : MonoBehaviour
         this_Camera = transform.Find("Main Camera").gameObject;
         this_Crosshair = this_Player.GetComponent<Cs_Crosshair>();
         this_Shotgun = this_Player.GetComponent<Cs_Shotgun>();
+        this_Pistol = this_Player.GetComponent<Cs_Pistol>();
 
         // Raycast information
         go_RaycastPoint = new GameObject[5];
@@ -503,9 +504,18 @@ public class Cs_PlayerController : MonoBehaviour
 
     private void Update()
     {
+        // As long as one weapon is active, accept player weapon input
         if(Input.GetKeyDown(KeyCode.Alpha1))
         {
-            this_Shotgun.WeaponState = !this_Shotgun.WeaponState;
+            GameObject.Find("mdl_Shotgun").SetActive(true);
+
+            this_Shotgun.WeaponState = true;
+            this_Pistol.WeaponState = false;
+        }
+        else if(Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            this_Shotgun.WeaponState = false;
+            this_Pistol.WeaponState = true;
         }
     }
 }

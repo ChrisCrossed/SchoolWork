@@ -21,11 +21,11 @@ public class Cs_BULLET : MonoBehaviour
     {
         if(GameObject.Find("mdl_Shotgun").activeSelf)
         {
-            print("Shotgun Active");
             go_BulletCreationPoint = GameObject.Find("mdl_Shotgun").transform.Find("Bullet_CreatePoint").gameObject;
         }
         else if(GameObject.Find("mdl_Pistol").activeSelf)
         {
+            print("Pistol Active");
             go_BulletCreationPoint = GameObject.Find("mdl_Pistol").transform.Find("Bullet_CreatePoint").gameObject;
         }
 

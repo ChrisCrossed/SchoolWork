@@ -9,6 +9,7 @@ public class Cs_Shotgun : Cs_WEAPON
     [Range(1, 1000)] [SerializeField] int i_PelletSpeed = 100;
     GameObject go_Spawn;
 
+    // Use this for initialization
     void Start()
     {
         base.Start();
