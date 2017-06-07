@@ -15,9 +15,21 @@ public class Cs_BULLET : MonoBehaviour
 
     float f_Timer;
 
+    GameObject go_CreatePoint_Shotgun;
+    GameObject go_CreatePoint_Pistol;
     private void Awake()
     {
-        go_BulletCreationPoint = GameObject.Find("Bullet_CreatePoint");
+        if(GameObject.Find("mdl_Shotgun").activeSelf)
+        {
+            print("Shotgun Active");
+            go_BulletCreationPoint = GameObject.Find("mdl_Shotgun").transform.Find("Bullet_CreatePoint").gameObject;
+        }
+        else if(GameObject.Find("mdl_Pistol").activeSelf)
+        {
+            go_BulletCreationPoint = GameObject.Find("mdl_Pistol").transform.Find("Bullet_CreatePoint").gameObject;
+        }
+
+        // Find player object
         go_Player = GameObject.Find("Player");
     }
 

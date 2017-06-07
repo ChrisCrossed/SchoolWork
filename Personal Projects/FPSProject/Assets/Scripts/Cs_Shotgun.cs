@@ -29,7 +29,6 @@ public class Cs_Shotgun : Cs_WEAPON
         }
     }
 
-
     void Update()
     {
         base.Update();

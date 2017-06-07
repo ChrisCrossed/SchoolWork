@@ -17,12 +17,19 @@ public class Cs_WEAPON : MonoBehaviour
     Enum_WeaponState e_WeaponState = Enum_WeaponState.Disabled;
     GameObject go_WeaponModel;
     GameObject go_Camera;
+    GameObject this_PlayerObject;
+    Cs_PlayerController this_PlayerController;
 
 	// Use this for initialization
 	protected void Start ()
     {
         go_Camera = GameObject.Find("Main Camera");
-	}
+        this_PlayerObject = GameObject.Find("Player");
+        this_PlayerController = this_PlayerObject.GetComponent<Cs_PlayerController>();
+
+        // Math - Weapon rotation (Points directly in-front of player
+        q_ForwardRot = Quaternion.Euler(new Vector3(0, 90, 0));
+    }
 
     protected GameObject SetWeaponModel
     {
@@ -67,6 +74,9 @@ public class Cs_WEAPON : MonoBehaviour
         get { return b_IsActive; }
         set
         {
+            // If the gun was off and now activated, enable the mesh renderer
+            if (value && b_IsActive != value) go_WeaponModel.GetComponent<MeshRenderer>().enabled = true;
+
             b_IsActive = value;
             Set_WeaponState(b_IsActive);
         }
@@ -86,7 +96,8 @@ public class Cs_WEAPON : MonoBehaviour
 
     float f_LoadingTimer;
     static float f_LoadingTimer_MAX = 0.5f;
-    Vector3 v3_DisabledRot = new Vector3(0, 90, 30);
+    Quaternion q_DisabledRot;
+    Quaternion q_ForwardRot;
     void Update_WeaponState()
     {
         if(e_WeaponState == Enum_WeaponState.Loading)
@@ -106,12 +117,18 @@ public class Cs_WEAPON : MonoBehaviour
             {
                 f_LoadingTimer = 0f;
 
+                go_WeaponModel.GetComponent<MeshRenderer>().enabled = false;
+
                 e_WeaponState = Enum_WeaponState.Disabled;
             }
         }
 
+        // Determine rotation to look in-front of player at a slight downward angle
+        q_DisabledRot = Quaternion.Euler(new Vector3(0, 90, 30) + gameObject.transform.eulerAngles);
+        
+        // Lerp to proper position
         float f_Perc = f_LoadingTimer / f_LoadingTimer_MAX;
-        go_WeaponModel.transform.eulerAngles = Vector3.Lerp(v3_DisabledRot + gameObject.transform.eulerAngles, new Vector3(0, 90, 0) + go_Camera.transform.eulerAngles, f_Perc);
+        go_WeaponModel.transform.rotation = Quaternion.Lerp(q_DisabledRot, this_PlayerController.GetCameraRotation * q_ForwardRot, f_Perc);
     }
 
     float f_FireTimer = 0.01f;
