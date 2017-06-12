@@ -6,12 +6,9 @@ public class Cs_BULLET : MonoBehaviour
 {
     GameObject go_Player;
     Rigidbody this_Rigidbody;
-    Vector3 v3_StartRotation;
     LineRenderer this_LineRenderer;
 
     float f_Speed = 10f;
-    float f_Rotation = 0f;
-    float f_Slope = 0f;
 
     float f_Timer;
 
@@ -37,7 +34,6 @@ public class Cs_BULLET : MonoBehaviour
     protected void Initialize ()
     {
         this_Rigidbody = gameObject.GetComponent<Rigidbody>();
-        v3_StartRotation = gameObject.transform.eulerAngles;
         this_LineRenderer = gameObject.GetComponent<LineRenderer>();
 
         this_LineRenderer.SetPosition(0, gameObject.transform.position);
@@ -47,12 +43,6 @@ public class Cs_BULLET : MonoBehaviour
     {
         set { f_Speed = value; }
         get { return f_Speed; }
-    }
-
-    float f_TrailDistance = 1.0f;
-    void Update()
-    {
-
     }
 
     protected void RaycastBullet( Vector3 v3_Pos_, Vector3 v3_Dir_ )

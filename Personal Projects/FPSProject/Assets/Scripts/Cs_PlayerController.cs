@@ -53,6 +53,7 @@ public class Cs_PlayerController : MonoBehaviour
         go_RaycastPoint[2] = transform.Find("RaycastPoints").Find("RaycastPoint_1").gameObject;
         go_RaycastPoint[3] = transform.Find("RaycastPoints").Find("RaycastPoint_2").gameObject;
         go_RaycastPoint[4] = transform.Find("RaycastPoints").Find("RaycastPoint_3").gameObject;
+        go_RaycastPoint_Head = transform.Find("RaycastPoints").Find("RaycastPoint_Head").gameObject;
 
         // Set Player State
         e_PlayerState = Enum_PlayerState.Movement;
@@ -117,18 +118,23 @@ public class Cs_PlayerController : MonoBehaviour
     }
 
     GameObject[] go_RaycastPoint;
-    RaycastHit FindRaycastHit(float f_Distance = 0.35f)
+    bool FindRaycastHit(Vector3 v3_StartPosition_, Vector3 v3_RayDirection_, out RaycastHit hit_, float f_Distance_ = 0.35f)
     {
-        // Raycast downward to find ground plane
-        RaycastHit hit;
         // RaycastHit tempHit;
         int i_LayerMask = LayerMask.GetMask("Ground");
 
         // Store first normal of ground plane
-        Physics.Raycast(go_RaycastPoint[0].transform.position, -Vector3.up, out hit, f_Distance, i_LayerMask);
+        if(Physics.Raycast(v3_StartPosition_, v3_RayDirection_, out hit_, f_Distance_, i_LayerMask))
+        {
+            return true;
+        }
 
         // Return normal
-        return hit;
+        return false;
+    }
+    bool FindRaycastHit(out RaycastHit hit_, float f_Distance_ = 0.35f)
+    {
+        return FindRaycastHit(go_RaycastPoint[0].transform.position, Vector3.down, out hit_, f_Distance_);
     }
 
     float f_FOV_MAX = 75f;
@@ -175,29 +181,33 @@ public class Cs_PlayerController : MonoBehaviour
         // Duck
         if (Input.GetKey(KeyCode.LeftControl))
         {
+            // Reduce movespeed
             f_MoveSpeed_ /= 2f;
-
-            Vector3 v3_PlayerHeight = gameObject.transform.lossyScale;
-            if(v3_PlayerHeight.y > 0.5f) v3_PlayerHeight.y -= 5 * Time.deltaTime;
-            if (v3_PlayerHeight.y < 0.5f) v3_PlayerHeight.y = 0.5f;
-            gameObject.transform.localScale = v3_PlayerHeight;
         }
         // Sprint
         else if (Input.GetKey(KeyCode.LeftShift))
         {
             f_MoveSpeed_ *= 2f;
-
-            Vector3 v3_PlayerHeight = gameObject.transform.lossyScale;
-            if (v3_PlayerHeight.y < 1f) v3_PlayerHeight.y += 5 * Time.deltaTime;
-            if (v3_PlayerHeight.y > 1f) v3_PlayerHeight.y = 1f;
-            gameObject.transform.localScale = v3_PlayerHeight;
+            
+            // If the plaayer doesn't have a ceiling above them
+            if(!b_IsCrouched_)
+            {
+                Vector3 v3_PlayerHeight = gameObject.transform.lossyScale;
+                if (v3_PlayerHeight.y < 1f) v3_PlayerHeight.y += 5 * Time.deltaTime;
+                if (v3_PlayerHeight.y > 1f) v3_PlayerHeight.y = 1f;
+                gameObject.transform.localScale = v3_PlayerHeight;
+            }
         }
-        else
+        else // If the player isn't sprinting or holding the crouch button
         {
-            Vector3 v3_PlayerHeight = gameObject.transform.lossyScale;
-            if (v3_PlayerHeight.y < 1f) v3_PlayerHeight.y += 5 * Time.deltaTime;
-            if (v3_PlayerHeight.y > 1f) v3_PlayerHeight.y = 1f;
-            gameObject.transform.localScale = v3_PlayerHeight;
+            // If the player doesn't have a ceiling above them
+            if(!b_IsCrouched_)
+            {
+                Vector3 v3_PlayerHeight = gameObject.transform.lossyScale;
+                if (v3_PlayerHeight.y < 1f) v3_PlayerHeight.y += 5 * Time.deltaTime;
+                if (v3_PlayerHeight.y > 1f) v3_PlayerHeight.y = 1f;
+                gameObject.transform.localScale = v3_PlayerHeight;
+            }
         }
 
         // Set camera FOV based on movespeed
@@ -219,7 +229,9 @@ public class Cs_PlayerController : MonoBehaviour
             if (hit.distance > f_RayCast_DownwardDistance) v3_newVelocity.y = v3_oldVelocity.y - (Time.deltaTime * 50);
 
             // Determine direction to push against ramp
-            v3_PushDirection = -FindRaycastHit().normal;
+            RaycastHit hit_;
+            FindRaycastHit( out hit_ );
+            v3_PushDirection = -hit_.normal;
 
             // Apply velocity to player
             v3_newVelocity = Vector3.ProjectOnPlane(v3_newVelocity, v3_PushDirection);
@@ -262,6 +274,26 @@ public class Cs_PlayerController : MonoBehaviour
         v3_CamEuler.x = f_VertAngle;
         this_Camera.transform.eulerAngles = v3_CamEuler;
         #endregion
+    }
+
+    bool b_IsCrouched_;
+    GameObject go_RaycastPoint_Head;
+    RaycastHit hit_Head = new RaycastHit();
+    void CrouchState()
+    {
+        bool b_CrouchPressed = Input.GetKey(KeyCode.LeftControl);
+        bool b_GroundAbove = FindRaycastHit(go_RaycastPoint_Head.transform.position, Vector3.up, out hit_Head, 0.15f);
+
+        if (b_CrouchPressed || b_GroundAbove)
+        {
+            b_IsCrouched_ = true;
+
+            Vector3 v3_PlayerHeight = gameObject.transform.lossyScale;
+            if (v3_PlayerHeight.y > 0.5f) v3_PlayerHeight.y -= 5 * Time.deltaTime;
+            if (v3_PlayerHeight.y < 0.5f) v3_PlayerHeight.y = 0.5f;
+            gameObject.transform.localScale = v3_PlayerHeight;
+        }
+        else b_IsCrouched_ = false;
     }
 
     bool b_CanJump;
@@ -550,6 +582,8 @@ public class Cs_PlayerController : MonoBehaviour
             this_Shotgun.WeaponState = false;
             this_Pistol.WeaponState = true;
         }
+
+        CrouchState();
 
         #region Just some code to force a wait for one frame. It's messy.
         if (!b_WaitOneFrame)

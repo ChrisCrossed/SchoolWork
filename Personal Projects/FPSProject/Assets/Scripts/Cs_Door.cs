@@ -6,16 +6,12 @@ public class Cs_Door : MonoBehaviour
 {
     // Door Options
     bool ControlledByButton = false;
-    float f_DistanceToCloseDoor = 10.0f;
     float f_DoorTimer_Max = 0.25f;
 
     // Position Vectors
     Vector3 v3_StartPosition;
     Vector3 v3_FinalPosition;
     [SerializeField] AnimationCurve ac;
-
-    // Player connector
-    GameObject go_Player;
 
 	// Use this for initialization
 	void Start ()
@@ -28,9 +24,6 @@ public class Cs_Door : MonoBehaviour
         {
             v3_FinalPosition.y += gameObject.GetComponent<BoxCollider>().size.y + 0.1f;
         }
-
-        // Find and attach Player
-        go_Player = GameObject.Find("Player");
     }
 
     bool b_Open;
