@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Cs_Door : MonoBehaviour
 {
+    // Door Closes after time
+    [SerializeField] float DoorClosesAfterTime = 0f;
+    float f_DoorCloseTimer;
+    GameObject go_Player;
+
     // Door Options
     bool ControlledByButton = false;
     float f_DoorTimer_Max = 0.25f;
@@ -23,6 +28,12 @@ public class Cs_Door : MonoBehaviour
         if(gameObject.GetComponent<BoxCollider>())
         {
             v3_FinalPosition.y += gameObject.GetComponent<BoxCollider>().size.y + 0.1f;
+        }
+
+        // No need to capture player information if Door doesn't close
+        if(DoorClosesAfterTime > 0)
+        {
+            go_Player = GameObject.Find("Player");
         }
     }
 
@@ -62,20 +73,49 @@ public class Cs_Door : MonoBehaviour
         set { ControlledByButton = value; }
     }
 
+    float f_MinimumDistanceToPlayer = 5.0f;
+    void CloseDoorBasedOnTimer()
+    {
+        // If door is open, increment the timer
+        if (DoorState)
+        {
+            // If the player is too close to the door, do not close
+            if(Vector3.Distance(go_Player.transform.position, gameObject.transform.position) < f_MinimumDistanceToPlayer)
+            {
+                // Reset the door timer
+                f_DoorCloseTimer = 0f;
+
+                // Quit out without incrementing the timer;
+                return;
+            }
+
+            // If under the max timer, increment / cap the timer
+            if (f_DoorCloseTimer < DoorClosesAfterTime)
+            {
+                f_DoorCloseTimer += Time.deltaTime;
+
+                // Time limit reached, close door
+                if (f_DoorCloseTimer >= DoorClosesAfterTime)
+                {
+                    // Reset timer
+                    f_DoorCloseTimer = 0f;
+
+                    // Close door
+                    DoorState = false;
+                }
+            }
+        }
+    }
+
     // Update is called once per frame
     float f_MoveTimer;
 	void Update ()
     {
-		// If door is open and Not controlled by a button, then close when the player is a certain distance away.
-        /*
-        if( DoorState == true && !ControlledByButton )
+		// If door is supposed to close after a certain amount of time, close it
+        if(DoorClosesAfterTime > 0f)
         {
-            if( Vector3.Distance(go_Player.transform.position, gameObject.transform.position) > f_DistanceToCloseDoor )
-            {
-                DoorState = false;
-            }
+            CloseDoorBasedOnTimer();
         }
-        */
         
         // If the door is 'open', move to the Open position
         if( DoorState && f_MoveTimer < f_DoorTimer_Max )

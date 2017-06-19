@@ -93,8 +93,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Cs_Pistol.cs" />
-    <Compile Include="Assets\Cs_WaypointMarker.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\Scripts\CameraControls.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\Scripts\IcoBumpin.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Misc\HueCube.cs" />
@@ -109,12 +107,14 @@
     <Compile Include="Assets\Scripts\Cs_Enemy_Basic.cs" />
     <Compile Include="Assets\Scripts\Cs_Enemy_Test.cs" />
     <Compile Include="Assets\Scripts\Cs_Grenade.cs" />
+    <Compile Include="Assets\Scripts\Cs_Pistol.cs" />
     <Compile Include="Assets\Scripts\Cs_PlayerController.cs" />
     <Compile Include="Assets\Scripts\Cs_Shotgun.cs" />
     <Compile Include="Assets\Scripts\Cs_ShotgunPellet.cs" />
     <Compile Include="Assets\Scripts\Cs_ThrowGrenade.cs" />
     <Compile Include="Assets\Scripts\Cs_UseButton.cs" />
     <Compile Include="Assets\Scripts\Cs_WEAPON.cs" />
+    <Compile Include="Assets\Scripts\Cs_WaypointMarker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\README.txt" />
