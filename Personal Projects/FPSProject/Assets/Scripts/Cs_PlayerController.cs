@@ -147,7 +147,7 @@ public class Cs_PlayerController : MonoBehaviour
     {
         float f_FOV = this_Camera.GetComponent<Camera>().fieldOfView;
 
-        if (!b_IsCrouched)
+        if (Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.LeftControl))
         {
             if(f_FOV < f_FOV_MAX)
             {
