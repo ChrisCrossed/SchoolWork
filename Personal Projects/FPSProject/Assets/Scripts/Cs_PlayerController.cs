@@ -106,7 +106,7 @@ public class Cs_PlayerController : MonoBehaviour
         bool b_Jump = false;
         if (b_CanJump)
         {
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Space) && !b_IsCrouched)
             {
                 b_Jump = true;
                 b_CanJump = false;
@@ -121,7 +121,7 @@ public class Cs_PlayerController : MonoBehaviour
     bool FindRaycastHit(Vector3 v3_StartPosition_, Vector3 v3_RayDirection_, out RaycastHit hit_, float f_Distance_ = 0.35f)
     {
         // RaycastHit tempHit;
-        int i_LayerMask = LayerMask.GetMask("Ground");
+        int i_LayerMask = LayerMask.GetMask("Ground", "Wall", "Default");
 
         // Store first normal of ground plane
         if(Physics.Raycast(v3_StartPosition_, v3_RayDirection_, out hit_, f_Distance_, i_LayerMask))
@@ -144,7 +144,7 @@ public class Cs_PlayerController : MonoBehaviour
     {
         float f_FOV = this_Camera.GetComponent<Camera>().fieldOfView;
 
-        if (Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.LeftControl))
+        if (!b_IsCrouched)
         {
             if(f_FOV < f_FOV_MAX)
             {
@@ -177,21 +177,21 @@ public class Cs_PlayerController : MonoBehaviour
 
         // If player is sprinting, increase move speed
         float f_MoveSpeed_ = MAX_MOVESPEED_FORWARD;
-
+        
         // Duck
         if (Input.GetKey(KeyCode.LeftControl))
         {
-            // Reduce movespeed
-            f_MoveSpeed_ /= 2f;
+            b_IsCrouched = true;
         }
         // Sprint
         else if (Input.GetKey(KeyCode.LeftShift))
         {
-            f_MoveSpeed_ *= 2f;
-            
-            // If the plaayer doesn't have a ceiling above them
-            if(!b_IsCrouched_)
+            // If the player doesn't have a ceiling above them
+            if(!b_IsCrouched)
             {
+                // Increase movespeed
+                f_MoveSpeed_ *= 2f;
+
                 Vector3 v3_PlayerHeight = gameObject.transform.lossyScale;
                 if (v3_PlayerHeight.y < 1f) v3_PlayerHeight.y += 5 * Time.deltaTime;
                 if (v3_PlayerHeight.y > 1f) v3_PlayerHeight.y = 1f;
@@ -201,13 +201,19 @@ public class Cs_PlayerController : MonoBehaviour
         else // If the player isn't sprinting or holding the crouch button
         {
             // If the player doesn't have a ceiling above them
-            if(!b_IsCrouched_)
+            if(!b_IsCrouched)
             {
                 Vector3 v3_PlayerHeight = gameObject.transform.lossyScale;
                 if (v3_PlayerHeight.y < 1f) v3_PlayerHeight.y += 5 * Time.deltaTime;
                 if (v3_PlayerHeight.y > 1f) v3_PlayerHeight.y = 1f;
                 gameObject.transform.localScale = v3_PlayerHeight;
             }
+        }
+
+        if(b_IsCrouched)
+        {
+            // Reduce movespeed
+            f_MoveSpeed_ /= 2f;
         }
 
         // Set camera FOV based on movespeed
@@ -276,24 +282,24 @@ public class Cs_PlayerController : MonoBehaviour
         #endregion
     }
 
-    bool b_IsCrouched_;
+    bool b_IsCrouched;
     GameObject go_RaycastPoint_Head;
     RaycastHit hit_Head = new RaycastHit();
     void CrouchState()
     {
         bool b_CrouchPressed = Input.GetKey(KeyCode.LeftControl);
-        bool b_GroundAbove = FindRaycastHit(go_RaycastPoint_Head.transform.position, Vector3.up, out hit_Head, 0.15f);
+        bool b_GroundAbove = FindRaycastHit(go_RaycastPoint_Head.transform.position, Vector3.up, out hit_Head, 0.2f);
 
         if (b_CrouchPressed || b_GroundAbove)
         {
-            b_IsCrouched_ = true;
+            b_IsCrouched = true;
 
             Vector3 v3_PlayerHeight = gameObject.transform.lossyScale;
             if (v3_PlayerHeight.y > 0.5f) v3_PlayerHeight.y -= 5 * Time.deltaTime;
             if (v3_PlayerHeight.y < 0.5f) v3_PlayerHeight.y = 0.5f;
             gameObject.transform.localScale = v3_PlayerHeight;
         }
-        else b_IsCrouched_ = false;
+        else b_IsCrouched = false;
     }
 
     bool b_CanJump;
