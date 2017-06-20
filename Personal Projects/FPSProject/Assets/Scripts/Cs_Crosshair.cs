@@ -73,6 +73,30 @@ public class Cs_Crosshair : MonoBehaviour
     {
         get { return go_CrosshairObject; }
     }
+
+    bool b_IsTransparent;
+    public bool IsTransparent
+    {
+        set
+        {
+            b_IsTransparent = value;
+
+            Color clr_ = img_Crosshair.material.color;
+
+            if(b_IsTransparent)
+            {
+                clr_.a = 0.5f;
+            }
+            else
+            {
+                clr_.a = 1.0f;
+            }
+
+            img_Crosshair.material.color = clr_;
+        }
+        get { return b_IsTransparent; }
+    }
+
 	
 	// Update is called once per frame
 	void FixedUpdate ()

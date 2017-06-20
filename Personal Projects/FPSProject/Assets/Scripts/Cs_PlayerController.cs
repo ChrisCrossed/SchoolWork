@@ -20,6 +20,7 @@ public class Cs_PlayerController : MonoBehaviour
     Cs_Crosshair this_Crosshair;
     Cs_Shotgun this_Shotgun;
     Cs_Pistol this_Pistol;
+    GameObject go_Flashlight;
 
     // Floats
     float MAX_MOVESPEED_FORWARD = 10f;
@@ -57,8 +58,10 @@ public class Cs_PlayerController : MonoBehaviour
 
         // Set Player State
         e_PlayerState = Enum_PlayerState.Movement;
-        
-        
+
+        go_Flashlight = transform.Find("Main Camera").Find("Flashlight").gameObject;
+
+        FlashlightState = false;
     }
 
     public float GetMaxWalkspeed
@@ -336,6 +339,22 @@ public class Cs_PlayerController : MonoBehaviour
         b_CanJump = false;
     }
 
+    bool b_FlashlightState;
+    bool FlashlightState
+    {
+        get { return b_FlashlightState; }
+        set
+        {
+            b_FlashlightState = value;
+
+            // Set state of flashlight
+            go_Flashlight.SetActive(b_FlashlightState);
+
+            // If flashlight is on, set Crosshair to half transparency
+            this_Crosshair.IsTransparent = b_FlashlightState;
+        }
+    }
+
     public Quaternion GetCameraRotation
     {
         get { return this_Camera.transform.rotation; }
@@ -595,6 +614,12 @@ public class Cs_PlayerController : MonoBehaviour
         }
 
         CrouchState();
+
+        // Flashlight input
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            FlashlightState = !FlashlightState;
+        }
 
         #region Just some code to force a wait for one frame. It's messy.
         if (!b_WaitOneFrame)
