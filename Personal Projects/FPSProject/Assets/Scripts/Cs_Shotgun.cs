@@ -10,7 +10,7 @@ public class Cs_Shotgun : Cs_WEAPON
     GameObject go_Spawn;
 
     // Use this for initialization
-    void Start()
+    new void Start()
     {
         base.Start();
 
@@ -32,7 +32,7 @@ public class Cs_Shotgun : Cs_WEAPON
         }
     }
 
-    void Update()
+    new void Update()
     {
         base.Update();
     }

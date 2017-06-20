@@ -19,7 +19,7 @@ public class Cs_Door : MonoBehaviour
     [SerializeField] AnimationCurve ac;
 
 	// Use this for initialization
-	void Start ()
+	protected void Start ()
     {
         v3_StartPosition = gameObject.transform.position;
 
@@ -109,7 +109,7 @@ public class Cs_Door : MonoBehaviour
 
     // Update is called once per frame
     float f_MoveTimer;
-	void Update ()
+	protected void Update ()
     {
 		// If door is supposed to close after a certain amount of time, close it
         if(DoorClosesAfterTime > 0f)

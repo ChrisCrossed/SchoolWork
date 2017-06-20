@@ -103,6 +103,7 @@
     <Compile Include="Assets\Scripts\Cs_Crosshair.cs" />
     <Compile Include="Assets\Scripts\Cs_DashToObject.cs" />
     <Compile Include="Assets\Scripts\Cs_Door.cs" />
+    <Compile Include="Assets\Scripts\Cs_Door_Broken.cs" />
     <Compile Include="Assets\Scripts\Cs_ENEMY.cs" />
     <Compile Include="Assets\Scripts\Cs_Enemy_Basic.cs" />
     <Compile Include="Assets\Scripts\Cs_Enemy_Test.cs" />

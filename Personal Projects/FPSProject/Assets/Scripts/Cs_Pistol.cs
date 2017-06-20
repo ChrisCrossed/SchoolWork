@@ -12,7 +12,7 @@ public class Cs_Pistol : Cs_WEAPON
     [SerializeField] float f_AttackSpeed;
 
     // Use this for initialization
-    void Start ()
+    new void Start ()
     {
         base.Start();
 
@@ -80,7 +80,7 @@ public class Cs_Pistol : Cs_WEAPON
 
     float f_PelletIntensityTimer;
     float f_PelletIntensityTimer_MAX = 0.3f;
-    void Update()
+    new void Update()
     {
         base.Update();
 
