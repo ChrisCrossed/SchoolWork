@@ -10,19 +10,21 @@ public enum Enum_MapList
     Assault_Hanamura = 0,
     Assault_TempleOfAnubis = 1,
     Assault_Volskaya = 2,
+    Assault_LunarColony = 3,
 
-    Control_Ilios = 3,
-    Control_Lijang = 4,
-    Control_Nepal = 5,
+    Control_Ilios = 4,
+    Control_Lijang = 5,
+    Control_Nepal = 6,
+    Control_Oasis = 7,
 
-    Hybrid_Hollywood = 6,
-    Hybrid_KingsRow = 7,
-    Hybrid_Numbani = 8,
-    Hybrid_Eichenwalde = 9,
+    Hybrid_Hollywood = 8,
+    Hybrid_KingsRow = 9,
+    Hybrid_Numbani = 10,
+    Hybrid_Eichenwalde = 11,
 
-    Escort_Dorado = 10,
-    Escort_Gibraltar = 11,
-    Escort_Route66 = 12,
+    Escort_Dorado = 12,
+    Escort_Gibraltar = 13,
+    Escort_Route66 = 14,
 }
 
 public enum Enum_TeamList
@@ -42,6 +44,9 @@ enum Enum_TeamTurn
 
 public class Cs_OverlaySystem : MonoBehaviour
 {
+    // Set Number of Maps
+    [SerializeField] int NumberOfMaps = 15;
+
     // Variables
     int i_NumMaps;
     bool[] b_MapActive;
@@ -75,9 +80,11 @@ public class Cs_OverlaySystem : MonoBehaviour
     GameObject button_Hanamura;
     GameObject button_Anubis;
     GameObject button_Volskaya;
+    GameObject button_LunarColony;
     GameObject button_Ilios;
     GameObject button_Lijang;
     GameObject button_Nepal;
+    GameObject button_Oasis;
     GameObject button_Hollywood;
     GameObject button_KingsRow;
     GameObject button_Numbani;
@@ -121,7 +128,7 @@ public class Cs_OverlaySystem : MonoBehaviour
         }
 
         // Sets number of maps in use
-        i_NumMaps = 13;
+        i_NumMaps = NumberOfMaps;
 
         // Activates the number of maps to use
         b_MapActive = new bool[ i_NumMaps ];
@@ -163,9 +170,11 @@ public class Cs_OverlaySystem : MonoBehaviour
         button_Hanamura = GameObject.Find("Button_Hanamura");
         button_Anubis = GameObject.Find("Button_Anubis");
         button_Volskaya = GameObject.Find("Button_Volskaya");
+        button_LunarColony = GameObject.Find("Button_LunarColony");
         button_Ilios = GameObject.Find("Button_Ilios");
         button_Lijang = GameObject.Find("Button_Lijang");
         button_Nepal = GameObject.Find("Button_Nepal");
+        button_Oasis = GameObject.Find("Button_Oasis");
         button_Hollywood = GameObject.Find("Button_Hollywood");
         button_KingsRow = GameObject.Find("Button_KingsRow");
         button_Numbani = GameObject.Find("Button_Numbani");
@@ -456,16 +465,18 @@ public class Cs_OverlaySystem : MonoBehaviour
                             if (i_ == 0) button_Hanamura.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
                             if (i_ == 1) button_Anubis.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
                             if (i_ == 2) button_Volskaya.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
-                            if (i_ == 3) button_Ilios.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
-                            if (i_ == 4) button_Lijang.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
-                            if (i_ == 5) button_Nepal.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
-                            if (i_ == 6) button_Hollywood.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
-                            if (i_ == 7) button_KingsRow.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
-                            if (i_ == 8) button_Numbani.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
-                            if (i_ == 9) button_Eichenwalde.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
-                            if (i_ == 10) button_Dorado.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
-                            if (i_ == 11) button_Gibraltar.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
-                            if (i_ == 12) button_Route66.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED;
+                            if (i_ == 3) button_LunarColony.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 4) button_Ilios.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 5) button_Lijang.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 6) button_Nepal.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 7) button_Oasis.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 8) button_Hollywood.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 9) button_KingsRow.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 10) button_Numbani.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 11) button_Eichenwalde.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 12) button_Dorado.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 13) button_Gibraltar.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 14) button_Route66.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED;
                         }
                     }
 
@@ -588,31 +599,21 @@ public class Cs_OverlaySystem : MonoBehaviour
                     {
                         if (b_MapActive[i_])
                         {
-                            if (i_ == 0) button_Hanamura.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED;
-                            else
-                            if (i_ == 1) button_Anubis.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED;
-                            else
-                            if (i_ == 2) button_Volskaya.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED;
-                            else
-                            if (i_ == 3) button_Ilios.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED;
-                            else
-                            if (i_ == 4) button_Lijang.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED;
-                            else
-                            if (i_ == 5) button_Nepal.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED;
-                            else
-                            if (i_ == 6) button_Hollywood.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED;
-                            else
-                            if (i_ == 7) button_KingsRow.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED;
-                            else
-                            if (i_ == 8) button_Numbani.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED;
-                            else
-                            if (i_ == 9) button_Eichenwalde.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED;
-                            else
-                            if (i_ == 10) button_Dorado.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED;
-                            else
-                            if (i_ == 11) button_Gibraltar.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED;
-                            else
-                            if (i_ == 12) button_Route66.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED;
+                            if (i_ == 0) button_Hanamura.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 1) button_Anubis.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 2) button_Volskaya.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 3) button_LunarColony.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 4) button_Ilios.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 5) button_Lijang.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 6) button_Nepal.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 7) button_Oasis.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 8) button_Hollywood.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 9) button_KingsRow.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 10) button_Numbani.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 11) button_Eichenwalde.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 12) button_Dorado.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 13) button_Gibraltar.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED; else
+                            if (i_ == 14) button_Route66.GetComponent<Cs_Button_Map>().Set_MapState = b_BANNED;
                         }
                     }
                     break;
@@ -762,33 +763,39 @@ public class Cs_OverlaySystem : MonoBehaviour
                 go_CurrMap = button_Volskaya;
                 break;
             case 3:
-                go_CurrMap = button_Ilios;
+                go_CurrMap = button_LunarColony;
                 break;
             case 4:
-                go_CurrMap = button_Lijang;
+                go_CurrMap = button_Ilios;
                 break;
             case 5:
-                go_CurrMap = button_Nepal;
+                go_CurrMap = button_Lijang;
                 break;
             case 6:
-                go_CurrMap = button_Hollywood;
+                go_CurrMap = button_Nepal;
                 break;
             case 7:
-                go_CurrMap = button_KingsRow;
+                go_CurrMap = button_Oasis;
                 break;
             case 8:
-                go_CurrMap = button_Numbani;
+                go_CurrMap = button_Hollywood;
                 break;
             case 9:
-                go_CurrMap = button_Eichenwalde;
+                go_CurrMap = button_KingsRow;
                 break;
             case 10:
-                go_CurrMap = button_Dorado;
+                go_CurrMap = button_Numbani;
                 break;
             case 11:
-                go_CurrMap = button_Gibraltar;
+                go_CurrMap = button_Eichenwalde;
                 break;
             case 12:
+                go_CurrMap = button_Dorado;
+                break;
+            case 13:
+                go_CurrMap = button_Gibraltar;
+                break;
+            case 14:
                 go_CurrMap = button_Route66;
                 break;
             default:
@@ -947,13 +954,13 @@ public class Cs_OverlaySystem : MonoBehaviour
                 else go_Temp = map_Button3;
                 
                 go_Temp.GetComponent<RectTransform>().sizeDelta = new Vector2(775, 200);
-                go_Temp.transform.FindChild("Img_Picked").GetComponent<RectTransform>().sizeDelta = new Vector2(775, 200);
-                go_Temp.transform.FindChild("Text").GetComponent<Text>().fontSize = 135;
-                go_Temp.transform.FindChild("Trail").GetComponent<Image>().enabled = true;
+                go_Temp.transform.Find("Img_Picked").GetComponent<RectTransform>().sizeDelta = new Vector2(775, 200);
+                go_Temp.transform.Find("Text").GetComponent<Text>().fontSize = 135;
+                go_Temp.transform.Find("Trail").GetComponent<Image>().enabled = true;
 
-                Vector3 v3_Pos = go_Temp.transform.FindChild("Trail").GetComponent<RectTransform>().localPosition;
+                Vector3 v3_Pos = go_Temp.transform.Find("Trail").GetComponent<RectTransform>().localPosition;
                 v3_Pos.x = 885;
-                go_Temp.transform.FindChild("Trail").GetComponent<RectTransform>().localPosition = v3_Pos;
+                go_Temp.transform.Find("Trail").GetComponent<RectTransform>().localPosition = v3_Pos;
             }
             #endregion
         }
@@ -999,13 +1006,13 @@ public class Cs_OverlaySystem : MonoBehaviour
                 else go_Temp = map_Button5;
 
                 go_Temp.GetComponent<RectTransform>().sizeDelta = new Vector2(600, 200);
-                go_Temp.transform.FindChild("Img_Picked").GetComponent<RectTransform>().sizeDelta = new Vector2(600, 200);
-                go_Temp.transform.FindChild("Text").GetComponent<Text>().fontSize = 135;
-                go_Temp.transform.FindChild("Trail").GetComponent<Image>().enabled = true;
+                go_Temp.transform.Find("Img_Picked").GetComponent<RectTransform>().sizeDelta = new Vector2(600, 200);
+                go_Temp.transform.Find("Text").GetComponent<Text>().fontSize = 135;
+                go_Temp.transform.Find("Trail").GetComponent<Image>().enabled = true;
 
-                Vector3 v3_Pos = go_Temp.transform.FindChild("Trail").GetComponent<RectTransform>().localPosition;
+                Vector3 v3_Pos = go_Temp.transform.Find("Trail").GetComponent<RectTransform>().localPosition;
                 v3_Pos.x = 799;
-                go_Temp.transform.FindChild("Trail").GetComponent<RectTransform>().localPosition = v3_Pos;
+                go_Temp.transform.Find("Trail").GetComponent<RectTransform>().localPosition = v3_Pos;
             }
             #endregion
         }

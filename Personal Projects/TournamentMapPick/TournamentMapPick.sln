@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
+# Visual Studio 2017
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TournamentMapPick", "TournamentMapPick.csproj", "{A8A3FA21-12C7-195B-891E-B0AE29502280}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TournamentMapPick.Editor", "TournamentMapPick.Editor.csproj", "{866AB164-1433-B8AE-C0DF-36ACE0B537F6}"

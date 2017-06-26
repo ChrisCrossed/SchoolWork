@@ -46,6 +46,7 @@ public class Cs_PlayerController : MonoBehaviour
         this_Crosshair = this_Player.GetComponent<Cs_Crosshair>();
         this_Shotgun = this_Player.GetComponent<Cs_Shotgun>();
         this_Pistol = this_Player.GetComponent<Cs_Pistol>();
+        this_WeaponPosition = this_Player.transform.Find("WeaponPosition").gameObject;
 
         // Raycast information
         go_RaycastPoint = new GameObject[5];
@@ -55,6 +56,9 @@ public class Cs_PlayerController : MonoBehaviour
         go_RaycastPoint[3] = transform.Find("RaycastPoints").Find("RaycastPoint_2").gameObject;
         go_RaycastPoint[4] = transform.Find("RaycastPoints").Find("RaycastPoint_3").gameObject;
         go_RaycastPoint_Head = transform.Find("RaycastPoints").Find("RaycastPoint_Head").gameObject;
+
+        // Set current WeaponPosition information
+        v3_WeaponPosition = this_WeaponPosition.transform.localPosition;
 
         // Set Player State
         e_PlayerState = Enum_PlayerState.Movement;
@@ -167,6 +171,7 @@ public class Cs_PlayerController : MonoBehaviour
         this_Camera.GetComponent<Camera>().fieldOfView = f_FOV;
     }
 
+    [SerializeField] float f_SprintMultiplier = 1.5f;
     void PlayerMovement(Vector3 v3_Direction_, bool b_Jump_, float f_Magnitude_ = 1)
     {
         // Old velocity
@@ -193,7 +198,7 @@ public class Cs_PlayerController : MonoBehaviour
             if(!b_IsCrouched)
             {
                 // Increase movespeed
-                f_MoveSpeed_ *= 2f;
+                f_MoveSpeed_ *= f_SprintMultiplier;
 
                 Vector3 v3_PlayerHeight = gameObject.transform.lossyScale;
                 if (v3_PlayerHeight.y < 1f) v3_PlayerHeight.y += 5 * Time.deltaTime;
@@ -216,7 +221,7 @@ public class Cs_PlayerController : MonoBehaviour
         if(b_IsCrouched)
         {
             // Reduce movespeed
-            f_MoveSpeed_ /= 2f;
+            f_MoveSpeed_ /= f_SprintMultiplier;
         }
 
         // Set camera FOV based on movespeed
@@ -257,6 +262,8 @@ public class Cs_PlayerController : MonoBehaviour
         gameObject.GetComponent<Rigidbody>().AddForce(v3_PushDirection);
     }
 
+    Vector3 v3_WeaponPosition;
+    GameObject this_WeaponPosition;
     float f_VertAngle;
     void MouseLook()
     {
@@ -282,6 +289,19 @@ public class Cs_PlayerController : MonoBehaviour
         Vector3 v3_CamEuler = this_Camera.transform.eulerAngles;
         v3_CamEuler.x = f_VertAngle;
         this_Camera.transform.eulerAngles = v3_CamEuler;
+        #endregion
+
+        #region Set new WeaponPosition based on camera rotation
+        float f_Perc = -(f_VertAngle / (85f - -85f));
+        float yPos_ = f_Perc * 2f;
+        float zPos_ = f_Perc / 2;
+        if (zPos_ > 0f) zPos_ *= -1;
+
+        // Move Y position based on f_Perc
+        Vector3 v3_NewWeaponPos = this_WeaponPosition.transform.localPosition;
+        v3_NewWeaponPos.y = v3_WeaponPosition.y + yPos_;
+        v3_NewWeaponPos.z = v3_WeaponPosition.z + zPos_;
+        this_WeaponPosition.transform.localPosition = v3_NewWeaponPos;
         #endregion
     }
 

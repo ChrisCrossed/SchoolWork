@@ -16,7 +16,7 @@ public class Cs_Pistol : Cs_WEAPON
     {
         base.Start();
 
-        go_Spawn = transform.Find("Main Camera").Find("mdl_Pistol").Find("Bullet_CreatePoint").gameObject;
+        go_Spawn = GameObject.Find("WeaponObjects").transform.Find("mdl_Pistol").Find("Bullet_CreatePoint").gameObject;
 
         SetWeaponModel = GameObject.Find("mdl_Pistol");
 
