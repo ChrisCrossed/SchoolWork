@@ -47,6 +47,9 @@ public class Cs_PlayerController : MonoBehaviour
         this_Shotgun = this_Player.GetComponent<Cs_Shotgun>();
         this_Pistol = this_Player.GetComponent<Cs_Pistol>();
         this_WeaponPosition = this_Player.transform.Find("WeaponPosition").gameObject;
+        go_RaycastCollider = GameObject.Find("RaycastCollider").gameObject;
+        this_RaycastCollider = go_RaycastCollider.GetComponent<Cs_RaycastCollider>();
+        go_DynamicRaycastPosition = GameObject.Find("RaycastPoint_Dynamic");
 
         // Raycast information
         go_RaycastPoint = new GameObject[5];
@@ -125,6 +128,9 @@ public class Cs_PlayerController : MonoBehaviour
     }
 
     GameObject[] go_RaycastPoint;
+    GameObject go_RaycastCollider;
+    Cs_RaycastCollider this_RaycastCollider;
+    GameObject go_DynamicRaycastPosition;
     bool FindRaycastHit(Vector3 v3_StartPosition_, Vector3 v3_RayDirection_, out RaycastHit hit_, float f_Distance_ = 0.35f)
     {
         // RaycastHit tempHit;
@@ -142,6 +148,48 @@ public class Cs_PlayerController : MonoBehaviour
     bool FindRaycastHit(out RaycastHit hit_, float f_Distance_ = 0.35f)
     {
         return FindRaycastHit(go_RaycastPoint[0].transform.position, Vector3.down, out hit_, f_Distance_);
+    }
+    bool DynamicRaycaster( ref RaycastHit hit_ )
+    {
+        // Check if something with the proper tag exists in the collider
+        List<GameObject> go_GroundColliderList = this_RaycastCollider.GetColliderList;
+
+        if (go_GroundColliderList.Count == 0) return false;
+
+        // If multiple things exist, find the closest hit.point to the player
+        GameObject go_Ground_;
+        if (go_GroundColliderList.Count == 1) go_Ground_ = go_GroundColliderList[0];
+        else
+        {
+            GameObject go_TempGround_ = new GameObject();
+            Vector3 v3_StartPos_ = go_RaycastPoint[0].transform.position;
+            float f_Dist_ = 10f;
+            for (int i_ = 0; i_ < go_GroundColliderList.Count; ++i_)
+            {
+                float f_TempDist = Vector3.Distance(go_GroundColliderList[i_].transform.position, v3_StartPos_);
+
+                if (f_TempDist < f_Dist_)
+                {
+                    f_Dist_ = f_TempDist;
+
+                    go_TempGround_ = go_GroundColliderList[i_];
+                }
+            }
+
+            // Save results
+            go_Ground_ = go_TempGround_;
+        }
+
+        // THIS WILL NOT WORK
+        // I need to figure out how to find a hit.point for any object I'm standing on
+
+        // Move the dynamic raycaster to the proper X & Z position
+        go_DynamicRaycastPosition.transform.position = go_Ground_.transform.position;
+
+        // Raycast downward
+
+        // Return results
+        return false;
     }
 
     float f_FOV_MAX = 75f;
