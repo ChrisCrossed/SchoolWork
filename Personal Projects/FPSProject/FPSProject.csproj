@@ -93,7 +93,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Cs_RaycastCollider.cs" />
     <Compile Include="Assets\Cs_StopLight.cs" />
     <Compile Include="Assets\Cs_WeaponObjects.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\Scripts\CameraControls.cs" />
