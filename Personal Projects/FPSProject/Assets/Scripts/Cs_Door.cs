@@ -18,8 +18,12 @@ public class Cs_Door : MonoBehaviour
     Vector3 v3_FinalPosition;
     [SerializeField] AnimationCurve ac;
 
-	// Use this for initialization
-	protected void Start ()
+    // Connected Objects
+    [SerializeField] GameObject[] DisableLightsOnOpen;
+    [SerializeField] GameObject[] EnableLightsOnOpen;
+
+    // Use this for initialization
+    protected void Start ()
     {
         v3_StartPosition = gameObject.transform.position;
 
@@ -49,6 +53,9 @@ public class Cs_Door : MonoBehaviour
                 if(b_Open)
                 {
                     gameObject.layer = LayerMask.NameToLayer("Default");
+
+                    EnableLights();
+                    DisableLights();
                 }
                 else
                 {
@@ -102,6 +109,35 @@ public class Cs_Door : MonoBehaviour
 
                     // Close door
                     DoorState = false;
+                }
+            }
+        }
+    }
+
+    void EnableLights()
+    {
+        int i_NumLights_ = EnableLightsOnOpen.Length;
+
+        if(i_NumLights_ > 0)
+        {
+            for(int i_ = 0; i_ < i_NumLights_; ++i_)
+            {
+                EnableLightsOnOpen[i_].GetComponent<Light>().enabled = true;
+            }
+        }
+    }
+
+    void DisableLights()
+    {
+        if (DisableLightsOnOpen.Length > 0)
+        {
+            int i_NumLights_ = DisableLightsOnOpen.Length;
+
+            if (i_NumLights_ > 0)
+            {
+                for (int i_ = 0; i_ < i_NumLights_; ++i_)
+                {
+                    DisableLightsOnOpen[i_].GetComponent<Light>().enabled = false;
                 }
             }
         }
