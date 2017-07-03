@@ -86,8 +86,10 @@ public class Cs_Door : MonoBehaviour
         // If door is open, increment the timer
         if (DoorState)
         {
+            float f_DoorHeight = gameObject.GetComponent<BoxCollider>().size.y;
+
             // If the player is too close to the door, do not close
-            if(Vector3.Distance(go_Player.transform.position, gameObject.transform.position) < f_MinimumDistanceToPlayer)
+            if(Vector3.Distance(go_Player.transform.position, gameObject.transform.position) < f_MinimumDistanceToPlayer + (f_DoorHeight / 4f))
             {
                 // Reset the door timer
                 f_DoorCloseTimer = 0f;
