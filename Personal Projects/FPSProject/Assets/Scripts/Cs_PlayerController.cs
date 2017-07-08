@@ -174,11 +174,18 @@ public class Cs_PlayerController : MonoBehaviour
     float f_FOV_MAX = 75f;
     float f_FOV_MIN = 60f;
     float f_FOV_Speed = 100.0f;
+    float f_SpeedLastFrame;
+    float f_SpeedThisFrame;
+    bool b_PlayerIsMoving;
     void CameraPov()
     {
         float f_FOV = this_Camera.GetComponent<Camera>().fieldOfView;
+        
+        // Determine if player is moving forward
+        f_SpeedThisFrame = this_Rigidbody.velocity.magnitude;
+        if (f_SpeedThisFrame > f_SpeedLastFrame || f_SpeedThisFrame > MAX_MOVESPEED_FORWARD - 0.1f) b_PlayerIsMoving = true; else b_PlayerIsMoving = false;
 
-        if (Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.LeftControl))
+        if (b_IsSprinting && !Input.GetKey(KeyCode.LeftControl) && b_PlayerIsMoving)
         {
             if(f_FOV < f_FOV_MAX)
             {
@@ -196,9 +203,12 @@ public class Cs_PlayerController : MonoBehaviour
         }
 
         this_Camera.GetComponent<Camera>().fieldOfView = f_FOV;
+
+        f_SpeedLastFrame = f_SpeedThisFrame;
     }
 
     [SerializeField] float f_SprintMultiplier = 1.5f;
+    bool b_IsSprinting;
     void PlayerMovement(Vector3 v3_Direction_, bool b_Jump_, float f_Magnitude_ = 1)
     {
         // Old velocity
@@ -219,7 +229,7 @@ public class Cs_PlayerController : MonoBehaviour
             b_IsCrouched = true;
         }
         // Sprint
-        else if (Input.GetKey(KeyCode.LeftShift))
+        else if ( b_IsSprinting )
         {
             // If the player doesn't have a ceiling above them
             if(!b_IsCrouched)
@@ -661,6 +671,11 @@ public class Cs_PlayerController : MonoBehaviour
         {
             this_Shotgun.WeaponState = false;
             this_Pistol.WeaponState = true;
+        }
+
+        if(Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            b_IsSprinting = !b_IsSprinting;
         }
 
         CrouchState();
