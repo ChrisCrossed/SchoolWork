@@ -53,7 +53,7 @@
 				float ortho = (1 - UNITY_MATRIX_P[3][3]);
 				v2f o;
 
-				o.pos = mul(UNITY_MATRIX_MV, v.vertex);
+				o.pos = float4(UnityObjectToViewPos(v.vertex.xyz), 1);
 				o.pos.xyz *= lerp(.99, .95, ortho);
 				o.pos = mul(UNITY_MATRIX_P, o.pos);
 

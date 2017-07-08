@@ -339,7 +339,9 @@ public class Cs_PlayerController : MonoBehaviour
     void CrouchState()
     {
         bool b_CrouchPressed = Input.GetKey(KeyCode.LeftControl);
-        bool b_GroundAbove = FindRaycastHit(go_RaycastPoint_Head.transform.position, Vector3.up, out hit_Head, 0.2f);
+
+        float f_HeadHeight_ = gameObject.transform.lossyScale.y;
+        bool b_GroundAbove = FindRaycastHit(go_RaycastPoint_Head.transform.position, Vector3.up, out hit_Head, 1.0f - (f_HeadHeight_ + 0.01f));
 
         if (b_CrouchPressed || b_GroundAbove)
         {

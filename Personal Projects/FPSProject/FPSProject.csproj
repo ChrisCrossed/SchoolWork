@@ -85,14 +85,21 @@
     <Reference Include="KDTree">
       <HintPath>Assets\ProCore\ProBuilder\Classes\ClassesLib\KDTree.dll</HintPath>
     </Reference>
+    <Reference Include="KdTreeLib">
+      <HintPath>Assets\ProCore\ProBuilder\Classes\ClassesLib\KdTreeLib.dll</HintPath>
+    </Reference>
     <Reference Include="pb_Stl">
       <HintPath>Assets\ProCore\ProBuilder\Classes\ClassesLib\pb_Stl.dll</HintPath>
+    </Reference>
+    <Reference Include="Poly2Tri">
+      <HintPath>Assets\ProCore\ProBuilder\Classes\ClassesLib\Poly2Tri.dll</HintPath>
     </Reference>
     <Reference Include="Triangle">
       <HintPath>Assets\ProCore\ProBuilder\Classes\ClassesLib\Triangle.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Cs_Fan.cs" />
     <Compile Include="Assets\Cs_ForwardSpawn.cs" />
     <Compile Include="Assets\Cs_StopLight.cs" />
     <Compile Include="Assets\Cs_WeaponObjects.cs" />
@@ -124,6 +131,7 @@
     <None Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\README.txt" />
     <None Include="Assets\ProCore\ProBuilder\About\Credits.txt" />
     <None Include="Assets\ProCore\ProBuilder\About\Font\SIL Open Font License.txt" />
+    <None Include="Assets\ProCore\ProBuilder\About\ThirdPartyLicenses.txt" />
     <None Include="Assets\ProCore\ProBuilder\About\changelog.txt" />
     <None Include="Assets\ProCore\ProBuilder\About\pc_AboutEntry_ProBuilder.txt" />
     <None Include="Assets\ProCore\ProBuilder\Shader\DiffuseTextureBlend.shader" />

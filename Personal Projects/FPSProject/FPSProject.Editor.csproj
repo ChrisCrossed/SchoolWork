@@ -130,6 +130,12 @@
     <Reference Include="ProBuilderEditor-Unity5">
       <HintPath>Assets\ProCore\ProBuilder\Editor\ProBuilderEditor-Unity5.dll</HintPath>
     </Reference>
+    <Reference Include="Poly2Tri">
+      <HintPath>Assets\ProCore\ProBuilder\Classes\ClassesLib\Poly2Tri.dll</HintPath>
+    </Reference>
+    <Reference Include="KdTreeLib">
+      <HintPath>Assets\ProCore\ProBuilder\Classes\ClassesLib\KdTreeLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="FPSProject.csproj">
@@ -138,6 +144,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\ProCore\ProBuilder\API Examples\Editor\ClearUnusedAttributes.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Editor\CreateShadowObject.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Editor\CustomAction.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Editor\EditorCallbackViewer.cs" />
@@ -191,6 +198,7 @@
     <None Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\README.txt" />
     <None Include="Assets\ProCore\ProBuilder\About\Credits.txt" />
     <None Include="Assets\ProCore\ProBuilder\About\Font\SIL Open Font License.txt" />
+    <None Include="Assets\ProCore\ProBuilder\About\ThirdPartyLicenses.txt" />
     <None Include="Assets\ProCore\ProBuilder\About\changelog.txt" />
     <None Include="Assets\ProCore\ProBuilder\About\pc_AboutEntry_ProBuilder.txt" />
     <None Include="Assets\ProCore\ProBuilder\Shader\DiffuseTextureBlend.shader" />
