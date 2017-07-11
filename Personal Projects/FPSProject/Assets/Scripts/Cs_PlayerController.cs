@@ -662,6 +662,7 @@ public class Cs_PlayerController : MonoBehaviour
     private void Update()
     {
         // As long as one weapon is active, accept player weapon input
+        /*
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             this_Shotgun.WeaponState = true;
@@ -672,6 +673,7 @@ public class Cs_PlayerController : MonoBehaviour
             this_Shotgun.WeaponState = false;
             this_Pistol.WeaponState = true;
         }
+        */
 
         if(Input.GetKeyDown(KeyCode.LeftShift))
         {
@@ -689,7 +691,7 @@ public class Cs_PlayerController : MonoBehaviour
         #region Just some code to force a wait for one frame. It's messy.
         if (!b_WaitOneFrame)
         {
-            this_Pistol.WeaponState = true;
+            this_Pistol.WeaponState = false;
             this_Shotgun.WeaponState = false;
             b_WaitOneFrame = true;
         }
