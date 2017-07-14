@@ -281,8 +281,8 @@ public class Cs_PlayerController : MonoBehaviour
 
             // Determine direction to push against ramp
             RaycastHit hit_;
-            // FindRaycastHit( out hit_ );
-            CycleRaycastHit( out hit_ );
+            FindRaycastHit( out hit_ );
+            // CycleRaycastHit( out hit_ );
             v3_PushDirection = -hit_.normal;
 
             // Apply velocity to player
