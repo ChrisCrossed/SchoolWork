@@ -133,16 +133,19 @@ public class Cs_PlayerController : MonoBehaviour
         // Store first normal of ground plane
         if(Physics.Raycast(v3_StartPosition_, v3_RayDirection_, out hit_, f_Distance_, i_LayerMask))
         {
+            // print("Dist: " + hit_.distance);
             return true;
         }
 
         // Return normal
         return false;
     }
-    bool FindRaycastHit(out RaycastHit hit_, float f_Distance_ = 0.35f)
+    bool FindRaycastHit(out RaycastHit hit_, float f_Distance_ = 0.36f)
     {
         return FindRaycastHit(go_RaycastPoint[0].transform.position, Vector3.down, out hit_, f_Distance_);
     }
+
+    /*
     bool CycleRaycastHit( out RaycastHit hit_ )
     {
         bool b_Return_ = false;
@@ -170,6 +173,7 @@ public class Cs_PlayerController : MonoBehaviour
 
         return b_Return_;
     }
+    */
 
     float f_FOV_MAX = 75f;
     float f_FOV_MIN = 60f;
