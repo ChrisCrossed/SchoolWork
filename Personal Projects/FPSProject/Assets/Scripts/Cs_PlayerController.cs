@@ -125,7 +125,7 @@ public class Cs_PlayerController : MonoBehaviour
     }
 
     GameObject[] go_RaycastPoint;
-    bool FindRaycastHit(Vector3 v3_StartPosition_, Vector3 v3_RayDirection_, out RaycastHit hit_, float f_Distance_ = 0.35f)
+    bool FindRaycastHit(Vector3 v3_StartPosition_, Vector3 v3_RayDirection_, out RaycastHit hit_, float f_Distance_ = 0.36f)
     {
         // RaycastHit tempHit;
         int i_LayerMask = LayerMask.GetMask("Ground", "Wall", "Default");
