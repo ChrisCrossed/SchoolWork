@@ -72,6 +72,8 @@ public class Cs_EndgameTrigger : MonoBehaviour
         if(collider_.gameObject == go_Player.gameObject)
         {
             if(!b_Begin) b_Begin = true;
+
+            f_Timer = 1.0f;
         }
     }
 }

@@ -99,6 +99,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Cs_AlarmTrigger.cs" />
     <Compile Include="Assets\Cs_EndgameTrigger.cs" />
     <Compile Include="Assets\Cs_Fan.cs" />
     <Compile Include="Assets\Cs_ForwardSpawn.cs" />
