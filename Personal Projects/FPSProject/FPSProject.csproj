@@ -104,6 +104,8 @@
     <Compile Include="Assets\Cs_Fan.cs" />
     <Compile Include="Assets\Cs_ForwardSpawn.cs" />
     <Compile Include="Assets\Cs_LookAtPlayer.cs" />
+    <Compile Include="Assets\Cs_MusicPlayer.cs" />
+    <Compile Include="Assets\Cs_PlaySongOnTrigger.cs" />
     <Compile Include="Assets\Cs_StopLight.cs" />
     <Compile Include="Assets\Cs_ThreeAxisRotation.cs" />
     <Compile Include="Assets\Cs_WeaponObjects.cs" />

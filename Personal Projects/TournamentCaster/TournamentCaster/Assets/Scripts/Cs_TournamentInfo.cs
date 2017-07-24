@@ -31,11 +31,8 @@ public class Cs_TournamentInfo : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
-    }
 
-    void OnLevelWasLoaded(int level)
-    {
-        if(GameObject.Find("SystemManager"))
+        if (GameObject.Find("SystemManager"))
         {
             GameObject.Find("SystemManager").GetComponent<Cs_SystemManager>().InitializeGame(tourneyInfo);
         }

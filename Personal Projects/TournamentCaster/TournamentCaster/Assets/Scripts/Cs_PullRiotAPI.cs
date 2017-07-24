@@ -21,11 +21,41 @@ enum RegionLocations
 
 public class SummonerInfo
 {
-    public int summonerID;
-    public string name;
-    public int profileIconId;
-    public int summonerLevel;
-    public int revisionDate;
+    int summonerName_;
+    string name_;
+    int profileIconId_;
+    int summonerLevel_;
+    int revisionDate_;
+
+    public int summonerName
+    {
+        set { summonerName_ = value; }
+        get { return summonerName_; }
+    }
+
+    public string name
+    {
+        set { name_ = value; }
+        get { return name_; }
+    }
+
+    public int profileIconId
+    {
+        set { profileIconId_ = value; }
+        get { return profileIconId_; }
+    }
+
+    public int summonerLevel
+    {
+        set { summonerLevel_ = value; }
+        get { return summonerLevel_; }
+    }
+
+    public int revisionDate
+    {
+        set { revisionDate_ = value; }
+        get { return revisionDate_; }
+    }
 }
 
 public class ShoutcasterInfo
@@ -71,8 +101,10 @@ public class Cs_PullRiotAPI : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        print("Begun API Request");
+
         // Forcing in my own key to test. MUST replace later.
-        playerData.shoutcaster.s_CasterAPIKey = "79ba48bc-e49a-4a64-a3ee-55ac3d012c24";
+        playerData.shoutcaster.s_CasterAPIKey = "RGAPI-d0bb3cb2-f447-4c79-a7fe-d477ff72537f";
         playerData.shoutcaster.s_CasterUsername = "ChrisCrossed";
         enum_RegionLocation = RegionLocations.NA;
 
@@ -106,7 +138,7 @@ public class Cs_PullRiotAPI : MonoBehaviour
                             s_SummonerName_.ToString() + 
                             "?api_key=" + playerData.shoutcaster.s_CasterAPIKey;
 
-        APIRequest(s_LinkURL, true);
+        APIRequest(s_LinkURL);
     }
 
     /*******************************************************************************
@@ -122,65 +154,68 @@ public class Cs_PullRiotAPI : MonoBehaviour
          Outputs:   None
 
     *******************************************************************************/
-    void APIRequest(string s_WebAPILink_, bool b_IsNewRequest_)
+    void APIRequest(string s_WebAPILink_)
     {
-        if(b_IsNewRequest_)
-        {
-            // This sends out the API Info online. www_ApiRequest.IsDone states if complete.
-            www_ApiRequest = new WWW(s_WebAPILink_);
+        // This sends out the API Info online. www_ApiRequest.IsDone states if complete.
+        www_ApiRequest = new WWW(s_WebAPILink_);
 
-            // States that a request has been made. Turns off later so I don't keep requesting
-            b_IsDone = true;
-        }
-        else
+        // States that a request has been made. Turns off later so I don't keep requesting
+        b_IsDone = true;
+    }
+
+    void APIPull()
+    {
+        if (www_ApiRequest.isDone && b_IsDone)
         {
-            if (www_ApiRequest.isDone && b_IsDone)
+            playerData.shoutcaster.s_SaveAPIInfo = www_ApiRequest.text;
+            print("---");
+            print(playerData.shoutcaster.s_SaveAPIInfo);
+
+            // Sets the Caster Information (Nasty parsing ahead... had no choice)
+            if (playerData.shoutcaster.s_SaveAPIInfo.Contains("\"id\":"))
             {
-                playerData.shoutcaster.s_SaveAPIInfo = www_ApiRequest.text;
-                
-                // Sets the Caster Information (Nasty parsing ahead... had no choice)
-                if(playerData.shoutcaster.s_SaveAPIInfo.Contains("\"id\":"))
-                {
-                    // Start with a fresh string
-                    string testOutput;
+                // Start with a fresh string
+                string testOutput;
 
-                    // Find the location of 'id' within the API string
-                    int startPos = playerData.shoutcaster.s_SaveAPIInfo.IndexOf("\"id\":") + 5;
-                    testOutput = playerData.shoutcaster.s_SaveAPIInfo.Substring(startPos);
+                // Find the location of 'id' within the API string
+                int startPos = playerData.shoutcaster.s_SaveAPIInfo.IndexOf("\"id\":") + 5;
+                testOutput = playerData.shoutcaster.s_SaveAPIInfo.Substring(startPos);
 
-                    // Find the end location of the first piece of information
-                    startPos = testOutput.IndexOf(',');
-                    testOutput = testOutput.Substring(0, startPos);
+                // Find the end location of the first piece of information
+                startPos = testOutput.IndexOf(',');
+                testOutput = testOutput.Substring(0, startPos);
 
-                    // Passes the information along
-                    playerData.shoutcaster.summonerID = int.Parse(testOutput);
-                    print(playerData.shoutcaster.summonerID);
+                // Passes the information along
+                playerData.shoutcaster.summonerID = int.Parse(testOutput);
+                print(playerData.shoutcaster.summonerID);
 
-                    // **********************************************************************
+                // **********************************************************************
 
-                    // Find the location of 'Name' within the API string
-                    print(playerData.shoutcaster.s_SaveAPIInfo);
-                    startPos = playerData.shoutcaster.s_SaveAPIInfo.IndexOf("\"name\":") + 8;
-                    testOutput = playerData.shoutcaster.s_SaveAPIInfo.Substring(startPos);
+                // Find the location of 'Name' within the API string
+                print(playerData.shoutcaster.s_SaveAPIInfo);
+                startPos = playerData.shoutcaster.s_SaveAPIInfo.IndexOf("\"name\":") + 8;
+                testOutput = playerData.shoutcaster.s_SaveAPIInfo.Substring(startPos);
 
-                    // Cut off the remaining quotation marks
-                    startPos = testOutput.IndexOf("\",");
-                    testOutput = testOutput.Substring(0, startPos);
+                // Cut off the remaining quotation marks
+                startPos = testOutput.IndexOf("\",");
+                testOutput = testOutput.Substring(0, startPos);
 
-                    // Store the name of the shoutcaster
-                    playerData.shoutcaster.s_CasterUsername = testOutput;
-                    print(playerData.shoutcaster.s_CasterUsername);
-                }
-                // {"id":35703666,"name":"ChrisCrossed","profileIconId":749,"summonerLevel":30,"revisionDate":1453107512000}
-
-                b_IsDone = false;
+                // Store the name of the shoutcaster
+                playerData.shoutcaster.s_CasterUsername = testOutput;
+                print(playerData.shoutcaster.s_CasterUsername);
             }
+            // {"id":35703666,"name":"ChrisCrossed","profileIconId":749,"summonerLevel":30,"revisionDate":1453107512000}
+
+            b_IsDone = false;
         }
     }
 
     // Update is called once per frame
     void Update ()
     {
-        APIRequest(null, false);
+        if(www_ApiRequest.isDone)
+        {
+            APIPull();
+        }
     }
 }
