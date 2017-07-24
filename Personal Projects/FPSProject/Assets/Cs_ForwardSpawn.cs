@@ -8,6 +8,7 @@ public class Cs_ForwardSpawn : MonoBehaviour
 
     // Player Connection
     GameObject go_Player;
+    GameObject go_Child;
 
 	// Use this for initialization
 	void Start ()
@@ -15,7 +16,11 @@ public class Cs_ForwardSpawn : MonoBehaviour
         gameObject.GetComponent<MeshRenderer>().enabled = false;
         gameObject.GetComponent<Collider>().enabled = false;
 
-		if(Active)
+        go_Child = transform.Find("Cube").gameObject;
+        go_Child.GetComponent<MeshRenderer>().enabled = false;
+        go_Child.GetComponent<Collider>().enabled = false;
+
+        if (Active)
         {
             go_Player = GameObject.Find("Player");
 
@@ -25,6 +30,6 @@ public class Cs_ForwardSpawn : MonoBehaviour
 
         new WaitForEndOfFrame();
 
-        GameObject.Destroy(gameObject);
+        // GameObject.Destroy(gameObject);
 	}
 }

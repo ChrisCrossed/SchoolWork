@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 enum Enum_PlayerState
 {
@@ -47,6 +48,8 @@ public class Cs_PlayerController : MonoBehaviour
         this_Shotgun = this_Player.GetComponent<Cs_Shotgun>();
         this_Pistol = this_Player.GetComponent<Cs_Pistol>();
         this_WeaponPosition = this_Player.transform.Find("WeaponPosition").gameObject;
+        go_Backdrop = GameObject.Find("Backdrop");
+        ui_Backdrop = go_Backdrop.GetComponent<Image>();
 
         // Raycast information
         go_RaycastPoint = new GameObject[5];
@@ -215,6 +218,9 @@ public class Cs_PlayerController : MonoBehaviour
     bool b_IsSprinting;
     void PlayerMovement(Vector3 v3_Direction_, bool b_Jump_, float f_Magnitude_ = 1)
     {
+        // If player isn't active (disabled), do not apply a direction
+        if (!b_IsActive) v3_Direction_ = Vector3.zero;
+
         // Old velocity
         Vector3 v3_oldVelocity = gameObject.GetComponent<Rigidbody>().velocity;
 
@@ -535,134 +541,209 @@ public class Cs_PlayerController : MonoBehaviour
         f_DashCooldown = f_DashCooldown_Max;
     }
 
+    Vector3 v3_TeleportLocation;
+    Quaternion q_TeleportRotation;
+    bool b_IsTeleporting;
+    float f_TeleportTimer;
+    GameObject go_Backdrop;
+    Image ui_Backdrop;
+    public GameObject TeleportPlayer
+    {
+        set
+        {
+            v3_TeleportLocation = value.transform.position;
+            q_TeleportRotation = value.transform.rotation;
+
+            SetActive = false;
+            b_IsTeleporting = true;
+
+            f_TeleportTimer = 0f;
+        }
+    }
+    static float f_TeleportTimer_Max = 3.0f;
+    void TeleportState()
+    {
+        if(!b_IsActive) // Player doesn't have control
+        {
+            if(b_IsTeleporting) // Player Is Teleporting
+            {
+                f_TeleportTimer += Time.deltaTime / f_TeleportTimer_Max;
+                if (f_TeleportTimer > 1.0f)
+                {
+                    new WaitForSeconds(0.5f);
+
+                    gameObject.transform.position = v3_TeleportLocation;
+                    gameObject.transform.rotation = q_TeleportRotation;
+
+                    b_IsTeleporting = false;
+
+                    f_TeleportTimer = 1.0f;
+                }
+            }
+            else // Player Is Done Teleporting
+            {
+                f_TeleportTimer -= Time.deltaTime / f_TeleportTimer_Max;
+                if (f_TeleportTimer < 0.0f)
+                {
+                    f_TeleportTimer = 0.0f;
+
+                    SetActive = true;
+                }
+            }
+
+            // Enable the backdrop
+            if(f_TeleportTimer != 0f)
+            {
+                if(!ui_Backdrop.enabled) ui_Backdrop.enabled = true;
+
+                Color clr_ = ui_Backdrop.color;
+                clr_.a = f_TeleportTimer;
+                ui_Backdrop.color = clr_;
+            }
+            else
+            {
+                ui_Backdrop.enabled = false;
+            }
+        }
+    }
+
+    public bool SetActive
+    {
+        set { b_IsActive = value; }
+        get { return b_IsActive; }
+    }
+
     // FixedUpdate is called at the same points in time.
     void FixedUpdate ()
     {
-        #region Cooldown timers
-        if (f_DashCooldown > 0f) 
-        {
-            f_DashCooldown -= Time.deltaTime;
-            if (f_DashCooldown < 0f) f_DashCooldown = 0f;
-        }
-        #endregion
-
-        if (e_PlayerState == Enum_PlayerState.Movement)
-        {
-            Movement();
-            UpdateJump();
-            MouseLook();
-
-            // GRENADE THROW DISABLED
-            /*
-            if(Input.GetKeyDown(KeyCode.Q))
+            #region Cooldown timers
+            if (f_DashCooldown > 0f) 
             {
-                gameObject.GetComponent<Cs_ThrowGrenade>().GrenadeButtonPressed();
+                f_DashCooldown -= Time.deltaTime;
+                if (f_DashCooldown < 0f) f_DashCooldown = 0f;
             }
-            */
-        }
-        else if(e_PlayerState == Enum_PlayerState.DashToObject)
-        {
-            // Increase timer
-            f_TimeToPosition += Time.fixedDeltaTime;
-            if (f_TimeToPosition > f_TimeToPosition_Max) f_TimeToPosition = f_TimeToPosition_Max;
+            #endregion
 
-            // Find position of player
-            float f_Perc = ac_PullCurve.Evaluate(f_TimeToPosition / f_TimeToPosition_Max);
-            Vector3 v3_NewPosition = Vector3.Lerp(v3_StartPos, v3_EndPos, f_Perc);
-
-            // Set new position
-            this_Rigidbody.MovePosition(v3_NewPosition);
-
-            // When player timer reaches max, reset player state and velocity.
-            if(f_TimeToPosition == f_TimeToPosition_Max)
+            if (e_PlayerState == Enum_PlayerState.Movement)
             {
-                // Allow movement
-                e_PlayerState = Enum_PlayerState.Movement;
+                Movement();
+                UpdateJump();
 
-                // Reset velocity
-                this_Rigidbody.velocity = new Vector3();
-            }
-        }
-        else if(e_PlayerState == Enum_PlayerState.Grenade)
-        {
-            // Allow mouse look
-            MouseLook();
+                if (!b_IsActive) return;
+                MouseLook();
 
-            // Old velocity
-            Vector3 v3_OldVelocity = this_Rigidbody.velocity;
-
-            Vector3 v3_NewVelocity = v3_OldVelocity;
-            v3_NewVelocity.y = v3_OldVelocity.y - (Time.deltaTime * 50);
-
-            // Receive player input and apply velocity to it, correcting for player rotation
-            Vector3 v3_InputVector = this_Player.transform.rotation * InputVector();
-
-            // Add air-strafing velocity
-            v3_InputVector *= 25.0f * Time.fixedDeltaTime;
-
-            // Add player input velocity to current velocity
-            v3_NewVelocity += v3_InputVector;
-
-            // Set new velocity
-            this_Rigidbody.velocity = v3_NewVelocity;
-
-            // Determine if the player is touching the ground
-            RaycastHit hit;
-            int i_LayerMask = LayerMask.GetMask("Ground", "Enemy", "Wall");
-            if(Physics.Raycast(go_RaycastPoint[0].transform.position, Vector3.down, out hit, f_RayCast_DownwardDistance, i_LayerMask))
-            {
-                e_PlayerState = Enum_PlayerState.Movement;
-            }
-        }
-
-        #region Bullet Connection Timer
-        if( f_LastKnownBulletHit_Timer < f_LastKnownBulletHit_Timer_Max )
-        {
-            f_LastKnownBulletHit_Timer += Time.fixedDeltaTime;
-
-            if( f_LastKnownBulletHit_Timer > f_LastKnownBulletHit_Timer_Max ) f_LastKnownBulletHit_Timer = f_LastKnownBulletHit_Timer_Max;
-        }
-        #endregion
-
-        if ( Input.GetKeyDown( KeyCode.E ) )
-        {
-            if( this_Crosshair.Get_CrosshairObject != null )
-            {
-                if(this_Crosshair.Get_CrosshairObject.layer == LayerMask.NameToLayer("Use"))
+                // GRENADE THROW DISABLED
+                /*
+                if(Input.GetKeyDown(KeyCode.Q))
                 {
-                    // If button
-                    if(this_Crosshair.Get_CrosshairObject.GetComponent<Cs_UseButton>())
-                    {
-                        this_Crosshair.Get_CrosshairObject.GetComponent<Cs_UseButton>().Use_Button();
-                    }
+                    gameObject.GetComponent<Cs_ThrowGrenade>().GrenadeButtonPressed();
+                }
+                */
+            }
+            else if(e_PlayerState == Enum_PlayerState.DashToObject)
+            {
+                // Increase timer
+                f_TimeToPosition += Time.fixedDeltaTime;
+                if (f_TimeToPosition > f_TimeToPosition_Max) f_TimeToPosition = f_TimeToPosition_Max;
 
-                    if(this_Crosshair.Get_CrosshairObject.GetComponent<Cs_Door>())
-                    {
-                        this_Crosshair.Get_CrosshairObject.GetComponent<Cs_Door>().Use_OpenDoor();
-                    }
+                // Find position of player
+                float f_Perc = ac_PullCurve.Evaluate(f_TimeToPosition / f_TimeToPosition_Max);
+                Vector3 v3_NewPosition = Vector3.Lerp(v3_StartPos, v3_EndPos, f_Perc);
 
-                    if(this_Crosshair.Get_CrosshairObject.GetComponent<Cs_Door_Broken>())
+                // Set new position
+                this_Rigidbody.MovePosition(v3_NewPosition);
+
+                // When player timer reaches max, reset player state and velocity.
+                if(f_TimeToPosition == f_TimeToPosition_Max)
+                {
+                    // Allow movement
+                    e_PlayerState = Enum_PlayerState.Movement;
+
+                    // Reset velocity
+                    this_Rigidbody.velocity = new Vector3();
+                }
+            }
+            else if(e_PlayerState == Enum_PlayerState.Grenade)
+            {
+                // Allow mouse look
+                MouseLook();
+
+                // Old velocity
+                Vector3 v3_OldVelocity = this_Rigidbody.velocity;
+
+                Vector3 v3_NewVelocity = v3_OldVelocity;
+                v3_NewVelocity.y = v3_OldVelocity.y - (Time.deltaTime * 50);
+
+                // Receive player input and apply velocity to it, correcting for player rotation
+                Vector3 v3_InputVector = this_Player.transform.rotation * InputVector();
+
+                // Add air-strafing velocity
+                v3_InputVector *= 25.0f * Time.fixedDeltaTime;
+
+                // Add player input velocity to current velocity
+                v3_NewVelocity += v3_InputVector;
+
+                // Set new velocity
+                this_Rigidbody.velocity = v3_NewVelocity;
+
+                // Determine if the player is touching the ground
+                RaycastHit hit;
+                int i_LayerMask = LayerMask.GetMask("Ground", "Enemy", "Wall");
+                if(Physics.Raycast(go_RaycastPoint[0].transform.position, Vector3.down, out hit, f_RayCast_DownwardDistance, i_LayerMask))
+                {
+                    e_PlayerState = Enum_PlayerState.Movement;
+                }
+            }
+
+            #region Bullet Connection Timer
+            if( f_LastKnownBulletHit_Timer < f_LastKnownBulletHit_Timer_Max )
+            {
+                f_LastKnownBulletHit_Timer += Time.fixedDeltaTime;
+
+                if( f_LastKnownBulletHit_Timer > f_LastKnownBulletHit_Timer_Max ) f_LastKnownBulletHit_Timer = f_LastKnownBulletHit_Timer_Max;
+            }
+            #endregion
+
+            if ( Input.GetKeyDown( KeyCode.E ) )
+            {
+                if( this_Crosshair.Get_CrosshairObject != null )
+                {
+                    if(this_Crosshair.Get_CrosshairObject.layer == LayerMask.NameToLayer("Use"))
                     {
-                        this_Crosshair.Get_CrosshairObject.GetComponent<Cs_Door_Broken>().Use_OpenDoor();
+                        // If button
+                        if(this_Crosshair.Get_CrosshairObject.GetComponent<Cs_UseButton>())
+                        {
+                            this_Crosshair.Get_CrosshairObject.GetComponent<Cs_UseButton>().Use_Button();
+                        }
+
+                        if(this_Crosshair.Get_CrosshairObject.GetComponent<Cs_Door>())
+                        {
+                            this_Crosshair.Get_CrosshairObject.GetComponent<Cs_Door>().Use_OpenDoor();
+                        }
+
+                        if(this_Crosshair.Get_CrosshairObject.GetComponent<Cs_Door_Broken>())
+                        {
+                            this_Crosshair.Get_CrosshairObject.GetComponent<Cs_Door_Broken>().Use_OpenDoor();
+                        }
                     }
                 }
             }
-        }
-        else if( Input.GetMouseButtonDown(0) )
-        {
-            if( this_Crosshair.Get_CrosshairObject != null )
+            else if( Input.GetMouseButtonDown(0) )
             {
-                if( this_Crosshair.Get_CrosshairObject.layer == LayerMask.NameToLayer("Enemy") )
+                if( this_Crosshair.Get_CrosshairObject != null )
                 {
-                    // print( this_Crosshair.Get_CrosshairObject );
+                    if( this_Crosshair.Get_CrosshairObject.layer == LayerMask.NameToLayer("Enemy") )
+                    {
+                        // print( this_Crosshair.Get_CrosshairObject );
+                    }
                 }
             }
-        }
 
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
 	}
 
     bool b_WaitOneFrame;
+    bool b_IsActive;
     private void Update()
     {
         // As long as one weapon is active, accept player weapon input
@@ -679,17 +760,22 @@ public class Cs_PlayerController : MonoBehaviour
         }
         */
 
-        if(Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            b_IsSprinting = !b_IsSprinting;
-        }
+        TeleportState();
 
-        CrouchState();
-
-        // Flashlight input
-        if(Input.GetKeyDown(KeyCode.F))
+        if(b_IsActive)
         {
-            FlashlightState = !FlashlightState;
+            if(Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                // b_IsSprinting = !b_IsSprinting;
+            }
+
+            CrouchState();
+
+            // Flashlight input
+            if(Input.GetKeyDown(KeyCode.F))
+            {
+                FlashlightState = !FlashlightState;
+            }
         }
 
         #region Just some code to force a wait for one frame. It's messy.

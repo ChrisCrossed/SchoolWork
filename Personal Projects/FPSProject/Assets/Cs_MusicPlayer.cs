@@ -60,13 +60,13 @@ public class Cs_MusicPlayer : MonoBehaviour
         if(e_Song != Enum_Song.None)
         {
             if (RunningSong == Enum_Song.One) this_MusicSource_One.volume += Time.deltaTime;
-            else this_MusicSource_One.volume -= Time.deltaTime;
+            else this_MusicSource_One.volume -= Time.deltaTime / 5f;
 
             if (RunningSong == Enum_Song.Two) this_MusicSource_Two.volume += Time.deltaTime;
-            else this_MusicSource_Two.volume -= Time.deltaTime;
+            else this_MusicSource_Two.volume -= Time.deltaTime / 5f;
 
             if (RunningSong == Enum_Song.Three) this_MusicSource_Three.volume += Time.deltaTime;
-            else this_MusicSource_Three.volume -= Time.deltaTime;
+            else this_MusicSource_Three.volume -= Time.deltaTime / 5f;
         }
         else
         {

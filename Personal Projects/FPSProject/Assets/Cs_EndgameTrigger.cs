@@ -18,6 +18,10 @@ public class Cs_EndgameTrigger : MonoBehaviour
     [SerializeField] GameObject[] go_Lights;
     [SerializeField] GameObject[] go_SFX;
 
+    // Endgame
+    float f_Timer_Endgame;
+    bool b_EndGame;
+
     // Use this for initialization
     void Start ()
     {
@@ -56,6 +60,13 @@ public class Cs_EndgameTrigger : MonoBehaviour
                 ++i_Counter;
             }
         }
+
+        if(b_EndGame)
+        {
+            f_Timer_Endgame += Time.deltaTime;
+
+            if (f_Timer_Endgame > 3.0f) Application.Quit();
+        }
 	}
 
     void Endgame()
@@ -65,6 +76,8 @@ public class Cs_EndgameTrigger : MonoBehaviour
 
         // Disable the player's controller
         go_Player.GetComponent<Cs_PlayerController>().enabled = false;
+
+        b_EndGame = true;
     }
 
     private void OnTriggerEnter(Collider collider_)
