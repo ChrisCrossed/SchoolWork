@@ -65,7 +65,7 @@ public class Cs_EndgameTrigger : MonoBehaviour
         {
             f_Timer_Endgame += Time.deltaTime;
 
-            if (f_Timer_Endgame > 3.0f) Application.Quit();
+            if (f_Timer_Endgame > 5.0f) Application.Quit();
         }
 	}
 
@@ -74,8 +74,8 @@ public class Cs_EndgameTrigger : MonoBehaviour
         // Enable the backdrop
         go_Backdrop.GetComponent<Image>().enabled = true;
 
-        // Disable the player's controller
-        go_Player.GetComponent<Cs_PlayerController>().enabled = false;
+        // Disable the player's input
+        go_Player.GetComponent<Cs_PlayerController>().SetActive = false;
 
         b_EndGame = true;
     }

@@ -33,6 +33,11 @@ public class Cs_PlayerController : MonoBehaviour
     [SerializeField] float f_DashCooldown_Max = 5.0f;
     float f_DashCooldown;
 
+    // Teleportation Destinations
+    GameObject go_TeleportLocation_1;
+    GameObject go_TeleportLocation_2;
+    GameObject go_TeleportLocation_3;
+
     // Use this for initialization
     void Start ()
     {
@@ -66,8 +71,13 @@ public class Cs_PlayerController : MonoBehaviour
         // Set Player State
         e_PlayerState = Enum_PlayerState.Movement;
 
-        go_Flashlight = transform.Find("Main Camera").Find("Flashlight").gameObject;
+        // Teleport Destinations
+        go_TeleportLocation_1 = GameObject.Find("ForwardSpawn_1");
+        go_TeleportLocation_2 = GameObject.Find("ForwardSpawn_2");
+        go_TeleportLocation_3 = GameObject.Find("ForwardSpawn_3");
 
+        // Flashlight
+        go_Flashlight = transform.Find("Main Camera").Find("Flashlight").gameObject;
         FlashlightState = false;
     }
 
@@ -113,7 +123,12 @@ public class Cs_PlayerController : MonoBehaviour
         v3_InputVector = InputVector();
 
         #region Jump
+        // Default condition.
         bool b_Jump = false;
+
+        // If the player isn't active (teleporting, end game, etc...), the player may not jump.
+        if (!b_IsActive) b_CanJump = false;
+
         if (b_CanJump)
         {
             if (Input.GetKey(KeyCode.Space) && !b_IsCrouched)
@@ -575,6 +590,12 @@ public class Cs_PlayerController : MonoBehaviour
                     gameObject.transform.position = v3_TeleportLocation;
                     gameObject.transform.rotation = q_TeleportRotation;
 
+                    // Reset Camera Rotation
+                    Vector3 v3_CamRot = this_Camera.transform.eulerAngles;
+                    v3_CamRot.x = 0f;
+                    f_VertAngle = 0f;
+                    this_Camera.transform.eulerAngles = v3_CamRot;
+
                     b_IsTeleporting = false;
 
                     f_TeleportTimer = 1.0f;
@@ -764,7 +785,12 @@ public class Cs_PlayerController : MonoBehaviour
 
         if(b_IsActive)
         {
-            if(Input.GetKeyDown(KeyCode.LeftShift))
+            // Cheat Codes (Teleportation)
+            if (Input.GetKeyDown(KeyCode.Alpha1)) TeleportPlayer = go_TeleportLocation_1;
+            if (Input.GetKeyDown(KeyCode.Alpha2)) TeleportPlayer = go_TeleportLocation_2;
+            if (Input.GetKeyDown(KeyCode.Alpha3)) TeleportPlayer = go_TeleportLocation_3;
+
+            if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 // b_IsSprinting = !b_IsSprinting;
             }

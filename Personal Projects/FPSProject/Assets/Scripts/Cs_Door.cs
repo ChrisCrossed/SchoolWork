@@ -22,6 +22,11 @@ public class Cs_Door : MonoBehaviour
     [SerializeField] GameObject[] DisableLightsOnOpen;
     [SerializeField] GameObject[] EnableLightsOnOpen;
 
+    // Music On Activation
+    [SerializeField] bool PlaysSong = false;
+    [SerializeField] Enum_Song SongToPlay = Enum_Song.None;
+    Cs_MusicPlayer cs_MusicPlayer;
+
     // Use this for initialization
     protected void Start ()
     {
@@ -35,9 +40,10 @@ public class Cs_Door : MonoBehaviour
         }
 
         // No need to capture player information if Door doesn't close
-        if(DoorClosesAfterTime > 0)
+        if(DoorClosesAfterTime > 0 || PlaysSong)
         {
             go_Player = GameObject.Find("Player");
+            cs_MusicPlayer = go_Player.GetComponent<Cs_MusicPlayer>();
         }
     }
 
@@ -72,6 +78,15 @@ public class Cs_Door : MonoBehaviour
         if( !DoorState )
         {
             DoorState = true;
+
+            if(PlaysSong)
+            {
+                // Change soundtrack
+                cs_MusicPlayer.RunningSong = SongToPlay;
+
+                // Disable after first use
+                PlaysSong = false;
+            }
         }
     }
 
