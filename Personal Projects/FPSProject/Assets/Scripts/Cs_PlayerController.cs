@@ -623,7 +623,7 @@ public class Cs_PlayerController : MonoBehaviour
             }
             else
             {
-                ui_Backdrop.enabled = false;
+                // ui_Backdrop.enabled = false;
             }
         }
     }

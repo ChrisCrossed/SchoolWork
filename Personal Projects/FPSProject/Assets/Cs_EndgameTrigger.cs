@@ -71,8 +71,13 @@ public class Cs_EndgameTrigger : MonoBehaviour
 
     void Endgame()
     {
+        print("Endgame");
         // Enable the backdrop
         go_Backdrop.GetComponent<Image>().enabled = true;
+
+        Color clr_ = go_Backdrop.GetComponent<Image>().color;
+        clr_.a = 1.0f;
+        go_Backdrop.GetComponent<Image>().color = clr_;
 
         // Disable the player's input
         go_Player.GetComponent<Cs_PlayerController>().SetActive = false;
