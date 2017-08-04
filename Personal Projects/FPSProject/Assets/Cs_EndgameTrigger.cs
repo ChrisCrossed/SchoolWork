@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Cs_EndgameTrigger : MonoBehaviour
 {
@@ -65,7 +66,7 @@ public class Cs_EndgameTrigger : MonoBehaviour
         {
             f_Timer_Endgame += Time.deltaTime;
 
-            if (f_Timer_Endgame > 5.0f) Application.Quit();
+            if (f_Timer_Endgame > 5.0f) SceneManager.LoadScene(2);
         }
 	}
 

@@ -100,15 +100,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Cs_AlarmTrigger.cs" />
+    <Compile Include="Assets\Cs_ControlsTutorial.cs" />
     <Compile Include="Assets\Cs_EndgameTrigger.cs" />
     <Compile Include="Assets\Cs_Fan.cs" />
     <Compile Include="Assets\Cs_ForwardSpawn.cs" />
+    <Compile Include="Assets\Cs_Intro.cs" />
     <Compile Include="Assets\Cs_LookAtPlayer.cs" />
+    <Compile Include="Assets\Cs_MainMenu.cs" />
     <Compile Include="Assets\Cs_MusicPlayer.cs" />
+    <Compile Include="Assets\Cs_Outro.cs" />
     <Compile Include="Assets\Cs_PlaySongOnTrigger.cs" />
     <Compile Include="Assets\Cs_StopLight.cs" />
     <Compile Include="Assets\Cs_TeleportTrigger.cs" />
     <Compile Include="Assets\Cs_ThreeAxisRotation.cs" />
+    <Compile Include="Assets\Cs_TutorialTrigger.cs" />
     <Compile Include="Assets\Cs_WeaponObjects.cs" />
     <Compile Include="Assets\EffectExamples\Shared\Scripts\DecalDestroyer.cs" />
     <Compile Include="Assets\EffectExamples\Shared\Scripts\GunAim.cs" />
